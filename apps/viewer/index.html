@@ -7,49 +7,74 @@
     <title>Graph-Universum</title>
   </head>
   <body>
-    <main id="app" class="app-shell">
-      <header class="app-header">
-        <p class="eyebrow">Graph-Universum</p>
-        <h1>Graphdaten im Browser untersuchen</h1>
-        <p class="intro">Lade eine JSON-Datei und prüfe zuerst, ob der Graphvertrag erfüllt ist.</p>
+    <div id="app" class="app-shell">
+      <header class="top-bar">
+        <div class="brand">
+          <p class="eyebrow">Graph-Universum</p>
+          <span class="brand-subtitle">Quellenneutraler Graph-Viewer</span>
+        </div>
+        <div class="graph-heading">
+          <h1 id="graph-title">Noch kein Graph geladen.</h1>
+          <p id="graph-meta" class="graph-meta">Lade eine JSON-Datei oder die Beispieldaten.</p>
+        </div>
+        <div class="toolbar" role="toolbar" aria-label="Werkzeuge">
+          <label class="toolbar-button">
+            JSON laden
+            <input id="graph-file" class="visually-hidden" type="file" accept=".json,application/json">
+          </label>
+          <button id="load-sample" type="button">Beispiel</button>
+          <button id="toggle-details" type="button" aria-expanded="false" aria-controls="details-card">Details</button>
+        </div>
       </header>
 
-      <section class="import-panel" aria-labelledby="import-title">
-        <h2 id="import-title">Graph laden</h2>
-        <label id="drop-zone" class="drop-zone">
-          <span class="drop-zone-title">JSON-Datei hier ablegen</span>
-          <span>oder zur Auswahl klicken</span>
-          <input id="graph-file" class="visually-hidden" type="file" accept=".json,application/json">
-        </label>
-        <button id="load-sample" type="button">Beispieldaten laden</button>
+      <main id="drop-zone" class="universe-stage" aria-label="Graph-Universum">
+        <svg id="graph-canvas" class="graph-canvas" role="img" aria-label="Graphvisualisierung"></svg>
+        <div id="drop-hint" class="drop-hint">
+          <strong>JSON-Datei hier ablegen</strong>
+          <span>oder oben über „JSON laden“ auswählen</span>
+        </div>
         <p id="graph-status" class="status" role="status" aria-live="polite">Bereit zum Laden.</p>
+
+        <aside id="details-card" class="details-card" aria-labelledby="details-title" hidden>
+          <div class="details-header">
+            <div>
+              <p id="details-kicker" class="details-kicker">Graphdetails</p>
+              <h2 id="details-title">Graph</h2>
+            </div>
+            <button id="close-details" class="close-button" type="button" aria-label="Details schließen">×</button>
+          </div>
+          <p id="details-description" class="details-description"></p>
+          <dl class="details-list">
+            <div>
+              <dt>Nodes</dt>
+              <dd id="node-count">0</dd>
+            </div>
+            <div>
+              <dt>Links</dt>
+              <dd id="link-count">0</dd>
+            </div>
+          </dl>
+          <div id="selected-node-details" hidden>
+            <h3>Ausgewählter Node</h3>
+            <dl class="node-details-list">
+              <div><dt>ID</dt><dd id="selected-node-id"></dd></div>
+              <div><dt>Art</dt><dd id="selected-node-kind"></dd></div>
+              <div><dt>Gruppe</dt><dd id="selected-node-group"></dd></div>
+              <div><dt>Tags</dt><dd id="selected-node-tags"></dd></div>
+            </dl>
+            <h3>Metriken</h3>
+            <pre id="selected-node-metrics" class="details-code"></pre>
+            <h3>Attribute</h3>
+            <pre id="selected-node-attributes" class="details-code"></pre>
+          </div>
+        </aside>
+
         <div id="graph-errors" class="error-panel" role="alert" hidden>
-          <h3>Die Graphdaten konnten nicht geladen werden</h3>
+          <h2>Die Graphdaten konnten nicht geladen werden</h2>
           <ul id="graph-error-list"></ul>
         </div>
-      </section>
-
-      <section class="visualization-panel" aria-labelledby="visualization-title">
-        <h2 id="visualization-title">Universum</h2>
-        <svg id="graph-canvas" class="graph-canvas" role="img" aria-label="Graphvisualisierung"></svg>
-        <p class="visualization-note">Die Positionen sind eine deterministische erste Ansicht. Nodegröße und Linkbreite folgen den gelieferten Werten.</p>
-      </section>
-
-      <section class="graph-summary" aria-labelledby="summary-title">
-        <h2 id="summary-title">Geladener Graph</h2>
-        <p id="graph-title">Noch kein Graph geladen.</p>
-        <dl class="summary-list">
-          <div>
-            <dt>Nodes</dt>
-            <dd id="node-count">0</dd>
-          </div>
-          <div>
-            <dt>Links</dt>
-            <dd id="link-count">0</dd>
-          </div>
-        </dl>
-      </section>
-    </main>
+      </main>
+    </div>
     <script type="module" src="./src/main.js"></script>
   </body>
 </html>

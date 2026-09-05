@@ -83,6 +83,12 @@ export function renderGraph(svg, graph) {
   return layout;
 }
 
+export function selectGraphNode(svg, nodeId) {
+  svg.querySelectorAll(".graph-node").forEach((node) => {
+    node.classList.toggle("is-selected", node.dataset.nodeId === nodeId);
+  });
+}
+
 function createArrowMarker() {
   const marker = createSvgElement("marker");
   marker.setAttribute("id", "graph-arrow");
