@@ -1,12 +1,14 @@
 import sampleGraph from "../../../contracts/graph-universe/fixtures/minimal.json";
 import { normalizeGraph, parseGraphText, validateGraph } from "./domain/graph.js";
-import { renderGraph, selectGraphNode } from "./visualization.js";
+import { applyGraphFocus, applyGraphSearch, getNodeNeighborhood, renderGraph } from "./visualization.js";
 
 const fileInput = document.querySelector("#graph-file");
 const dropZone = document.querySelector("#drop-zone");
 const sampleButton = document.querySelector("#load-sample");
 const detailsButton = document.querySelector("#toggle-details");
 const closeDetailsButton = document.querySelector("#close-details");
+const resetButton = document.querySelector("#reset-view");
+const searchInput = document.querySelector("#node-search");
 const status = document.querySelector("#graph-status");
 const dropHint = document.querySelector("#drop-hint");
 const errorsPanel = document.querySelector("#graph-errors");
@@ -30,7 +32,10 @@ fileInput.addEventListener("change", handleFileSelection);
 sampleButton.addEventListener("click", loadSampleGraph);
 detailsButton.addEventListener("click", toggleGraphDetails);
 closeDetailsButton.addEventListener("click", closeDetails);
+resetButton.addEventListener("click", resetView);
+searchInput.addEventListener("input", handleSearch);
 graphCanvas.addEventListener("click", handleGraphClick);
+document.addEventListener("keydown", handleKeyDown);
 dropZone.addEventListener("dragover", handleDragOver);
 dropZone.addEventListener("dragleave", handleDragLeave);
 dropZone.addEventListener("drop", handleDrop);
@@ -90,9 +95,10 @@ function showGraph(graph, sourceName) {
   errorsPanel.hidden = true;
   errorList.replaceChildren();
   dropHint.hidden = true;
-  selectGraphNode(graphCanvas, null);
   selectedDetails.hidden = true;
   renderGraph(graphCanvas, graph);
+  applyGraphFocus(graphCanvas, graph, null);
+  applyGraphSearch(graphCanvas, graph, searchInput.value);
   graphTitle.textContent = graph.meta?.title ?? sourceName;
   graphMeta.textContent = getGraphMeta(graph, sourceName);
   nodeCount.textContent = String(graph.nodes.length);
@@ -114,6 +120,11 @@ function showErrors(errors) {
 }
 
 function handleGraphClick(event) {
+  if (event.target === graphCanvas) {
+    clearSelection();
+    return;
+  }
+
   const nodeElement = event.target.closest(".graph-node");
   if (!nodeElement || !currentGraph) {
     return;
@@ -126,7 +137,8 @@ function handleGraphClick(event) {
 }
 
 function showNodeDetails(node) {
-  selectGraphNode(graphCanvas, node.id);
+  const neighborhood = getNodeNeighborhood(currentGraph, node.id);
+  applyGraphFocus(graphCanvas, currentGraph, node.id);
   detailsKicker.textContent = "Ausgewählter Node";
   detailsTitle.textContent = node.label ?? node.id;
   detailsDescription.textContent = node.kind ?? "Node";
@@ -134,6 +146,9 @@ function showNodeDetails(node) {
   document.querySelector("#selected-node-kind").textContent = node.kind ?? "–";
   document.querySelector("#selected-node-group").textContent = node.groupId ?? "–";
   document.querySelector("#selected-node-tags").textContent = node.tags?.join(", ") || "–";
+  document.querySelector("#selected-node-incoming").textContent = String(neighborhood.incomingLinks.length);
+  document.querySelector("#selected-node-outgoing").textContent = String(neighborhood.outgoingLinks.length);
+  document.querySelector("#selected-node-undirected").textContent = String(neighborhood.undirectedLinks.length);
   document.querySelector("#selected-node-metrics").textContent = formatDetailsCode(node.metrics);
   document.querySelector("#selected-node-attributes").textContent = formatDetailsCode(node.attributes);
   selectedDetails.hidden = false;
@@ -153,7 +168,7 @@ function showGraphDetails() {
     return;
   }
 
-  selectGraphNode(graphCanvas, null);
+  applyGraphFocus(graphCanvas, currentGraph, null);
   selectedDetails.hidden = true;
   detailsKicker.textContent = "Graphdetails";
   detailsTitle.textContent = currentGraph.meta?.title ?? "Graph";
@@ -169,6 +184,38 @@ function openDetails() {
 function closeDetails() {
   detailsCard.hidden = true;
   detailsButton.setAttribute("aria-expanded", "false");
+}
+
+function resetView() {
+  searchInput.value = "";
+  if (currentGraph) {
+    applyGraphFocus(graphCanvas, currentGraph, null);
+    applyGraphSearch(graphCanvas, currentGraph, "");
+  }
+  selectedDetails.hidden = true;
+  closeDetails();
+}
+
+function clearSelection() {
+  if (!currentGraph) {
+    return;
+  }
+
+  applyGraphFocus(graphCanvas, currentGraph, null);
+  selectedDetails.hidden = true;
+  closeDetails();
+}
+
+function handleSearch() {
+  if (currentGraph) {
+    applyGraphSearch(graphCanvas, currentGraph, searchInput.value);
+  }
+}
+
+function handleKeyDown(event) {
+  if (event.key === "Escape") {
+    clearSelection();
+  }
 }
 
 function getGraphMeta(graph, sourceName) {

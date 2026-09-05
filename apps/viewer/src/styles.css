@@ -28,28 +28,6 @@ body {
   overflow: hidden;
 }
 
-button,
-.toolbar-button {
-  display: inline-grid;
-  place-items: center;
-  min-height: 2.25rem;
-  padding: 0.45rem 0.75rem;
-  border: 1px solid var(--border);
-  border-radius: 0.4rem;
-  color: var(--card-foreground);
-  background: rgb(30 41 59 / 90%);
-  font: inherit;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-button:hover,
-.toolbar-button:hover {
-  border-color: var(--primary);
-  color: var(--foreground);
-}
-
 .app-shell {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
@@ -133,188 +111,6 @@ h3 {
   white-space: nowrap;
 }
 
-.toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  justify-content: flex-end;
-}
-
-.universe-stage {
-  position: relative;
-  min-height: 0;
-  overflow: hidden;
-  background: radial-gradient(circle at 50% 45%, #172554 0%, #0b1120 62%);
-}
-
-.universe-stage.is-dragging {
-  outline: 2px solid var(--primary);
-  outline-offset: -0.5rem;
-}
-
-.graph-canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.graph-link {
-  stroke: #94a3b8;
-  stroke-linecap: round;
-  opacity: 0.8;
-}
-
-.graph-node {
-  cursor: pointer;
-}
-
-.graph-node circle {
-  stroke: #f8fafc;
-  stroke-width: 2;
-  transition: stroke-width 120ms ease, filter 120ms ease;
-}
-
-.graph-node:hover circle,
-.graph-node.is-selected circle {
-  stroke-width: 4;
-  filter: drop-shadow(0 0 0.6rem currentcolor);
-}
-
-.graph-node-label {
-  fill: var(--foreground);
-  font-size: 0.875rem;
-  pointer-events: none;
-  text-anchor: middle;
-}
-
-.drop-hint,
-.status,
-.error-panel,
-.details-card {
-  position: absolute;
-  z-index: 1;
-  border: 1px solid var(--border);
-  border-radius: 0.6rem;
-  background: var(--card);
-  box-shadow: 0 1rem 3rem rgb(0 0 0 / 25%);
-}
-
-.drop-hint {
-  top: 50%;
-  left: 50%;
-  display: grid;
-  gap: 0.35rem;
-  padding: 1rem 1.5rem;
-  color: var(--muted-foreground);
-  text-align: center;
-  transform: translate(-50%, -50%);
-}
-
-.drop-hint strong {
-  color: var(--foreground);
-}
-
-.status {
-  bottom: 1rem;
-  left: 1rem;
-  padding: 0.5rem 0.75rem;
-}
-
-.details-card {
-  top: 1rem;
-  right: 1rem;
-  width: min(22rem, calc(100% - 2rem));
-  max-height: calc(100% - 2rem);
-  padding: 1.25rem;
-  overflow: auto;
-  color: var(--card-foreground);
-}
-
-.details-header {
-  display: flex;
-  gap: 1rem;
-  align-items: start;
-  justify-content: space-between;
-}
-
-.close-button {
-  min-width: 2rem;
-  padding: 0.1rem 0.5rem;
-  color: var(--muted-foreground);
-  font-size: 1.5rem;
-  line-height: 1;
-}
-
-.details-description {
-  margin-top: 0.75rem;
-  color: var(--muted-foreground);
-  font-size: 0.875rem;
-}
-
-.details-list,
-.node-details-list {
-  display: grid;
-  gap: 0.75rem;
-  margin: 1rem 0 0;
-}
-
-.details-list {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.details-list div,
-.node-details-list div {
-  display: grid;
-  gap: 0.2rem;
-}
-
-dt,
-dd {
-  margin: 0;
-}
-
-dd {
-  color: var(--foreground);
-  font-variant-numeric: tabular-nums;
-}
-
-.details-list dd {
-  font-size: 1.5rem;
-}
-
-.details-code {
-  max-width: 100%;
-  margin: 0.5rem 0 0;
-  padding: 0.75rem;
-  overflow: auto;
-  border-radius: 0.4rem;
-  color: #bae6fd;
-  background: #0b1222;
-  font: 0.75rem/1.4 ui-monospace, monospace;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-
-.error-panel {
-  bottom: 1rem;
-  left: 1rem;
-  max-width: min(34rem, calc(100% - 2rem));
-  padding: 1rem;
-  border-left: 0.25rem solid #f87171;
-  background: rgb(43 23 32 / 96%);
-}
-
-.error-panel h2 {
-  font-size: 0.95rem;
-}
-
-.error-panel ul {
-  display: grid;
-  gap: 0.35rem;
-  margin: 0.75rem 0 0;
-  padding-left: 1.25rem;
-}
-
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -341,11 +137,6 @@ dd {
     grid-row: 2;
   }
 
-  .toolbar {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
   .brand-subtitle {
     display: none;
   }
@@ -356,19 +147,4 @@ dd {
     padding: 0.5rem;
   }
 
-  .toolbar {
-    gap: 0.25rem;
-  }
-
-  button,
-  .toolbar-button {
-    padding: 0.4rem 0.5rem;
-  }
-
-  .details-card {
-    top: 0.5rem;
-    right: 0.5rem;
-    width: calc(100% - 1rem);
-    max-height: calc(100% - 1rem);
-  }
 }

@@ -4,64 +4,66 @@
 
 ### Phase 0 – Vertrag und Fixtures
 
-- Graphformat 0.1 festlegen.
-- JSON-Schema anlegen.
-- kleine, mittlere und absichtlich fehlerhafte Beispieldateien anlegen.
-- Normalisierung und Validierung als reine Funktionen definieren.
+- [X] Graphformat 0.1 festlegen.
+- [X] JSON-Schema anlegen.
+- [ ] Kleine, mittlere und absichtlich fehlerhafte Beispieldateien anlegen. Bisher existiert nur die kleine Minimal-Fixture.
+- [X] Normalisierung und Validierung als reine Funktionen definieren.
 
 **Ergebnis:** Wir können Datenqualität testen, ohne einen Renderer zu benötigen.
 
 ### Phase 1 – Statische Browser-App
 
-- HTML/CSS/TypeScript-App mit statischem Build.
-- Datei-Upload und Drag-and-drop.
-- JSON-Parsing, Schema-Validierung und Fehlermeldungen.
-- Beispieldaten laden.
+- [X] HTML/CSS/JavaScript-App mit statischem Build.
+- [X] Datei-Upload und Drag-and-drop.
+- [X] JSON-Parsing, Schema-Validierung und Fehlermeldungen.
+- [X] Beispieldaten laden.
 
 **Ergebnis:** Eine statisch hostbare Seite kann ein lokales Graph-JSON öffnen.
 
-### Phase 2 – Erste 3D-Ansicht
+### Phase 2 – Erste Graphansicht
 
-- Three.js-basierter Renderer, zunächst mit `3d-force-graph`.
-- Nodes, Links und Richtung darstellen.
-- Kamera- und Resize-Verhalten.
-- einfache, erklärbare Größen- und Breiten-Mappings.
+- [X] Dependency-freier deterministischer SVG-Renderer als erste 2D-Ansicht.
+- [X] Nodes, Links und Richtung darstellen.
+- [ ] Kamera- und Resize-Verhalten für die geplante 3D-Ansicht.
+- [X] Einfache, erklärbare Größen- und Breiten-Mappings.
+- [ ] Three.js-basierter 3D-Renderer, zunächst mit `3d-force-graph`.
 
 **Ergebnis:** Der Graph ist navigierbar und nicht nur ein Screenshot.
 
 ### Phase 3 – Analyse der Ansicht
 
-- Auswahl, Fokus und Nachbarschaftshervorhebung.
-- Detailbereich als HTML neben der Szene.
-- Suche, Reset und optionale Filter.
-- Legende und aktive Metrik sichtbar machen.
+- [X] Auswahl, Fokus und Nachbarschaftshervorhebung.
+- [X] Detailbereich als HTML über der Szene.
+- [X] Suche und Reset.
+- [ ] Optionale Filter.
+- [ ] Legende und aktive Metrik sichtbar machen.
 
 **Ergebnis:** Die Visualisierung unterstützt konkrete Fragen an den Graphen.
 
 ### Phase 4 – Gruppen und Maßstab
 
-- `groupId` für Cluster und semantischen Zoom verwenden.
-- Nodes je nach Zoomstufe aggregieren oder ausblenden.
-- Performance-Budgets mit realistischen Graphgrößen messen.
-- 2D-Fallback oder Diagnoseansicht ergänzen.
+- [ ] `groupId` für Cluster und semantischen Zoom verwenden.
+- [ ] Nodes je nach Zoomstufe aggregieren oder ausblenden.
+- [ ] Performance-Budgets mit realistischen Graphgrößen messen.
+- [X] 2D-Fallback oder Diagnoseansicht ergänzen.
 
 **Ergebnis:** Größere Graphen bleiben untersuchbar.
 
 ### Phase 5 – C#-Exporter
 
-- C#-Projekt analysieren.
-- Klassen, Methoden und Beziehungen exportieren.
-- Code-Metriken als benannte Metriken ergänzen.
-- Export gegen dasselbe Schema und dieselben Fixtures testen.
+- [ ] C#-Projekt analysieren.
+- [ ] Klassen, Methoden und Beziehungen exportieren.
+- [ ] Code-Metriken als benannte Metriken ergänzen.
+- [ ] Export gegen dasselbe Schema und dieselben Fixtures testen.
 
 **Ergebnis:** Der generische Viewer erhält eine erste reale Datenquelle.
 
 ### Phase 6 – Zeit und Livezustand
 
-- Git-Metriken als zusätzliche Metriken.
-- zeitabhängige Snapshots oder Deltas.
-- Agenten- und Testlaufereignisse.
-- Animation nur dort einsetzen, wo sie eine Änderung erklärt.
+- [ ] Git-Metriken als zusätzliche Metriken.
+- [ ] Zeitabhängige Snapshots oder Deltas.
+- [ ] Agenten- und Testlaufereignisse.
+- [ ] Animation nur dort einsetzen, wo sie eine Änderung erklärt.
 
 ## Empfohlener Entwicklungsstack
 

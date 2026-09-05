@@ -1,0 +1,68 @@
+button,
+.toolbar-button {
+  display: inline-grid;
+  place-items: center;
+  min-height: 2.25rem;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  color: var(--card-foreground);
+  background: rgb(30 41 59 / 90%);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover,
+.toolbar-button:hover {
+  border-color: var(--primary);
+  color: var(--foreground);
+}
+
+input[type="search"] {
+  width: 10rem;
+  min-height: 2.25rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  color: var(--foreground);
+  background: rgb(30 41 59 / 90%);
+  font: inherit;
+  font-size: 0.875rem;
+}
+
+input[type="search"]:focus {
+  border-color: var(--primary);
+  outline: 2px solid rgb(56 189 248 / 35%);
+  outline-offset: 1px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+@media (width <= 760px) {
+  .toolbar {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
+@media (width <= 480px) {
+  .toolbar {
+    gap: 0.25rem;
+  }
+
+  input[type="search"] {
+    width: 8rem;
+  }
+
+  button,
+  .toolbar-button {
+    padding: 0.4rem 0.5rem;
+  }
+}

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import sampleGraph from "../contracts/graph-universe/fixtures/minimal.json" with { type: "json" };
 import { normalizeGraph } from "../apps/viewer/src/domain/graph.js";
-import { createGraphLayout, findNodeMetric, scaleValue } from "../apps/viewer/src/visualization.js";
+import { createGraphLayout, findNodeMetric, getNodeNeighborhood, scaleValue } from "../apps/viewer/src/visualization.js";
 
 describe("graph visualization calculations", () => {
   it("uses the first available node metric and stable positions", () => {
@@ -21,5 +21,15 @@ describe("graph visualization calculations", () => {
     expect(scaleValue(5, [0, 10], 2, 12)).toBe(7);
     expect(scaleValue(5, [5, 5], 2, 12)).toBe(7);
     expect(scaleValue(undefined, [0, 10], 2, 12)).toBe(7);
+  });
+
+  it("separates incoming and outgoing neighbors", () => {
+    const graph = normalizeGraph(sampleGraph);
+    const neighborhood = getNodeNeighborhood(graph, "orders");
+
+    expect(neighborhood.incomingLinks.map((link) => link.source)).toEqual(["api"]);
+    expect(neighborhood.outgoingLinks.map((link) => link.target)).toEqual(["database"]);
+    expect(neighborhood.undirectedLinks).toHaveLength(0);
+    expect([...neighborhood.neighborIds]).toEqual(["api", "database"]);
   });
 });

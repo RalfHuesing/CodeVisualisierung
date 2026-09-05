@@ -89,6 +89,67 @@ export function selectGraphNode(svg, nodeId) {
   });
 }
 
+export function getNodeNeighborhood(graph, nodeId) {
+  const incomingLinks = graph.links.filter((link) => link.directed && link.target === nodeId);
+  const outgoingLinks = graph.links.filter((link) => link.directed && link.source === nodeId);
+  const undirectedLinks = graph.links.filter(
+    (link) => !link.directed && (link.source === nodeId || link.target === nodeId)
+  );
+  const neighborIds = new Set([
+    ...incomingLinks.map((link) => link.source),
+    ...outgoingLinks.map((link) => link.target),
+    ...undirectedLinks.flatMap((link) => [link.source, link.target])
+  ]);
+  neighborIds.delete(nodeId);
+
+  return { incomingLinks, neighborIds, outgoingLinks, undirectedLinks };
+}
+
+export function applyGraphFocus(svg, graph, nodeId) {
+  const neighborhood = nodeId ? getNodeNeighborhood(graph, nodeId) : null;
+  const incomingLinks = new Set(neighborhood?.incomingLinks ?? []);
+  const outgoingLinks = new Set(neighborhood?.outgoingLinks ?? []);
+  const undirectedLinks = new Set(neighborhood?.undirectedLinks ?? []);
+  const neighbors = new Set(neighborhood?.neighborIds ?? []);
+
+  svg.querySelectorAll(".graph-node").forEach((node) => {
+    const isSelected = node.dataset.nodeId === nodeId;
+    const isNeighbor = neighbors.has(node.dataset.nodeId);
+    node.classList.toggle("is-selected", isSelected);
+    node.classList.toggle("is-neighbor", isNeighbor);
+    node.classList.toggle("is-dimmed", Boolean(nodeId && !isSelected && !isNeighbor));
+  });
+  svg.querySelectorAll(".graph-link").forEach((linkElement) => {
+    const matchingLink = graph.links.find(
+      (link) => link.source === linkElement.dataset.source && link.target === linkElement.dataset.target
+    );
+    const isConnected = Boolean(matchingLink && (incomingLinks.has(matchingLink) || outgoingLinks.has(matchingLink) || undirectedLinks.has(matchingLink)));
+    linkElement.classList.toggle("is-incoming", Boolean(matchingLink && incomingLinks.has(matchingLink)));
+    linkElement.classList.toggle("is-outgoing", Boolean(matchingLink && outgoingLinks.has(matchingLink)));
+    linkElement.classList.toggle("is-related", Boolean(matchingLink && undirectedLinks.has(matchingLink)));
+    linkElement.classList.toggle("is-dimmed", Boolean(nodeId && !isConnected));
+  });
+}
+
+export function applyGraphSearch(svg, graph, query) {
+  const normalizedQuery = query.trim().toLocaleLowerCase();
+  const matches = new Set(
+    graph.nodes
+      .filter((node) => `${node.id} ${node.label}`.toLocaleLowerCase().includes(normalizedQuery))
+      .map((node) => node.id)
+  );
+  const hasQuery = normalizedQuery.length > 0;
+
+  svg.querySelectorAll(".graph-node").forEach((node) => {
+    node.classList.toggle("is-search-match", Boolean(hasQuery && matches.has(node.dataset.nodeId)));
+    node.classList.toggle("is-search-dimmed", Boolean(hasQuery && !matches.has(node.dataset.nodeId)));
+  });
+  svg.querySelectorAll(".graph-link").forEach((link) => {
+    const isMatch = matches.has(link.dataset.source) || matches.has(link.dataset.target);
+    link.classList.toggle("is-search-dimmed", Boolean(hasQuery && !isMatch));
+  });
+}
+
 function createArrowMarker() {
   const marker = createSvgElement("marker");
   marker.setAttribute("id", "graph-arrow");
@@ -110,6 +171,7 @@ function createLinkElement(link) {
   line.classList.add("graph-link");
   line.dataset.source = link.source;
   line.dataset.target = link.target;
+  line.dataset.directed = String(link.directed);
   line.setAttribute("stroke-width", String(link.width));
   line.setAttribute("x1", String(link.sourceNode.x));
   line.setAttribute("x2", String(link.targetNode.x));

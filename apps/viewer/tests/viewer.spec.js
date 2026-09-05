@@ -25,6 +25,25 @@ test("opens graph details and node details", async ({ page }) => {
   await expect(page.locator("#graph-canvas .graph-node.is-selected")).toHaveAttribute("data-node-id", "orders");
 });
 
+test("focuses the neighborhood and supports search and reset", async ({ page }) => {
+  await page.goto("/");
+
+  await page.locator("#graph-canvas .graph-node[data-node-id='orders']").click();
+  await expect(page.locator("#graph-canvas .graph-node[data-node-id='api']")).toHaveClass(/is-neighbor/);
+  await expect(page.locator("#graph-canvas .graph-node[data-node-id='database']")).toHaveClass(/is-neighbor/);
+  await expect(page.locator("#graph-canvas .graph-link[data-source='api']")).toHaveClass(/is-incoming/);
+  await expect(page.locator("#graph-canvas .graph-link[data-target='database']")).toHaveClass(/is-outgoing/);
+
+  await page.locator("#node-search").fill("database");
+  await expect(page.locator("#graph-canvas .graph-node[data-node-id='database']")).toHaveClass(/is-search-match/);
+  await expect(page.locator("#graph-canvas .graph-node[data-node-id='api']")).toHaveClass(/is-search-dimmed/);
+
+  await page.locator("#reset-view").click();
+  await expect(page.locator("#details-card")).toBeHidden();
+  await expect(page.locator("#graph-canvas .graph-node.is-dimmed")).toHaveCount(0);
+  await expect(page.locator("#node-search")).toHaveValue("");
+});
+
 test("shows a useful error for malformed uploaded JSON", async ({ page }) => {
   await page.goto("/");
   await page.locator("#graph-file").setInputFiles({

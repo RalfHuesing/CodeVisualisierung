@@ -1,0 +1,136 @@
+.drop-hint,
+.status,
+.error-panel,
+.details-card {
+  position: absolute;
+  z-index: 1;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--card);
+  box-shadow: 0 1rem 3rem rgb(0 0 0 / 25%);
+}
+
+.drop-hint {
+  top: 50%;
+  left: 50%;
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem 1.5rem;
+  color: var(--muted-foreground);
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.drop-hint strong {
+  color: var(--foreground);
+}
+
+.status {
+  bottom: 1rem;
+  left: 1rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.details-card {
+  top: 1rem;
+  right: 1rem;
+  width: min(22rem, calc(100% - 2rem));
+  max-height: calc(100% - 2rem);
+  padding: 1.25rem;
+  overflow: auto;
+  color: var(--card-foreground);
+}
+
+.details-header {
+  display: flex;
+  gap: 1rem;
+  align-items: start;
+  justify-content: space-between;
+}
+
+.close-button {
+  min-width: 2rem;
+  padding: 0.1rem 0.5rem;
+  color: var(--muted-foreground);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.details-description {
+  margin-top: 0.75rem;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+.details-list,
+.node-details-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1rem 0 0;
+}
+
+.details-list {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.details-list div,
+.node-details-list div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+dt,
+dd {
+  margin: 0;
+}
+
+dd {
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+
+.details-list dd {
+  font-size: 1.5rem;
+}
+
+.details-code {
+  max-width: 100%;
+  margin: 0.5rem 0 0;
+  padding: 0.75rem;
+  overflow: auto;
+  border-radius: 0.4rem;
+  color: #bae6fd;
+  background: #0b1222;
+  font: 0.75rem/1.4 ui-monospace, monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.error-panel {
+  bottom: 1rem;
+  left: 1rem;
+  max-width: min(34rem, calc(100% - 2rem));
+  padding: 1rem;
+  border-left: 0.25rem solid #f87171;
+  background: rgb(43 23 32 / 96%);
+}
+
+.error-panel h2 {
+  font-size: 0.95rem;
+}
+
+.error-panel ul {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.75rem 0 0;
+  padding-left: 1.25rem;
+}
+
+@media (width <= 480px) {
+  .details-card {
+    top: 0.5rem;
+    right: 0.5rem;
+    width: calc(100% - 1rem);
+    max-height: calc(100% - 1rem);
+  }
+}

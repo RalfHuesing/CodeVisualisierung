@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./src/styles.css">
+    <link rel="stylesheet" href="./src/controls.css">
+    <link rel="stylesheet" href="./src/universe.css">
+    <link rel="stylesheet" href="./src/overlays.css">
     <title>Graph-Universum</title>
   </head>
   <body>
@@ -18,11 +21,16 @@
           <p id="graph-meta" class="graph-meta">Lade eine JSON-Datei oder die Beispieldaten.</p>
         </div>
         <div class="toolbar" role="toolbar" aria-label="Werkzeuge">
+          <label class="search-control">
+            <span class="visually-hidden">Nodes suchen</span>
+            <input id="node-search" type="search" placeholder="Nodes suchen" autocomplete="off">
+          </label>
           <label class="toolbar-button">
             JSON laden
             <input id="graph-file" class="visually-hidden" type="file" accept=".json,application/json">
           </label>
           <button id="load-sample" type="button">Beispiel</button>
+          <button id="reset-view" type="button">Reset</button>
           <button id="toggle-details" type="button" aria-expanded="false" aria-controls="details-card">Details</button>
         </div>
       </header>
@@ -61,6 +69,12 @@
               <div><dt>Art</dt><dd id="selected-node-kind"></dd></div>
               <div><dt>Gruppe</dt><dd id="selected-node-group"></dd></div>
               <div><dt>Tags</dt><dd id="selected-node-tags"></dd></div>
+            </dl>
+            <h3>Beziehungen</h3>
+            <dl class="node-details-list">
+              <div><dt>Eingehend</dt><dd id="selected-node-incoming"></dd></div>
+              <div><dt>Ausgehend</dt><dd id="selected-node-outgoing"></dd></div>
+              <div><dt>Ungerichtet</dt><dd id="selected-node-undirected"></dd></div>
             </dl>
             <h3>Metriken</h3>
             <pre id="selected-node-metrics" class="details-code"></pre>
