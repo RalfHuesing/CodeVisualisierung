@@ -102,4 +102,8 @@ Für größere Graphen brauchen wir später Aggregation, Detailstufen und gegebe
 
 Die aktuelle Übersicht blendet ausschließlich Nodes mit `kind: "method"` aus. Die Detailstufe ist sichtbar auswählbar und über „Detail“ vollständig rückgängig machbar; die Quelldaten bleiben dabei unverändert.
 
-Der deterministische Aufbereitungs-Benchmark läuft mit `npm run benchmark` über feste Fixtures und 20 Wiederholungen. Der aktuelle Performance-Graph umfasst 684 Nodes und 1.260 Links; auf dem Entwicklungsrechner lag die Aufbereitung bei 7,94 ms pro Durchlauf. Das ist noch kein Versprechen für die WebGL-Bildrate, sondern ein reproduzierbarer Grenzwert für Filterung und visuelles Mapping.
+Der deterministische Aufbereitungs-Benchmark läuft mit `npm run benchmark` über feste Fixtures und 20 Wiederholungen. Der aktuelle Performance-Graph umfasst 684 Nodes und 1.260 Links; mehrere lokale Läufe lagen zwischen 7,4 und 7,9 ms pro Durchlauf. Das ist noch kein Versprechen für die WebGL-Bildrate, sondern ein reproduzierbarer Grenzwert für Filterung und visuelles Mapping.
+
+Der Produktionsbuild bleibt statisch hostbar. Der aktuelle JavaScript-Bundle liegt bei rund 2,0 MB unkomprimiert bzw. 440 kB gzip; die Abhängigkeit wird wegen der vollständigen 3D-Geometrien vorerst nicht weiter aufgeteilt.
+
+Der geprüfte interaktive Vollmodus umfasst aktuell die große Fixture mit 248 Nodes und 448 Links. Die Belastungs-Fixture mit 684 Nodes und 1.260 Links ist für deterministische Aufbereitungs- und Filtermessungen vorgesehen; eine verbindliche WebGL-FPS-Grenze für darüber hinausgehende Graphen bleibt offen.

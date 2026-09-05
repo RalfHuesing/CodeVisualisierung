@@ -71,6 +71,8 @@ test("switches examples and exposes active visual metrics", async ({ page }) => 
 test("filters the 3d graph without losing the source graph", async ({ page }) => {
   await page.goto("/");
   await page.locator("#example-select").selectOption("small");
+  await page.locator("#node-select").selectOption({ label: "Component 1.1.js" });
+  await expect(page.locator("#selected-node-details")).toBeVisible();
 
   await page.locator("#zoom-select").selectOption("overview");
   await expect(page.locator("#graph-status")).toContainText("Übersicht");
@@ -80,6 +82,7 @@ test("filters the 3d graph without losing the source graph", async ({ page }) =>
   await page.locator("#kind-filter").selectOption("method");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "8");
   await expect(page.locator("#accessible-nodes li")).toHaveCount(8);
+  await expect(page.locator("#selected-node-details")).toBeHidden();
 
   await page.locator("#reset-filters").click();
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "18");
@@ -105,6 +108,8 @@ test("renders the large target fixture and survives a resize", async ({ page }) 
 
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "248");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-link-count", "448");
+  await page.locator("#node-select").selectOption({ label: "Component 1.1" });
+  await expect(page.locator("#selected-node-details")).toBeVisible();
   await page.setViewportSize({ width: 1024, height: 700 });
   await expect(page.locator("#graph-canvas canvas")).toBeVisible();
 });
@@ -124,4 +129,21 @@ test("shows schema and semantic errors for an invalid graph", async ({ page }) =
   await expect(page.locator("#graph-errors")).toBeVisible();
   await expect(page.locator("#graph-error-list")).toContainText("duplicated");
   await expect(page.locator("#graph-error-list")).toContainText("does not reference");
+});
+
+test("reports an unavailable WebGL context", async ({ page }) => {
+  await page.addInitScript(() => {
+    const canvasPrototype = globalThis.HTMLCanvasElement.prototype;
+    const originalGetContext = canvasPrototype.getContext;
+    canvasPrototype.getContext = function getContext(type, ...args) {
+      if (type === "webgl2" || type === "webgl") {
+        return null;
+      }
+      return originalGetContext.call(this, type, ...args);
+    };
+  });
+  await page.goto("/");
+
+  await expect(page.locator("#graph-errors")).toBeVisible();
+  await expect(page.locator("#graph-error-list")).toContainText("WebGL");
 });

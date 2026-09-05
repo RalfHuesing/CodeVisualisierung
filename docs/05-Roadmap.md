@@ -57,7 +57,7 @@ Jede dieser Aussagen braucht mindestens einen automatisierten Test; Größen- un
 - [X] Kamera- und Resize-Verhalten.
 - [X] Einfache, erklärbare Größen- und Breiten-Mappings.
 - [X] Lade-, Leer-, Fehler- und WebGL-Fehlerzustände vollständig als 3D-Viewer-Zustände behandeln.
-- [ ] Renderer-Verhalten bei Node-, Link- und Gruppenzahlen aus den Ziel-Fixtures verifizieren.
+- [X] Renderer-Verhalten bei Node-, Link- und Gruppenzahlen aus den Ziel-Fixtures verifizieren.
 
 **Ergebnis:** Der Graph ist navigierbar und nicht nur ein Screenshot.
 
@@ -72,7 +72,7 @@ Jede dieser Aussagen braucht mindestens einen automatisierten Test; Größen- un
 - [X] Eine zentrale, explizite Auswahl der Node- und Linkmetriken ermöglichen.
 - [X] Node-Arten mit mehr als Farbe unterscheiden, sofern der Renderer das ohne unnötige Komplexität unterstützt.
 - [X] Tastaturbedienung, Fokuszustände und sinnvolle zugängliche HTML-Alternativen für die 3D-Szene ergänzen.
-- [ ] Lade-, leere, ungültige und nicht unterstützte Zustände im Browser testen.
+- [X] Lade-, leere, ungültige und nicht unterstützte Zustände im Browser testen.
 
 **Ergebnis:** Die Visualisierung unterstützt konkrete Fragen an den Graphen.
 
@@ -85,7 +85,7 @@ Jede dieser Aussagen braucht mindestens einen automatisierten Test; Größen- un
 - [X] Gruppen sichtbar und ein-/ausblendbar machen.
 - [X] Semantischen Zoom mit klarer UI-Rückmeldung ergänzen.
 - [X] Je nach Zoomstufe Nodes aggregieren oder ausblenden, ohne Daten stillschweigend zu löschen.
-- [ ] Ausgewählte Beziehungen und Gruppen auch in dichter 3D-Darstellung nachvollziehbar halten.
+- [X] Ausgewählte Beziehungen und Gruppen auch in dichter 3D-Darstellung nachvollziehbar halten.
 
 **Ergebnis:** Größere Graphen bleiben untersuchbar.
 
@@ -95,17 +95,17 @@ Jede dieser Aussagen braucht mindestens einen automatisierten Test; Größen- un
 - [ ] Zeit bis zum ersten sichtbaren Bild, Interaktionslatenz, Bildrate und Speicherverhalten dokumentieren.
 - [ ] Einen unterstützten interaktiven Vollmodus und das Verhalten darüber hinaus festlegen.
 - [ ] Aggregation, Detailstufen oder vorgegebene Positionen für große Graphen einsetzen, falls die Messungen es erfordern.
-- [ ] Extremwerte, fehlende Metriken, isolierte Nodes, parallele Links und leere Graphen verlässlich darstellen.
-- [ ] Browser-Smoke-Tests für Resize, WebGL-Kontext, große Fixture und Reset stabilisieren.
+- [X] Extremwerte, fehlende Metriken, isolierte Nodes, parallele Links und leere Graphen verlässlich darstellen.
+- [X] Browser-Smoke-Tests für Resize, WebGL-Kontext, große Fixture und Reset stabilisieren.
 
 **Ergebnis:** Der Viewer hat nachvollziehbare Grenzen und verhält sich auch bei ungewöhnlichen Daten zuverlässig.
 
 ### Phase 6 – Viewer-Abschluss
 
-- [ ] Statische Produktionsausgabe bauen und auf einem einfachen Webspace verifizieren.
+- [X] Statische Produktionsausgabe bauen und auf einem einfachen Webspace verifizieren.
 - [ ] Alle Nutzerpfade aus der Definition of Done als End-to-End-Szenarien abdecken.
 - [ ] Dokumentation für Graphformat, Beispiele, Bedienung und bekannte Grenzen vervollständigen.
-- [ ] Abhängigkeiten und Bundlegröße prüfen; nur bei messbarem Mehrwert optimieren.
+- [X] Abhängigkeiten und Bundlegröße prüfen; nur bei messbarem Mehrwert optimieren.
 - [ ] Viewer-Version als fachlich abgeschlossenen Meilenstein markieren.
 
 **Ergebnis:** Die allgemeingültige 3D-Visualisierung ist als eigenständiges Produkt nutzbar.

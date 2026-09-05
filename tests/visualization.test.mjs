@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import sampleGraph from "../contracts/graph-universe/fixtures/minimal.json" with { type: "json" };
+import edgeCasesGraph from "../contracts/graph-universe/fixtures/edge-cases.json" with { type: "json" };
 import { normalizeGraph } from "../apps/viewer/src/domain/graph.js";
 import {
   createVisualGraphData,
@@ -75,5 +76,14 @@ describe("graph visualization calculations", () => {
 
     expect(isWebGLSupported(supportedDocument)).toBe(true);
     expect(isWebGLSupported(unsupportedDocument)).toBe(false);
+  });
+
+  it("keeps isolated nodes and parallel links visible in mapping", () => {
+    const graph = normalizeGraph(edgeCasesGraph);
+    const visualData = createVisualGraphData(graph);
+
+    expect(visualData.nodes).toHaveLength(3);
+    expect(visualData.links).toHaveLength(2);
+    expect(visualData.nodes.find((node) => node.id === "isolated").visualValue).toBe(5);
   });
 });

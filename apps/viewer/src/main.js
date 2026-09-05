@@ -317,7 +317,11 @@ function refreshGraphView() {
 
   graphRenderer.updateOptions(viewOptions);
   const visibleGraph = filterGraph(currentGraph, viewOptions.filters);
+  const selectedNodeId = nodeSelect.value;
   updateNodeSelector(visibleGraph);
+  if (selectedNodeId && !visibleGraph.nodes.some((node) => node.id === selectedNodeId)) {
+    clearSelection();
+  }
   updateLegend();
   updateAccessibleNodes(visibleGraph);
   const zoomLabel = zoomSelect.value === "overview" ? "Übersicht" : "Detail";
@@ -331,6 +335,7 @@ function handleKeyDown(event) {
 }
 
 function updateNodeSelector(graph) {
+  const selectedNodeId = nodeSelect.value;
   const defaultOption = document.createElement("option");
   defaultOption.value = "";
   defaultOption.textContent = "Node auswählen";
@@ -339,6 +344,7 @@ function updateNodeSelector(graph) {
     const option = document.createElement("option");
     option.value = node.id;
     option.textContent = node.label ?? node.id;
+    option.selected = node.id === selectedNodeId;
     nodeSelect.append(option);
   });
 }

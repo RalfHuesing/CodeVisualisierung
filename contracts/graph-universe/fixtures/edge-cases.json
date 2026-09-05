@@ -1,0 +1,58 @@
+{
+  "format": {
+    "name": "graph-universe",
+    "version": "0.1"
+  },
+  "meta": {
+    "title": "Edge cases",
+    "description": "Isolated nodes, parallel links, missing metrics and extreme values.",
+    "createdAt": "2026-09-05T12:00:00Z"
+  },
+  "metricDefinitions": {
+    "importance": {
+      "label": "Importance",
+      "unit": "score",
+      "valueType": "number"
+    }
+  },
+  "nodes": [
+    {
+      "id": "high",
+      "label": "High value",
+      "kind": "class",
+      "groupId": "edge",
+      "metrics": { "importance": 1000000 }
+    },
+    {
+      "id": "low",
+      "label": "Low value",
+      "kind": "method",
+      "groupId": "edge",
+      "metrics": { "importance": -1000000 }
+    },
+    {
+      "id": "isolated",
+      "label": "Isolated",
+      "kind": "file",
+      "groupId": "lonely"
+    }
+  ],
+  "links": [
+    {
+      "id": "parallel-directed",
+      "source": "high",
+      "target": "low",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.1
+    },
+    {
+      "id": "parallel-undirected",
+      "source": "high",
+      "target": "low",
+      "kind": "related-to",
+      "directed": false,
+      "weight": 0.9
+    }
+  ]
+}

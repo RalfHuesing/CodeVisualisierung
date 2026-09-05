@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import { normalizeGraph, parseGraphText, validateGraph } from "../apps/viewer/src/domain/graph.js";
 import { EXAMPLE_CATALOG, getExampleGraph } from "../apps/viewer/src/domain/catalog.js";
 import invalidFixture from "../contracts/graph-universe/fixtures/invalid.json" with { type: "json" };
+import edgeCasesFixture from "../contracts/graph-universe/fixtures/edge-cases.json" with { type: "json" };
 
 const fixturePath = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -38,6 +39,11 @@ describe("validateGraph", () => {
     expect(validation.valid).toBe(false);
     expect(validation.errors.some((error) => error.message.includes("duplicated"))).toBe(true);
     expect(validation.errors.some((error) => error.message.includes("does not reference"))).toBe(true);
+  });
+
+  it("accepts edge cases without requiring optional values", () => {
+    expect(validateGraph(edgeCasesFixture)).toEqual({ valid: true, errors: [] });
+    expect(normalizeGraph(edgeCasesFixture).nodes.find((node) => node.id === "isolated")).toMatchObject({ tags: [], metrics: {} });
   });
 
   it("rejects duplicate node IDs", () => {

@@ -8,6 +8,7 @@ const RELATED_COLOR = "#a78bfa";
 const DEFAULT_LINK_COLOR = "#94a3b8";
 const DIMMED_NODE_COLOR = "#1e293b";
 const DIMMED_LINK_COLOR = "#1e293b";
+const NODE_GEOMETRIES = new Map();
 
 export function createGraphRenderer(container, onNodeClick) {
   let graphInstance;
@@ -160,6 +161,16 @@ function createNodeObject(node, color) {
 }
 
 function getNodeGeometry(kind) {
+  if (NODE_GEOMETRIES.has(kind)) {
+    return NODE_GEOMETRIES.get(kind);
+  }
+
+  const geometry = createNodeGeometry(kind);
+  NODE_GEOMETRIES.set(kind, geometry);
+  return geometry;
+}
+
+function createNodeGeometry(kind) {
   if (kind === "namespace") {
     return new THREE.SphereGeometry(1, 12, 8);
   }
