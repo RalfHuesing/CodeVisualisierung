@@ -1,0 +1,79 @@
+{
+  "format": {
+    "name": "graph-universe",
+    "version": "0.1"
+  },
+  "meta": {
+    "title": "Minimal example",
+    "description": "A tiny graph used for development and tests",
+    "createdAt": "2026-09-05T12:00:00Z",
+    "source": {
+      "name": "fixture",
+      "version": "0.1.0"
+    }
+  },
+  "metricDefinitions": {
+    "importance": {
+      "label": "Importance",
+      "unit": "score",
+      "valueType": "number"
+    },
+    "callCount": {
+      "label": "Call count",
+      "unit": "calls",
+      "valueType": "number"
+    }
+  },
+  "nodes": [
+    {
+      "id": "api",
+      "label": "API",
+      "kind": "service",
+      "groupId": "web",
+      "tags": ["entrypoint"],
+      "metrics": {
+        "importance": 1
+      }
+    },
+    {
+      "id": "orders",
+      "label": "Orders",
+      "kind": "service",
+      "groupId": "core",
+      "metrics": {
+        "importance": 0.8
+      }
+    },
+    {
+      "id": "database",
+      "label": "Database",
+      "kind": "storage",
+      "groupId": "data",
+      "metrics": {
+        "importance": 0.6
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "api",
+      "target": "orders",
+      "kind": "depends-on",
+      "directed": true,
+      "weight": 0.8,
+      "metrics": {
+        "callCount": 120
+      }
+    },
+    {
+      "source": "orders",
+      "target": "database",
+      "kind": "depends-on",
+      "directed": true,
+      "weight": 0.5,
+      "metrics": {
+        "callCount": 40
+      }
+    }
+  ]
+}

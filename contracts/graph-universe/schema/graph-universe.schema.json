@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/RalfHuesing/CodeVisualisierung/blob/main/contracts/graph-universe/schema/graph-universe.schema.json",
+  "title": "Graph Universe",
+  "description": "Source-independent graph data for the CodeVisualisierung viewer.",
+  "type": "object",
+  "required": ["format", "nodes", "links"],
+  "properties": {
+    "format": {
+      "$ref": "#/$defs/format"
+    },
+    "meta": {
+      "$ref": "#/$defs/meta"
+    },
+    "metricDefinitions": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/metricDefinition"
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/node"
+      }
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/link"
+      }
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "format": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": {
+          "const": "graph-universe"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "source": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "version": { "type": "string" }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "metricDefinition": {
+      "type": "object",
+      "properties": {
+        "label": { "type": "string" },
+        "unit": { "type": "string" },
+        "valueType": { "const": "number" },
+        "description": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "node": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string" },
+        "kind": { "type": "string" },
+        "groupId": { "type": "string" },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
+        "metrics": {
+          "type": "object",
+          "additionalProperties": { "type": "number" }
+        },
+        "attributes": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "link": {
+      "type": "object",
+      "required": ["source", "target"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "source": { "type": "string", "minLength": 1 },
+        "target": { "type": "string", "minLength": 1 },
+        "kind": { "type": "string" },
+        "directed": { "type": "boolean" },
+        "weight": { "type": "number" },
+        "metrics": {
+          "type": "object",
+          "additionalProperties": { "type": "number" }
+        },
+        "attributes": { "type": "object" }
+      },
+      "additionalProperties": true
+    }
+  }
+}
