@@ -12,6 +12,7 @@ Der Nutzer bevorzugt einfachen, expliziten und gut lesbaren Code. Weniger Code i
 - Datenfluss und Seiteneffekte explizit halten.
 - Reine Logik von DOM-, WebGL- und Datei-I/O trennen, wenn das die Tests vereinfacht.
 - Keine C#- oder Backend-Infrastruktur in den Browser-Viewer ziehen.
+- Fachlich abgeschlossene Änderungen automatisch committen, wenn die relevanten Checks erfolgreich sind.
 
 ## Verbindliche Regeln
 

@@ -28,3 +28,9 @@
 - Änderungen bleiben auf den angeforderten Bereich begrenzt.
 - Bestehende Nutzerdateien und Daten werden nicht stillschweigend gelöscht oder überschrieben.
 - Neue Bibliotheken müssen einen konkreten Nutzen und eine nachvollziehbare Wartungsbegründung haben.
+
+## Regelqualität
+
+- Regeln bleiben kurz, konkret und prüfbar.
+- Keine Wiederholung derselben Vorgabe in mehreren Dateien ohne zusätzlichen Geltungsbereich.
+- Beispiele nur aufnehmen, wenn sie eine häufige Fehlinterpretation verhindern.
