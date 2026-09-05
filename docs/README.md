@@ -10,7 +10,7 @@ flowchart LR
     S[Beliebige Datenquelle] --> A[Adapter / Exporter]
     A --> J[Versioniertes Graph-JSON]
     J --> V[Statische Webseite]
-    V --> R[Interaktive 2D-/3D-Visualisierung]
+    V --> R[Interaktive 3D-Visualisierung]
 ```
 
 ## Aktive Dokumente

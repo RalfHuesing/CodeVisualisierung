@@ -48,7 +48,6 @@ Die Datei bleibt lokal im Browser. Ein späteres Laden einer mitgelieferten Beis
 
 - Gruppierung und semantischer Zoom,
 - stabile lokale Orbits für Nodes mit gemeinsamer Gruppe,
-- alternative 2D-Ansicht als übersichtliche Diagnose- und Fallback-Ansicht,
 - gespeicherte Ansichtsprofile,
 - Zeitverlauf und Live-Deltas,
 - visuelle Zustände wie Hitze, Testabdeckung oder Änderungsfrequenz.
@@ -70,7 +69,7 @@ Die erste Version verwendet wenige, nachvollziehbare Kanäle:
 
 ## 3D-Entscheidung
 
-Für den ersten Renderer ist ein 3D-Force-Graph sinnvoll, weil er Kamera- und Graphinteraktion sowie gerichtete Links bereits als Ausgangspunkt anbietet. Die Graphdaten und die Visualisierungslogik werden trotzdem hinter einer kleinen eigenen Abstraktion gehalten. So können wir später eine 2D-Ansicht oder eine spezialisierte Orbit-Ansicht ergänzen, ohne das Datenformat umzubauen.
+Der Viewer verwendet ausschließlich eine 3D-Ansicht. Ein 3D-Force-Graph ist sinnvoll, weil er Kamera- und Graphinteraktion sowie gerichtete Links als Ausgangspunkt anbietet. Die Graphdaten und die Visualisierungslogik werden hinter einer kleinen eigenen Abstraktion gehalten, damit wir den konkreten 3D-Renderer später austauschen können.
 
 Die Physik ist eine Layout-Hilfe, keine fachliche Aussage. Ein Node ist nicht wirklich „schwer“, nur weil er groß dargestellt wird. Die Darstellung darf daher deterministische Positionen, Gruppen und feste Layoutregeln ergänzen.
 
@@ -99,4 +98,4 @@ Wir messen stattdessen:
 - Speicherbedarf,
 - Verhalten bei fehlenden oder extremen Metrikwerten.
 
-Für größere Graphen brauchen wir später Aggregation, Detailstufen und gegebenenfalls vorgegebene Positionen. Pruning darf nicht stillschweigend Daten löschen; es muss als Darstellungsentscheidung sichtbar und rückgängig machbar sein.
+Für größere Graphen brauchen wir später Aggregation, Detailstufen und gegebenenfalls vorgegebene Positionen. Pruning darf nicht stillschweigend Daten löschen; es muss als Darstellungsentscheidung sichtbar und rückgängig machbar sein. Eine separate 2D-Ansicht ist nicht Bestandteil des Produkts.

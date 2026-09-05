@@ -20,13 +20,12 @@
 
 **Ergebnis:** Eine statisch hostbare Seite kann ein lokales Graph-JSON öffnen.
 
-### Phase 2 – Erste Graphansicht
+### Phase 2 – Erste 3D-Ansicht
 
-- [X] Dependency-freier deterministischer SVG-Renderer als erste 2D-Ansicht.
-- [X] Nodes, Links und Richtung darstellen.
-- [ ] Kamera- und Resize-Verhalten für die geplante 3D-Ansicht.
-- [X] Einfache, erklärbare Größen- und Breiten-Mappings.
 - [ ] Three.js-basierter 3D-Renderer, zunächst mit `3d-force-graph`.
+- [ ] Nodes, Links und Richtung in 3D darstellen.
+- [ ] Kamera- und Resize-Verhalten.
+- [ ] Einfache, erklärbare Größen- und Breiten-Mappings.
 
 **Ergebnis:** Der Graph ist navigierbar und nicht nur ein Screenshot.
 
@@ -45,7 +44,7 @@
 - [ ] `groupId` für Cluster und semantischen Zoom verwenden.
 - [ ] Nodes je nach Zoomstufe aggregieren oder ausblenden.
 - [ ] Performance-Budgets mit realistischen Graphgrößen messen.
-- [X] 2D-Fallback oder Diagnoseansicht ergänzen.
+- [ ] 3D-Darstellung bei größeren Graphen mit Aggregation und Detailstufen skalieren.
 
 **Ergebnis:** Größere Graphen bleiben untersuchbar.
 
@@ -87,7 +86,7 @@ Der Webspace braucht keinen Node-Prozess. Node ist nur eine mögliche Entwicklun
 ## Offene Entscheidungen
 
 - Wie viele Nodes muss der Vollmodus im ersten Zielbrowser flüssig darstellen?
-- Ist 3D die Standardansicht und 2D nur Fallback, oder sind beide gleichwertige Modi?
+- [X] 3D ist die einzige Produktansicht; einen 2D-Fallback bauen wir nicht.
 - Soll `weight` standardmäßig die Linkbreite steuern oder nur als auswählbare Metrik gelten?
 - Welche Gruppierungssemantik brauchen wir wirklich: nur `groupId`, oder später echte Container-Nodes?
 - Werden Ansichtsprofile als Datei, URL-Fragment oder lokale Browsereinstellung gespeichert?
