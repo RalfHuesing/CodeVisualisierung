@@ -34,9 +34,9 @@ Jede dieser Aussagen braucht mindestens einen automatisierten Test; Größen- un
 
 - [X] Graphformat 0.1 festlegen.
 - [X] JSON-Schema anlegen.
-- [ ] Kleine, mittlere, große und absichtlich fehlerhafte Beispieldateien anlegen.
-- [ ] Die Beispiele fachlich wie einen Codegraphen modellieren: Namespaces, Klassen, Methoden, Dateien und typische Beziehungen.
-- [ ] Eine deterministisch erzeugte Belastungs-Fixture für Performance-Tests ergänzen.
+- [X] Kleine, mittlere, große und absichtlich fehlerhafte Beispieldateien anlegen.
+- [X] Die Beispiele fachlich wie einen Codegraphen modellieren: Namespaces, Klassen, Methoden, Dateien und typische Beziehungen.
+- [X] Eine deterministisch erzeugte Belastungs-Fixture für Performance-Tests ergänzen.
 - [X] Normalisierung und Validierung als reine Funktionen definieren.
 
 **Ergebnis:** Wir können Datenqualität testen, ohne einen Renderer zu benötigen.
@@ -66,24 +66,24 @@ Jede dieser Aussagen braucht mindestens einen automatisierten Test; Größen- un
 - [X] Auswahl, Fokus und Nachbarschaftshervorhebung.
 - [X] Detailbereich als HTML über der Szene.
 - [X] Suche und Reset.
-- [ ] Mehrere mitgelieferte Beispiele über einen zentralen Beispielkatalog auswählen.
-- [ ] Optionale Filter nach Node-Art, Gruppe, Tag und Link-Art.
-- [ ] Legende und aktive Metrik sichtbar machen.
-- [ ] Eine zentrale, explizite Auswahl der Node- und Linkmetriken ermöglichen.
+- [X] Mehrere mitgelieferte Beispiele über einen zentralen Beispielkatalog auswählen.
+- [X] Optionale Filter nach Node-Art, Gruppe, Tag und Link-Art.
+- [X] Legende und aktive Metrik sichtbar machen.
+- [X] Eine zentrale, explizite Auswahl der Node- und Linkmetriken ermöglichen.
 - [ ] Node-Arten mit mehr als Farbe unterscheiden, sofern der Renderer das ohne unnötige Komplexität unterstützt.
-- [ ] Tastaturbedienung, Fokuszustände und sinnvolle zugängliche HTML-Alternativen für die 3D-Szene ergänzen.
+- [X] Tastaturbedienung, Fokuszustände und sinnvolle zugängliche HTML-Alternativen für die 3D-Szene ergänzen.
 - [ ] Lade-, leere, ungültige und nicht unterstützte Zustände im Browser testen.
 
 **Ergebnis:** Die Visualisierung unterstützt konkrete Fragen an den Graphen.
 
 ### Phase 4 – Realistische Beispiele und semantische Orientierung
 
-- [ ] Eine kleine Fixture mit wenigen Namespace-, Klassen- und Methoden-Nodes als Referenzbeispiel pflegen.
-- [ ] Eine mittlere Fixture mit mehreren Bereichen und gerichteten Abhängigkeiten pflegen.
-- [ ] Eine große Fixture mit vielen Methoden, Klassen, Namespaces, Tags und benannten Metriken pflegen.
-- [ ] `groupId` für Cluster und semantische Orientierung verwenden, ohne verschachtelte JSON-Strukturen vorauszusetzen.
-- [ ] Gruppen sichtbar und ein-/ausblendbar machen.
-- [ ] Semantischen Zoom mit klarer UI-Rückmeldung ergänzen.
+- [X] Eine kleine Fixture mit wenigen Namespace-, Klassen- und Methoden-Nodes als Referenzbeispiel pflegen.
+- [X] Eine mittlere Fixture mit mehreren Bereichen und gerichteten Abhängigkeiten pflegen.
+- [X] Eine große Fixture mit vielen Methoden, Klassen, Namespaces, Tags und benannten Metriken pflegen.
+- [X] `groupId` für Cluster und semantische Orientierung verwenden, ohne verschachtelte JSON-Strukturen vorauszusetzen.
+- [X] Gruppen sichtbar und ein-/ausblendbar machen.
+- [X] Semantischen Zoom mit klarer UI-Rückmeldung ergänzen.
 - [ ] Je nach Zoomstufe Nodes aggregieren oder ausblenden, ohne Daten stillschweigend zu löschen.
 - [ ] Ausgewählte Beziehungen und Gruppen auch in dichter 3D-Darstellung nachvollziehbar halten.
 

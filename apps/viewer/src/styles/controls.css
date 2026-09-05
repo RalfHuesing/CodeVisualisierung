@@ -33,6 +33,13 @@ select {
   font-size: 0.875rem;
 }
 
+.metric-picker select,
+.filter-picker select,
+.example-picker select,
+.zoom-picker select {
+  width: 8.5rem;
+}
+
 input[type="search"]:focus,
 select:focus {
   border-color: var(--primary);
@@ -60,7 +67,11 @@ select:focus {
   }
 
   input[type="search"],
-  select {
+  select,
+  .metric-picker select,
+  .filter-picker select,
+  .example-picker select,
+  .zoom-picker select {
     width: 8rem;
   }
 

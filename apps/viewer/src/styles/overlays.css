@@ -1,7 +1,8 @@
 .drop-hint,
 .status,
 .error-panel,
-.details-card {
+.details-card,
+.legend-panel {
   position: absolute;
   z-index: 1;
   border: 1px solid var(--border);
@@ -29,6 +30,56 @@
   bottom: 1rem;
   left: 1rem;
   padding: 0.5rem 0.75rem;
+}
+
+.legend-panel {
+  right: 1rem;
+  bottom: 1rem;
+  width: min(18rem, calc(100% - 2rem));
+  padding: 0.8rem 1rem;
+  color: var(--muted-foreground);
+  font-size: 0.8rem;
+}
+
+.legend-panel h2 {
+  margin-bottom: 0.35rem;
+  color: var(--foreground);
+  font-size: 0.9rem;
+}
+
+.legend-panel p {
+  margin-top: 0.2rem;
+}
+
+.legend-list,
+.accessible-node-list ul {
+  display: grid;
+  gap: 0.2rem;
+  margin: 0.45rem 0 0;
+  padding-left: 1rem;
+}
+
+.legend-list li {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+}
+
+.accessible-node-list button {
+  min-height: 1.75rem;
+  padding: 0.2rem 0.4rem;
+  border: 0;
+  color: var(--muted-foreground);
+  background: transparent;
+  font-size: 0.8rem;
+  text-align: left;
 }
 
 .details-card {

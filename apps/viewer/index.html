@@ -31,11 +31,49 @@
               <option value="">Node auswählen</option>
             </select>
           </label>
+          <label class="example-picker">
+            <span class="visually-hidden">Beispiel auswählen</span>
+            <select id="example-select">
+              <option value="minimal">Beispiel laden</option>
+            </select>
+          </label>
+          <label class="metric-picker">
+            <span class="visually-hidden">Node-Metrik</span>
+            <select id="node-metric-select" aria-label="Node-Metrik"></select>
+          </label>
+          <label class="metric-picker">
+            <span class="visually-hidden">Link-Metrik</span>
+            <select id="link-metric-select" aria-label="Link-Metrik"></select>
+          </label>
+          <label class="filter-picker">
+            <span class="visually-hidden">Node-Art filtern</span>
+            <select id="kind-filter" aria-label="Node-Art filtern"><option value="">Alle Arten</option></select>
+          </label>
+          <label class="zoom-picker">
+            <span class="visually-hidden">Detailstufe</span>
+            <select id="zoom-select" aria-label="Detailstufe">
+              <option value="detail">Detail</option>
+              <option value="overview">Übersicht · Methoden ausblenden</option>
+            </select>
+          </label>
+          <label class="filter-picker">
+            <span class="visually-hidden">Gruppe filtern</span>
+            <select id="group-filter" aria-label="Gruppe filtern"><option value="">Alle Gruppen</option></select>
+          </label>
+          <label class="filter-picker">
+            <span class="visually-hidden">Tag filtern</span>
+            <select id="tag-filter" aria-label="Tag filtern"><option value="">Alle Tags</option></select>
+          </label>
+          <label class="filter-picker">
+            <span class="visually-hidden">Link-Art filtern</span>
+            <select id="link-kind-filter" aria-label="Link-Art filtern"><option value="">Alle Link-Arten</option></select>
+          </label>
           <label class="toolbar-button">
             JSON laden
             <input id="graph-file" class="visually-hidden" type="file" accept=".json,application/json">
           </label>
-          <button id="load-sample" type="button">Beispiel</button>
+          <button id="load-sample" type="button">Minimal</button>
+          <button id="reset-filters" type="button">Filter löschen</button>
           <button id="reset-view" type="button">Reset</button>
           <button id="toggle-details" type="button" aria-expanded="false" aria-controls="details-card">Details</button>
         </div>
@@ -48,6 +86,12 @@
           <span>oder oben über „JSON laden“ auswählen</span>
         </div>
         <p id="graph-status" class="status" role="status" aria-live="polite">Bereit zum Laden.</p>
+        <aside id="legend-panel" class="legend-panel" aria-label="Legende">
+          <h2>Legende</h2>
+          <p id="legend-node-metric">Node-Größe: –</p>
+          <p id="legend-link-metric">Linkbreite: –</p>
+          <ul id="legend-kinds" class="legend-list"></ul>
+        </aside>
 
         <aside id="details-card" class="details-card" aria-labelledby="details-title" hidden>
           <div class="details-header">
@@ -86,6 +130,10 @@
             <pre id="selected-node-metrics" class="details-code"></pre>
             <h3>Attribute</h3>
             <pre id="selected-node-attributes" class="details-code"></pre>
+          </div>
+          <div id="visible-node-list" class="accessible-node-list">
+            <h3>Sichtbare Nodes</h3>
+            <ul id="accessible-nodes"></ul>
           </div>
         </aside>
 

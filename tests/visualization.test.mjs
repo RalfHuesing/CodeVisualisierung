@@ -1,7 +1,17 @@
 import { describe, expect, it } from "vitest";
 import sampleGraph from "../contracts/graph-universe/fixtures/minimal.json" with { type: "json" };
 import { normalizeGraph } from "../apps/viewer/src/domain/graph.js";
-import { createVisualGraphData, findNodeMetric, findSearchMatches, getNodeNeighborhood, scaleValue } from "../apps/viewer/src/rendering/graph-mapping.js";
+import {
+  createVisualGraphData,
+  filterGraph,
+  findLinkMetric,
+  findNodeMetric,
+  findSearchMatches,
+  getFilterOptions,
+  getNodeNeighborhood,
+  scaleValue
+} from "../apps/viewer/src/rendering/graph-mapping.js";
+import { isWebGLSupported } from "../apps/viewer/src/rendering/webgl.js";
 
 describe("graph visualization calculations", () => {
   it("uses the first available node metric for visual size", () => {
@@ -15,6 +25,25 @@ describe("graph visualization calculations", () => {
       { id: "database", visualValue: 2 }
     ]);
     expect(visualData.links.every((link) => link.source && link.target)).toBe(true);
+    expect(findLinkMetric(graph)).toBe("weight");
+  });
+
+  it("supports explicit node and link metrics", () => {
+    const graph = normalizeGraph(sampleGraph);
+    const visualData = createVisualGraphData(graph, { linkMetric: "callCount", nodeMetric: "importance" });
+
+    expect(visualData.nodeMetric).toBe("importance");
+    expect(visualData.linkMetric).toBe("callCount");
+    expect(visualData.links.map((link) => link.visualWidth)).toEqual([0.8, 0.2]);
+  });
+
+  it("filters nodes and keeps only links between visible nodes", () => {
+    const graph = normalizeGraph(sampleGraph);
+
+    expect(filterGraph(graph, { kind: "storage" }).nodes.map((node) => node.id)).toEqual(["database"]);
+    expect(filterGraph(graph, { linkKind: "depends-on" }).links).toHaveLength(2);
+    expect(getFilterOptions(graph)).toMatchObject({ groups: ["core", "data", "web"], kinds: ["service", "storage"] });
+    expect(filterGraph(graph, { hiddenKinds: ["service"] }).nodes.map((node) => node.id)).toEqual(["database"]);
   });
 
   it("scales values into the configured output range", () => {
@@ -38,5 +67,13 @@ describe("graph visualization calculations", () => {
 
     expect([...findSearchMatches(graph, "ord")]).toEqual(["orders"]);
     expect([...findSearchMatches(graph, "missing")]).toEqual([]);
+  });
+
+  it("detects supported and unavailable browser graphics contexts", () => {
+    const supportedDocument = { createElement: () => ({ getContext: (name) => name === "webgl2" ? {} : null }) };
+    const unsupportedDocument = { createElement: () => ({ getContext: () => null }) };
+
+    expect(isWebGLSupported(supportedDocument)).toBe(true);
+    expect(isWebGLSupported(unsupportedDocument)).toBe(false);
   });
 });

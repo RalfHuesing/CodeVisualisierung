@@ -57,3 +57,44 @@ test("shows a useful error for malformed uploaded JSON", async ({ page }) => {
   await expect(page.locator("#graph-status")).toHaveText("Die Graphdaten sind ungültig.");
   await expect(page.locator("#graph-error-list")).toContainText("Die Datei enthält kein gültiges JSON.");
 });
+
+test("switches examples and exposes active visual metrics", async ({ page }) => {
+  await page.goto("/");
+
+  await page.locator("#example-select").selectOption("small");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "14");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-link-count", "26");
+  await expect(page.locator("#legend-node-metric")).toContainText("Komplexität");
+  await expect(page.locator("#legend-link-metric")).toContainText("Gewicht");
+});
+
+test("filters the 3d graph without losing the source graph", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#example-select").selectOption("small");
+
+  await page.locator("#zoom-select").selectOption("overview");
+  await expect(page.locator("#graph-status")).toContainText("Übersicht");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "6");
+  await page.locator("#zoom-select").selectOption("detail");
+
+  await page.locator("#kind-filter").selectOption("method");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "8");
+  await expect(page.locator("#accessible-nodes li")).toHaveCount(8);
+
+  await page.locator("#reset-filters").click();
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "14");
+  await page.locator("#toggle-details").click();
+  await expect(page.locator("#accessible-nodes li")).toHaveCount(14);
+});
+
+test("reports an empty but valid graph clearly", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#graph-file").setInputFiles({
+    buffer: Buffer.from(JSON.stringify({ format: { name: "graph-universe", version: "0.1" }, nodes: [], links: [] })),
+    mimeType: "application/json",
+    name: "empty.json"
+  });
+
+  await expect(page.locator("#graph-status")).toHaveText("empty.json geladen: Der Graph ist leer.");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "0");
+});

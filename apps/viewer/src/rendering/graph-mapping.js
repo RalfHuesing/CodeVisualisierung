@@ -15,26 +15,67 @@ export const VIEWER_CONFIG = Object.freeze({
   })
 });
 
-export function createVisualGraphData(graph) {
-  const nodeMetric = findNodeMetric(graph);
+export function createVisualGraphData(graph, options = {}) {
+  const nodeMetric = options.nodeMetric ?? findNodeMetric(graph);
+  const linkMetric = options.linkMetric ?? findLinkMetric(graph);
   const nodeValues = graph.nodes.map((node) => node.metrics?.[nodeMetric]).filter(Number.isFinite);
-  const linkValues = graph.links.map((link) => getLinkValue(link)).filter(Number.isFinite);
+  const linkValues = graph.links.map((link) => getLinkValue(link, linkMetric)).filter(Number.isFinite);
   const nodes = graph.nodes.map((node) => ({
     ...node,
-    color: getNodeColor(node, graph),
+    color: getNodeKindColor(node, graph),
     visualValue: scaleValue(node.metrics?.[nodeMetric], nodeValues, VIEWER_CONFIG.node.minValue, VIEWER_CONFIG.node.maxValue)
   }));
   const links = graph.links.map((link) => ({
     ...link,
-    visualWidth: scaleValue(getLinkValue(link), linkValues, VIEWER_CONFIG.link.minWidth, VIEWER_CONFIG.link.maxWidth)
+    visualWidth: scaleValue(getLinkValue(link, linkMetric), linkValues, VIEWER_CONFIG.link.minWidth, VIEWER_CONFIG.link.maxWidth)
   }));
 
-  return { links, nodeMetric, nodes };
+  return { linkMetric, links, nodeMetric, nodes };
 }
 
 export function findNodeMetric(graph) {
-  const metricNames = Object.keys(graph.metricDefinitions ?? {});
+  const metricNames = getMetricNames(graph, "node");
   return metricNames.find((name) => graph.nodes.some((node) => Number.isFinite(node.metrics?.[name]))) ?? null;
+}
+
+export function findLinkMetric(graph) {
+  if (graph.links.some((link) => Number.isFinite(link.weight))) {
+    return "weight";
+  }
+
+  return getMetricNames(graph, "link").find((name) => graph.links.some((link) => Number.isFinite(link.metrics?.[name]))) ?? null;
+}
+
+export function getMetricNames(graph, type) {
+  const items = type === "node" ? graph.nodes : graph.links;
+  const definedNames = Object.keys(graph.metricDefinitions ?? {});
+  const observedNames = items.flatMap((item) => Object.keys(item.metrics ?? {}));
+  const metricNames = [...new Set([...definedNames, ...observedNames])];
+  return metricNames.filter((name) => items.some((item) => Number.isFinite(item.metrics?.[name])));
+}
+
+export function getMetricLabel(graph, metricName) {
+  if (metricName === "weight") {
+    return "Gewicht";
+  }
+
+  return graph.metricDefinitions?.[metricName]?.label ?? metricName ?? "Keine Metrik";
+}
+
+export function getFilterOptions(graph) {
+  return {
+    groups: getUniqueValues(graph.nodes, "groupId"),
+    kinds: getUniqueValues(graph.nodes, "kind"),
+    linkKinds: getUniqueValues(graph.links, "kind"),
+    tags: [...new Set(graph.nodes.flatMap((node) => node.tags ?? []))].sort()
+  };
+}
+
+export function filterGraph(graph, filters = {}) {
+  const nodes = graph.nodes.filter((node) => matchesNodeFilters(node, filters));
+  const nodeIds = new Set(nodes.map((node) => node.id));
+  const links = graph.links.filter((link) => nodeIds.has(link.source) && nodeIds.has(link.target) && matchesLinkFilters(link, filters));
+  return { ...graph, links, nodes };
 }
 
 export function findSearchMatches(graph, query) {
@@ -77,16 +118,32 @@ export function getNodeNeighborhood(graph, nodeId) {
   return { incomingLinks, neighborIds, outgoingLinks, undirectedLinks };
 }
 
-function getNodeColor(node, graph) {
+export function getNodeKindColor(node, graph) {
   const kinds = [...new Set(graph.nodes.map((item) => item.kind ?? "node"))];
   const kindIndex = kinds.indexOf(node.kind ?? "node");
   return VIEWER_CONFIG.node.colors[kindIndex % VIEWER_CONFIG.node.colors.length];
 }
 
-function getLinkValue(link) {
-  if (Number.isFinite(link.weight)) {
+function getLinkValue(link, metricName) {
+  if (metricName === "weight" && Number.isFinite(link.weight)) {
     return link.weight;
   }
 
-  return Object.values(link.metrics ?? {}).find(Number.isFinite) ?? 1;
+  return Number.isFinite(link.metrics?.[metricName]) ? link.metrics[metricName] : 1;
+}
+
+function getUniqueValues(items, propertyName) {
+  return [...new Set(items.map((item) => item[propertyName]).filter(Boolean))].sort();
+}
+
+function matchesNodeFilters(node, filters) {
+  const hiddenKind = filters.hiddenKinds?.includes(node.kind);
+  const groupMatches = !filters.groupId || node.groupId === filters.groupId;
+  const kindMatches = !filters.kind || node.kind === filters.kind;
+  const tagMatches = !filters.tag || node.tags?.includes(filters.tag);
+  return !hiddenKind && groupMatches && kindMatches && tagMatches;
+}
+
+function matchesLinkFilters(link, filters) {
+  return !filters.linkKind || link.kind === filters.linkKind;
 }
