@@ -20,6 +20,8 @@ flowchart LR
 - [03 – Graphformat](03-Graphformat.md): Vertrag für `nodes`, `links`, Metadaten und Metriken.
 - [04 – Datenquellen](04-Datenquellen.md): Abgrenzung und spätere Adapter, zuerst C#.
 - [05 – Roadmap](05-Roadmap.md): Umsetzungsreihenfolge, Tests und offene Entscheidungen.
+- [06 – Graphmodell und Visualisierungsprofile](06-Graphmodell-und-Visualisierungsprofile.md): Allgemeine Vertragserweiterung für Typen, Filter, Projektionen und Themes.
+- [07 – C#-Referenzgraph](07-CSharp-Referenzgraph.md): Fachlicher Zielentwurf für den späteren C#-/Roslyn-Exporter.
 - [99 – Archiv](99-Grob-Konzept-Idee-Archiv.md): Der ursprüngliche, noch vermischte Entwurf.
 
 ## Leitbegriffe

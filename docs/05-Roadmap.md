@@ -1,155 +1,80 @@
-# Roadmap und technische Leitplanken
+# Roadmap
 
-## Aktueller Lieferumfang
+Diese Datei ist der schlanke Arbeitsindex. Fachliche Entscheidungen und
+Akzeptanzkriterien stehen in den verlinkten Dokumenten und werden hier nicht
+dupliziert.
 
-Der aktuelle Produktfokus ist die vollständige, allgemeingültige 3D-Visualisierung eines Graph-JSONs im Browser.
+## Leitplanken
 
-Zum aktuellen Ziel gehören:
+- Der aktuelle Lieferumfang ist ein allgemeiner, statisch hostbarer 3D-Viewer.
+- Der Viewer kennt keine C#-, Roslyn- oder andere Quelllogik.
+- 2D-Ansichten und 2D-Fallbacks gehören nicht zum Produkt.
+- Der aktuelle Viewer-MVP ist funktionsfähig; der allgemeine Vertrag ist noch
+  nicht auf dem geplanten Stand 0.2.
 
-- eine statisch hostbare Webseite ohne Backend,
-- lokales Öffnen und Validieren von Graph-JSON,
-- mehrere verständliche Beispiele von klein bis groß,
-- eine untersuchbare 3D-Szene mit Auswahl, Suche, Filtern, Gruppen und Details,
-- nachvollziehbare visuelle Kodierungen für Node- und Linkeigenschaften,
-- deterministische Tests und messbare Grenzen für größere Graphen.
+Grundlagen: [Vision](01-Vision.md), [Visualisierung](02-Visualisierung.md),
+[Graphformat](03-Graphformat.md), [Graphmodell und Visualisierungsprofile](06-Graphmodell-und-Visualisierungsprofile.md).
 
-Nicht zum aktuellen Ziel gehören C#-, Roslyn- oder andere Datenquellen-Adapter. Sie dürfen den generischen Graphvertrag nicht mit Viewerlogik vermischen und werden erst nach Abschluss des Viewers begonnen.
+## Phase 0 – Bestand und Grundlagen
 
-## Definition of Done für den Viewer
+- [X] Produktvision und 3D-Leitentscheidung dokumentieren → [01](01-Vision.md), [02](02-Visualisierung.md)
+- [X] Graphformat 0.1, Schema und reine Validierung anlegen → [03](03-Graphformat.md)
+- [X] Statischen Viewer-MVP mit Upload, 3D-Szene, Auswahl und Details liefern → [Viewer](../apps/viewer/README.md)
+- [X] Deterministische Tests und Größenlimits einrichten → [Viewer-Tests](../apps/viewer/tests/viewer.spec.js)
 
-Der Viewer ist für diesen Abschnitt fertig, wenn eine Person ohne technische Kenntnisse:
+## Phase 1 – Allgemeiner Graphvertrag 0.2
 
-1. ein Beispiel oder eine lokale JSON-Datei öffnen kann,
-2. auch bei einem größeren Graphen die Struktur in einer reinen 3D-Ansicht erkennt,
-3. Node-Arten, Gruppen, Richtungen und aktive Metriken unterscheiden kann,
-4. einen Node findet, fokussiert, seine Nachbarschaft und Details untersucht,
-5. die Darstellung filtern, zurücksetzen und verständlich bedienen kann,
-6. bei ungültigen Daten oder fehlender WebGL-Unterstützung eine klare Rückmeldung erhält.
+- [ ] `nodeTypes` und `linkTypes` als deklarative Definitionen festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [ ] Facetten, Filterquellen und benannte Metriken festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [ ] View-Profile und Detailstufen festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [ ] Hierarchie, Containment und Summary-Links festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [ ] Visualisierungstokens und Theme-Auflösung festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [ ] Schema, gültige Fixtures und ungültige Fixtures für 0.2 ergänzen → [03](03-Graphformat.md), [06](06-Graphmodell-und-Visualisierungsprofile.md)
 
-Jede dieser Aussagen braucht mindestens einen automatisierten Test; Größen- und Performanceaussagen brauchen reproduzierbare Messungen.
+## Phase 2 – Domänenneutrale Referenzdaten
 
-## Reihenfolge
+- [X] Kleine, mittlere, große und deterministische Belastungs-Fixtures pflegen → [Fixtures](../contracts/graph-universe/fixtures)
+- [X] Edge Cases für leere, isolierte, parallele und unvollständige Graphen pflegen → [Edge Fixture](../contracts/graph-universe/fixtures/edge-cases.json)
+- [ ] Einen Familienstammbaum als Nicht-Code-Graph ergänzen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [ ] Ein Firmen- oder Beteiligungsgeflecht als Nicht-Code-Graph ergänzen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [ ] Eine C#-Referenz-Fixture für den späteren Exporter spezifizieren und anlegen → [07](07-CSharp-Referenzgraph.md)
 
-### Phase 0 – Vertrag und Fixtures
+## Phase 3 – Schema-gesteuerter Viewer
 
-- [X] Graphformat 0.1 festlegen.
-- [X] JSON-Schema anlegen.
-- [X] Kleine, mittlere, große und absichtlich fehlerhafte Beispieldateien anlegen.
-- [X] Die Beispiele fachlich wie einen Codegraphen modellieren: Namespaces, Klassen, Methoden, Dateien und typische Beziehungen.
-- [X] Eine deterministisch erzeugte Belastungs-Fixture für Performance-Tests ergänzen.
-- [X] Normalisierung und Validierung als reine Funktionen definieren.
+- [X] Mehrere Beispiele, Upload, Suche, Auswahl, Reset und Grundfilter anbieten → [Viewer](../apps/viewer/README.md)
+- [X] Node-Arten mit Geometrie, Farbe, Metrik und sichtbarer Legende darstellen → [02](02-Visualisierung.md)
+- [ ] Filter und Facetten vollständig aus dem Graph-JSON erzeugen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [ ] View-Profile aus dem Graph-JSON laden und auswählbar machen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [ ] Summary-Links und Projektionen bei jeder Detailstufe korrekt darstellen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [ ] Unbekannte Typen und Visualisierungstokens mit dokumentiertem Fallback behandeln → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [ ] C#-Begriffe vollständig aus dem Viewer-Code entfernen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
 
-**Ergebnis:** Wir können Datenqualität testen, ohne einen Renderer zu benötigen.
+## Phase 4 – Skalierung und Qualitätsgrenzen
 
-### Phase 1 – Statische Browser-App
+- [X] Deterministische Aufbereitungs-Benchmarks für alle Ziel-Fixtures ausführen → [Visualisierung](02-Visualisierung.md)
+- [X] Statische Produktionsausgabe bauen und Smoke-Tests gegen den Build ausführen → [Viewer](../apps/viewer/README.md)
+- [X] Fehler-, Leer-, WebGL-, Resize- und große-Graph-Zustände testen → [Viewer-Tests](../apps/viewer/tests/viewer.spec.js)
+- [ ] Zeit bis zum ersten sichtbaren Bild, Interaktionslatenz, FPS und Speicher im Zielbrowser messen → [Visualisierung](02-Visualisierung.md)
+- [ ] Unterstützten interaktiven Vollmodus und Verhalten darüber festlegen → [Visualisierung](02-Visualisierung.md)
+- [ ] Aggregation oder weitere Detailstufen nur aus den Messungen ableiten → [06](06-Graphmodell-und-Visualisierungsprofile.md)
 
-- [X] HTML/CSS/JavaScript-App mit statischem Build.
-- [X] Datei-Upload und Drag-and-drop.
-- [X] JSON-Parsing, Schema-Validierung und Fehlermeldungen.
-- [X] Beispieldaten laden.
+## Phase 5 – Viewer-Abschluss
 
-**Ergebnis:** Eine statisch hostbare Seite kann ein lokales Graph-JSON öffnen.
+- [X] Bedienung, Graphformat, Beispiele und bekannte Grenzen dokumentieren → [Dokumentationsindex](README.md)
+- [ ] Viewer-Version und fachlichen Meilenstein festlegen → [Visualisierung](02-Visualisierung.md)
+- [ ] Alle offenen Punkte aus Phase 1, 3 und 4 abschließen → dieses Dokument
 
-### Phase 2 – Erste 3D-Ansicht
+## Phase 6 – Spätere Datenquellen
 
-- [X] Three.js-basierter 3D-Renderer mit `3d-force-graph`.
-- [X] Nodes, Links und Richtung in 3D darstellen.
-- [X] Kamera- und Resize-Verhalten.
-- [X] Einfache, erklärbare Größen- und Breiten-Mappings.
-- [X] Lade-, Leer-, Fehler- und WebGL-Fehlerzustände vollständig als 3D-Viewer-Zustände behandeln.
-- [X] Renderer-Verhalten bei Node-, Link- und Gruppenzahlen aus den Ziel-Fixtures verifizieren.
+- [ ] C#-/Roslyn-Exporter implementieren → [07](07-CSharp-Referenzgraph.md)
+- [ ] C#-Graphen gegen Vertrag, Referenz-Fixture und Projektionen prüfen → [07](07-CSharp-Referenzgraph.md)
+- [ ] Weitere Datenquellenprofile ergänzen, ohne den Viewer zu ändern → [06](06-Graphmodell-und-Visualisierungsprofile.md)
 
-**Ergebnis:** Der Graph ist navigierbar und nicht nur ein Screenshot.
+## Außerhalb des aktuellen Umfangs
 
-### Phase 3 – Verstehen und Bedienen
+- Git-Metriken und Zeitverläufe
+- Live-Deltas und Agentenereignisse
+- Animationen ohne erklärende fachliche Bedeutung
+- Backend- oder Upload-Server
 
-- [X] Auswahl, Fokus und Nachbarschaftshervorhebung.
-- [X] Detailbereich als HTML über der Szene.
-- [X] Suche und Reset.
-- [X] Mehrere mitgelieferte Beispiele über einen zentralen Beispielkatalog auswählen.
-- [X] Optionale Filter nach Node-Art, Gruppe, Tag und Link-Art.
-- [X] Legende und aktive Metrik sichtbar machen.
-- [X] Eine zentrale, explizite Auswahl der Node- und Linkmetriken ermöglichen.
-- [X] Node-Arten mit mehr als Farbe unterscheiden, sofern der Renderer das ohne unnötige Komplexität unterstützt.
-- [X] Tastaturbedienung, Fokuszustände und sinnvolle zugängliche HTML-Alternativen für die 3D-Szene ergänzen.
-- [X] Lade-, leere, ungültige und nicht unterstützte Zustände im Browser testen.
-
-**Ergebnis:** Die Visualisierung unterstützt konkrete Fragen an den Graphen.
-
-### Phase 4 – Realistische Beispiele und semantische Orientierung
-
-- [X] Eine kleine Fixture mit wenigen Namespace-, Klassen- und Methoden-Nodes als Referenzbeispiel pflegen.
-- [X] Eine mittlere Fixture mit mehreren Bereichen und gerichteten Abhängigkeiten pflegen.
-- [X] Eine große Fixture mit vielen Methoden, Klassen, Namespaces, Tags und benannten Metriken pflegen.
-- [X] `groupId` für Cluster und semantische Orientierung verwenden, ohne verschachtelte JSON-Strukturen vorauszusetzen.
-- [X] Gruppen sichtbar und ein-/ausblendbar machen.
-- [X] Semantischen Zoom mit klarer UI-Rückmeldung ergänzen.
-- [X] Je nach Zoomstufe Nodes aggregieren oder ausblenden, ohne Daten stillschweigend zu löschen.
-- [X] Ausgewählte Beziehungen und Gruppen auch in dichter 3D-Darstellung nachvollziehbar halten.
-
-**Ergebnis:** Größere Graphen bleiben untersuchbar.
-
-### Phase 5 – Skalierung und Robustheit
-
-- [X] Performance-Budgets mit den kleinen, mittleren, großen und deterministischen Belastungs-Fixtures messen.
-- [ ] Zeit bis zum ersten sichtbaren Bild, Interaktionslatenz, Bildrate und Speicherverhalten dokumentieren.
-- [ ] Einen unterstützten interaktiven Vollmodus und das Verhalten darüber hinaus festlegen.
-- [ ] Aggregation, Detailstufen oder vorgegebene Positionen für große Graphen einsetzen, falls die Messungen es erfordern.
-- [X] Extremwerte, fehlende Metriken, isolierte Nodes, parallele Links und leere Graphen verlässlich darstellen.
-- [X] Browser-Smoke-Tests für Resize, WebGL-Kontext, große Fixture und Reset stabilisieren.
-
-**Ergebnis:** Der Viewer hat nachvollziehbare Grenzen und verhält sich auch bei ungewöhnlichen Daten zuverlässig.
-
-### Phase 6 – Viewer-Abschluss
-
-- [X] Statische Produktionsausgabe bauen und auf einem einfachen Webspace verifizieren.
-- [X] Alle Nutzerpfade aus der Definition of Done als End-to-End-Szenarien abdecken.
-- [X] Dokumentation für Graphformat, Beispiele, Bedienung und bekannte Grenzen vervollständigen.
-- [X] Abhängigkeiten und Bundlegröße prüfen; nur bei messbarem Mehrwert optimieren.
-- [ ] Viewer-Version als fachlich abgeschlossenen Meilenstein markieren.
-
-**Ergebnis:** Die allgemeingültige 3D-Visualisierung ist als eigenständiges Produkt nutzbar.
-
-### Phase 7 – Spätere Datenquellen, außerhalb des aktuellen Ziels
-
-- [ ] C#-Projekt analysieren.
-- [ ] Klassen, Methoden und Beziehungen exportieren.
-- [ ] Code-Metriken als benannte Metriken ergänzen.
-- [ ] Export gegen dasselbe Schema und dieselben Fixtures testen.
-
-**Ergebnis:** Der generische Viewer erhält eine erste reale Datenquelle.
-
-### Phase 6 – Zeit und Livezustand
-
-- [ ] Git-Metriken als zusätzliche Metriken.
-- [ ] Zeitabhängige Snapshots oder Deltas.
-- [ ] Agenten- und Testlaufereignisse.
-- [ ] Animation nur dort einsetzen, wo sie eine Änderung erklärt.
-
-## Empfohlener Entwicklungsstack
-
-- **Plain modernes JavaScript** für einen kleinen, gut lesbaren Einstieg. Typisierung wird erst ergänzt, wenn der konkrete Code davon profitiert.
-- **Vite** als Entwicklungs- und Buildwerkzeug; veröffentlicht wird nur das erzeugte statische `dist`-Verzeichnis.
-- **Three.js** als 3D-Basis.
-- **3d-force-graph** als erster Graph-Renderer, solange seine Abstraktion für das MVP ausreicht.
-- **JSON Schema** für den Datenvertrag; eine kleine Browser-Validierungsschicht kann darauf aufbauen.
-- **Vitest** für reine Logik und browsernahe Tests; zusätzlich ein kleiner End-to-End-Smoke-Test für Upload, Rendering und Auswahl.
-
-Der Webspace braucht keinen Node-Prozess. Node ist nur eine mögliche Entwicklungsabhängigkeit für Build und Tests. Wenn auch lokal kein Node verwendet werden soll, kann später auf einen No-Build-Ansatz mit versionierten ES-Modulen umgestellt werden; das verschlechtert jedoch meist Reproduzierbarkeit und Testergonomie.
-
-## Testpyramide
-
-1. **Schema-Fixtures:** gültige Dokumente, fehlende Pflichtfelder, doppelte IDs, unbekannte Linkziele, extreme Werte.
-2. **Pure Logic:** Normalisierung, Metric-Auswahl, Skalierung, Nachbarschaft und Filterung.
-3. **Browser-Tests:** Datei laden, Fehlermeldung anzeigen, Szene initialisieren, Node auswählen, Reset ausführen.
-4. **Visuelle Smoke-Checks:** WebGL-Kontext, Resize, leere Graphen, große aber noch unterstützte Fixtures.
-5. **Performance-Messung:** dokumentierte Budgets statt pauschaler Versprechen über LOC.
-
-## Offene Entscheidungen und Defaults
-
-- [ ] Wie viele Nodes muss der Vollmodus im ersten Zielbrowser flüssig darstellen? Bis zur Messung gelten kleine, mittlere und große Fixtures als getrennte Zielklassen; es wird kein pauschales LOC-Versprechen abgegeben.
-- [X] 3D ist die einzige Produktansicht; einen 2D-Fallback bauen wir nicht.
-- Als Default steuert `weight` zunächst die Linkbreite; benannte Linkmetriken werden auswählbar, sobald die UI dafür existiert.
-- Die Gruppierung basiert zunächst nur auf `groupId`; echte Container-Nodes sind nicht erforderlich.
-- Ansichtsprofile werden nicht vor dem Viewer-Abschluss persistiert; ein Speicherformat wird erst bei einem konkreten Bedarf entschieden.
-- Der erste Supportkorridor ist ein aktueller Desktop-Browser mit WebGL2; die konkrete Browsermatrix wird vor Phase 6 festgeschrieben.
+Diese Themen werden erst nach dem Viewer-Abschluss separat priorisiert.

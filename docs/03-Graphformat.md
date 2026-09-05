@@ -122,3 +122,14 @@ Der erste Entwurf erhält eine Versionsnummer und darf sich weiterentwickeln. De
 - Rohmetriken und normalisierte Anzeigegrößen bleiben getrennt.
 - Ansichtsprofile gehören später in eine eigene Konfiguration oder in lokale Viewer-Einstellungen.
 - Für die erste Version reicht ein JSON-Dokument; Streaming-Deltas kommen später.
+
+## Geplante Vertragserweiterung 0.2
+
+Der aktuelle Vertrag 0.1 bleibt der geprüfte technische Ausgangspunkt. Für den
+Greenfield-Viewer wird als nächster Vertragsschritt eine deklarative Erweiterung
+für Node- und Linktypen, Facetten, View-Profile, Projektionen und
+Visualisierungstokens entworfen. Die fachlichen Regeln und Beispiele dafür
+stehen in [06 – Graphmodell und Visualisierungsprofile](06-Graphmodell-und-Visualisierungsprofile.md).
+Die Erweiterung wird nicht aus C#-Begriffen abgeleitet; der spätere
+C#-Referenzfall ist separat in [07 – C#-Referenzgraph](07-CSharp-Referenzgraph.md)
+beschrieben.
