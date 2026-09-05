@@ -91,7 +91,7 @@ Jede dieser Aussagen braucht mindestens einen automatisierten Test; Größen- un
 
 ### Phase 5 – Skalierung und Robustheit
 
-- [ ] Performance-Budgets mit den kleinen, mittleren, großen und deterministischen Belastungs-Fixtures messen.
+- [X] Performance-Budgets mit den kleinen, mittleren, großen und deterministischen Belastungs-Fixtures messen.
 - [ ] Zeit bis zum ersten sichtbaren Bild, Interaktionslatenz, Bildrate und Speicherverhalten dokumentieren.
 - [ ] Einen unterstützten interaktiven Vollmodus und das Verhalten darüber hinaus festlegen.
 - [ ] Aggregation, Detailstufen oder vorgegebene Positionen für große Graphen einsetzen, falls die Messungen es erfordern.
@@ -103,8 +103,8 @@ Jede dieser Aussagen braucht mindestens einen automatisierten Test; Größen- un
 ### Phase 6 – Viewer-Abschluss
 
 - [X] Statische Produktionsausgabe bauen und auf einem einfachen Webspace verifizieren.
-- [ ] Alle Nutzerpfade aus der Definition of Done als End-to-End-Szenarien abdecken.
-- [ ] Dokumentation für Graphformat, Beispiele, Bedienung und bekannte Grenzen vervollständigen.
+- [X] Alle Nutzerpfade aus der Definition of Done als End-to-End-Szenarien abdecken.
+- [X] Dokumentation für Graphformat, Beispiele, Bedienung und bekannte Grenzen vervollständigen.
 - [X] Abhängigkeiten und Bundlegröße prüfen; nur bei messbarem Mehrwert optimieren.
 - [ ] Viewer-Version als fachlich abgeschlossenen Meilenstein markieren.
 

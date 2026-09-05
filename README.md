@@ -12,7 +12,21 @@ Zuerst entsteht die statische Visualisierungsanwendung:
 - Nodes und gerichtete oder ungerichtete Links darstellen
 - Metriken nachvollziehbar auf Größe, Farbe und Linienbreite abbilden
 - Nodes auswählen, fokussieren und ihre Nachbarschaft untersuchen
+- Beispiele von minimal bis groß sowie semantische Detailstufen verwenden
+- nach Node-Art, Gruppe, Tag und Link-Art filtern und aktive Metriken wechseln
 - ohne Backend auf einfachem Webspace deploybar sein
+
+## Lokaler Ablauf
+
+```text
+npm install
+npm run check
+npm run build
+```
+
+Der statische Build liegt danach unter `dist/viewer/`. Die deterministische
+Aufbereitungs-Messung läuft mit `npm run benchmark`. Beispielgraphen können mit
+`node scripts/generate-fixtures.mjs` neu erzeugt werden.
 
 Später folgt ein separater C#-/Roslyn-Exporter, der Code analysiert und dasselbe Graphformat erzeugt.
 
