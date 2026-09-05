@@ -17,6 +17,7 @@ npm run check
 Der Check umfasst:
 
 - `npm run check:code-size`
+- den Strukturtest für die maximale Dateianzahl pro Codeverzeichnis
 - ESLint für JavaScript
 - Stylelint für CSS
 - HTML-Validate für HTML
@@ -37,12 +38,15 @@ Die physischen Dateigrenzen werden mit `scripts/check-code-size.mjs` geprüft. D
 
 Wird eine Grenze erreicht, wird nach Verantwortung aufgeteilt. Die Lösung ist nicht, Code künstlich zu komprimieren oder in schwer lesbare Hilfsdateien zu verschieben.
 
+Die Werte stehen ausschließlich in `scripts/quality-config.mjs`. Tests und Prüfskripte verwenden diese gemeinsame Konfiguration.
+
 ## Testumfang
 
 - Schema- und Normalisierungslogik erhält Unit-Tests mit gültigen und ungültigen Fixtures.
 - Metrikskalierung, Nachbarschaft und Filterung erhalten deterministische Tests.
 - Upload, Fehleranzeige, Auswahl und Reset erhalten Browser-Smoke-Tests, sobald der Viewer existiert.
 - HTML und CSS werden bei jeder Änderung statisch validiert.
+- Ein Architekturtest wird rot, wenn ein Codeverzeichnis mehr Dateien enthält als die zentrale Grenze erlaubt.
 - Coverage wird beobachtet, aber nicht durch sinnlose Prozentziele optimiert.
 
 ## Testdaten

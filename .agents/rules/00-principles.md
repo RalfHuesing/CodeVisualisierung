@@ -13,6 +13,7 @@
 
 - Benenne Daten, Zustände und Transformationen konkret.
 - Verwende keine magischen Strings oder Zahlen, wenn eine benannte Konstante die Bedeutung klärt.
+- Konfigurierbare Werte stehen an einer benannten, zentralen Stelle und werden nicht mehrfach im Code wiederholt.
 - Verlasse dich nicht auf implizite globale Zustände.
 - Fehlerfälle werden sichtbar behandelt und verständlich gemeldet.
 
@@ -28,6 +29,9 @@
 - Änderungen bleiben auf den angeforderten Bereich begrenzt.
 - Bestehende Nutzerdateien und Daten werden nicht stillschweigend gelöscht oder überschrieben.
 - Neue Bibliotheken müssen einen konkreten Nutzen und eine nachvollziehbare Wartungsbegründung haben.
+- Keine Magic Values: fachliche Konstanten werden benannt, technische Grenzwerte zentral konfiguriert.
+- DRY gilt für gleiche Bedeutung; ähnliche, aber unabhängige Abläufe müssen nicht künstlich vereinheitlicht werden.
+- Dead Code, unreferenzierte Exporte, ungenutzte Styles und auskommentierte Altimplementierungen werden entfernt.
 
 ## Regelqualität
 

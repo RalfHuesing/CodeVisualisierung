@@ -32,3 +32,11 @@ tests/                       Bereichsübergreifende Unit-Tests
 - Vite darf als Entwicklungs- und Buildwerkzeug verwendet werden; der Betrieb bleibt rein statisch.
 - Three.js oder ein darauf basierender Graph-Renderer wird hinter einer kleinen Viewer-internen Schnittstelle verwendet.
 - Eine zusätzliche Architektur-Schicht ist nur erlaubt, wenn sie konkret Testbarkeit, Austauschbarkeit oder Verständlichkeit verbessert.
+
+## Module und Verzeichnisse
+
+- Ein Verzeichnis entspricht einer verständlichen fachlichen oder technischen Verantwortung.
+- Neue Unterverzeichnisse brauchen einen konkreten Grund; reine Namenshierarchien sind kein DDD.
+- Pro Verzeichnis gilt eine automatische Obergrenze für Quell-Dateien. Wird sie erreicht, nach Verantwortung aufteilen oder eine Datei sinnvoll zusammenlegen.
+- Kleine Bereiche dürfen wenige Dateien enthalten. Es gibt keine Pflicht, für jede Funktion, Klasse oder jedes Interface eine eigene Datei anzulegen.
+- Qualitätsgrenzen und andere technische Schwellwerte stehen zentral in `scripts/quality-config.mjs`.

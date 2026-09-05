@@ -1,16 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { QUALITY_LIMITS } from "./quality-config.mjs";
 
-export const FILE_LIMITS = Object.freeze({
-  ".cjs": 500,
-  ".css": 400,
-  ".html": 300,
-  ".js": 500,
-  ".mjs": 500,
-  ".ts": 500,
-  ".tsx": 500
-});
+export const FILE_LIMITS = QUALITY_LIMITS.fileLines;
 
 const IGNORED_DIRECTORIES = new Set([
   ".git",

@@ -1,4 +1,5 @@
 import eslint from "@eslint/js";
+import { QUALITY_LIMITS } from "./scripts/quality-config.mjs";
 
 export default [
   {
@@ -19,8 +20,8 @@ export default [
     rules: {
       "curly": ["error", "all"],
       "eqeqeq": ["error", "always"],
-      "max-lines": ["error", { "max": 500, "skipBlankLines": false, "skipComments": false }],
-      "max-lines-per-function": ["error", { "max": 80, "skipBlankLines": true, "skipComments": true }],
+      "max-lines": ["error", { "max": QUALITY_LIMITS.fileLines[".js"], "skipBlankLines": false, "skipComments": false }],
+      "max-lines-per-function": ["error", { "max": QUALITY_LIMITS.functionLines, "skipBlankLines": true, "skipComments": true }],
       "no-var": "error",
       "prefer-const": "error"
     }
