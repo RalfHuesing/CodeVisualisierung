@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { normalizeGraph, parseGraphText, validateGraph } from "../apps/viewer/src/domain/graph.js";
+import { EXAMPLE_CATALOG, getExampleGraph } from "../apps/viewer/src/domain/catalog.js";
 
 const fixturePath = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -11,6 +12,18 @@ const fixturePath = path.resolve(
 const validGraph = JSON.parse(fs.readFileSync(fixturePath, "utf8"));
 
 describe("validateGraph", () => {
+  it("provides several deterministic valid examples", () => {
+    expect(EXAMPLE_CATALOG.map((example) => example.id)).toEqual([
+      "minimal",
+      "small",
+      "medium",
+      "large",
+      "performance"
+    ]);
+    expect(EXAMPLE_CATALOG.every((example) => validateGraph(example.graph).valid)).toBe(true);
+    expect(getExampleGraph("medium").nodes.length).toBe(52);
+  });
+
   it("accepts the minimal graph fixture", () => {
     expect(validateGraph(validGraph)).toEqual({ valid: true, errors: [] });
   });

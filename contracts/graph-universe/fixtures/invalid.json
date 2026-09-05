@@ -1,0 +1,20 @@
+{
+  "format": {
+    "name": "graph-universe",
+    "version": "0.1"
+  },
+  "nodes": [
+    {
+      "id": "duplicate"
+    },
+    {
+      "id": "duplicate"
+    }
+  ],
+  "links": [
+    {
+      "source": "duplicate",
+      "target": "missing"
+    }
+  ]
+}

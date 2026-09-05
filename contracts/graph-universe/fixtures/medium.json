@@ -1,0 +1,2130 @@
+{
+  "format": {
+    "name": "graph-universe",
+    "version": "0.1"
+  },
+  "meta": {
+    "title": "Medium service graph",
+    "description": "A multi-area graph with directed calls and dependencies.",
+    "createdAt": "2026-09-05T12:00:00Z",
+    "source": {
+      "name": "deterministic-fixture-generator",
+      "version": "1.0.0"
+    }
+  },
+  "metricDefinitions": {
+    "complexity": {
+      "label": "Komplexität",
+      "unit": "score",
+      "valueType": "number"
+    },
+    "fanIn": {
+      "label": "Eingehende Beziehungen",
+      "unit": "links",
+      "valueType": "number"
+    },
+    "lines": {
+      "label": "Codezeilen",
+      "unit": "lines",
+      "valueType": "number"
+    },
+    "callCount": {
+      "label": "Aufrufe",
+      "unit": "calls",
+      "valueType": "number"
+    },
+    "dependencyWeight": {
+      "label": "Abhängigkeitsstärke",
+      "unit": "score",
+      "valueType": "number"
+    }
+  },
+  "nodes": [
+    {
+      "id": "ns-1",
+      "label": "Namespace 1",
+      "kind": "namespace",
+      "groupId": "ns-1",
+      "tags": [
+        "boundary"
+      ],
+      "metrics": {
+        "complexity": 4,
+        "fanIn": 5,
+        "lines": 59
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
+      "id": "ns-1-class-1",
+      "label": "Component 1.1",
+      "kind": "class",
+      "groupId": "ns-1",
+      "tags": [
+        "type:component"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
+      "id": "ns-1-class-1-method-1",
+      "label": "execute1()",
+      "kind": "method",
+      "groupId": "ns-1",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-1-class-1-method-2",
+      "label": "execute2()",
+      "kind": "method",
+      "groupId": "ns-1",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-1-class-1-method-3",
+      "label": "execute3()",
+      "kind": "method",
+      "groupId": "ns-1",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-1-class-2",
+      "label": "Component 1.2",
+      "kind": "class",
+      "groupId": "ns-1",
+      "tags": [
+        "type:component"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
+      "id": "ns-1-class-2-method-1",
+      "label": "execute1()",
+      "kind": "method",
+      "groupId": "ns-1",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-1-class-2-method-2",
+      "label": "execute2()",
+      "kind": "method",
+      "groupId": "ns-1",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-1-class-2-method-3",
+      "label": "execute3()",
+      "kind": "method",
+      "groupId": "ns-1",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-1-class-3",
+      "label": "Component 1.3",
+      "kind": "class",
+      "groupId": "ns-1",
+      "tags": [
+        "type:component"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
+      "id": "ns-1-class-3-method-1",
+      "label": "execute1()",
+      "kind": "method",
+      "groupId": "ns-1",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-1-class-3-method-2",
+      "label": "execute2()",
+      "kind": "method",
+      "groupId": "ns-1",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-1-class-3-method-3",
+      "label": "execute3()",
+      "kind": "method",
+      "groupId": "ns-1",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-2",
+      "label": "Namespace 2",
+      "kind": "namespace",
+      "groupId": "ns-2",
+      "tags": [
+        "boundary"
+      ],
+      "metrics": {
+        "complexity": 4,
+        "fanIn": 5,
+        "lines": 59
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
+      "id": "ns-2-class-1",
+      "label": "Component 2.1",
+      "kind": "class",
+      "groupId": "ns-2",
+      "tags": [
+        "type:component"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
+      "id": "ns-2-class-1-method-1",
+      "label": "execute1()",
+      "kind": "method",
+      "groupId": "ns-2",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-2-class-1-method-2",
+      "label": "execute2()",
+      "kind": "method",
+      "groupId": "ns-2",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-2-class-1-method-3",
+      "label": "execute3()",
+      "kind": "method",
+      "groupId": "ns-2",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-2-class-2",
+      "label": "Component 2.2",
+      "kind": "class",
+      "groupId": "ns-2",
+      "tags": [
+        "type:component"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
+      "id": "ns-2-class-2-method-1",
+      "label": "execute1()",
+      "kind": "method",
+      "groupId": "ns-2",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-2-class-2-method-2",
+      "label": "execute2()",
+      "kind": "method",
+      "groupId": "ns-2",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-2-class-2-method-3",
+      "label": "execute3()",
+      "kind": "method",
+      "groupId": "ns-2",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-2-class-3",
+      "label": "Component 2.3",
+      "kind": "class",
+      "groupId": "ns-2",
+      "tags": [
+        "type:component"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
+      "id": "ns-2-class-3-method-1",
+      "label": "execute1()",
+      "kind": "method",
+      "groupId": "ns-2",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-2-class-3-method-2",
+      "label": "execute2()",
+      "kind": "method",
+      "groupId": "ns-2",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-2-class-3-method-3",
+      "label": "execute3()",
+      "kind": "method",
+      "groupId": "ns-2",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-3",
+      "label": "Namespace 3",
+      "kind": "namespace",
+      "groupId": "ns-3",
+      "tags": [
+        "boundary"
+      ],
+      "metrics": {
+        "complexity": 4,
+        "fanIn": 5,
+        "lines": 59
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
+      "id": "ns-3-class-1",
+      "label": "Component 3.1",
+      "kind": "class",
+      "groupId": "ns-3",
+      "tags": [
+        "type:component"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
+      "id": "ns-3-class-1-method-1",
+      "label": "execute1()",
+      "kind": "method",
+      "groupId": "ns-3",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-3-class-1-method-2",
+      "label": "execute2()",
+      "kind": "method",
+      "groupId": "ns-3",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-3-class-1-method-3",
+      "label": "execute3()",
+      "kind": "method",
+      "groupId": "ns-3",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-3-class-2",
+      "label": "Component 3.2",
+      "kind": "class",
+      "groupId": "ns-3",
+      "tags": [
+        "type:component"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
+      "id": "ns-3-class-2-method-1",
+      "label": "execute1()",
+      "kind": "method",
+      "groupId": "ns-3",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-3-class-2-method-2",
+      "label": "execute2()",
+      "kind": "method",
+      "groupId": "ns-3",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-3-class-2-method-3",
+      "label": "execute3()",
+      "kind": "method",
+      "groupId": "ns-3",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-3-class-3",
+      "label": "Component 3.3",
+      "kind": "class",
+      "groupId": "ns-3",
+      "tags": [
+        "type:component"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
+      "id": "ns-3-class-3-method-1",
+      "label": "execute1()",
+      "kind": "method",
+      "groupId": "ns-3",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-3-class-3-method-2",
+      "label": "execute2()",
+      "kind": "method",
+      "groupId": "ns-3",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-3-class-3-method-3",
+      "label": "execute3()",
+      "kind": "method",
+      "groupId": "ns-3",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-4",
+      "label": "Namespace 4",
+      "kind": "namespace",
+      "groupId": "ns-4",
+      "tags": [
+        "boundary"
+      ],
+      "metrics": {
+        "complexity": 4,
+        "fanIn": 5,
+        "lines": 59
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
+      "id": "ns-4-class-1",
+      "label": "Component 4.1",
+      "kind": "class",
+      "groupId": "ns-4",
+      "tags": [
+        "type:component"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
+      "id": "ns-4-class-1-method-1",
+      "label": "execute1()",
+      "kind": "method",
+      "groupId": "ns-4",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-4-class-1-method-2",
+      "label": "execute2()",
+      "kind": "method",
+      "groupId": "ns-4",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-4-class-1-method-3",
+      "label": "execute3()",
+      "kind": "method",
+      "groupId": "ns-4",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-4-class-2",
+      "label": "Component 4.2",
+      "kind": "class",
+      "groupId": "ns-4",
+      "tags": [
+        "type:component"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
+      "id": "ns-4-class-2-method-1",
+      "label": "execute1()",
+      "kind": "method",
+      "groupId": "ns-4",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-4-class-2-method-2",
+      "label": "execute2()",
+      "kind": "method",
+      "groupId": "ns-4",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-4-class-2-method-3",
+      "label": "execute3()",
+      "kind": "method",
+      "groupId": "ns-4",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-4-class-3",
+      "label": "Component 4.3",
+      "kind": "class",
+      "groupId": "ns-4",
+      "tags": [
+        "type:component"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
+      "id": "ns-4-class-3-method-1",
+      "label": "execute1()",
+      "kind": "method",
+      "groupId": "ns-4",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-4-class-3-method-2",
+      "label": "execute2()",
+      "kind": "method",
+      "groupId": "ns-4",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-4-class-3-method-3",
+      "label": "execute3()",
+      "kind": "method",
+      "groupId": "ns-4",
+      "tags": [
+        "executable"
+      ],
+      "metrics": {
+        "complexity": 7,
+        "fanIn": 4,
+        "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    }
+  ],
+  "links": [
+    {
+      "id": "contains-ns-1-0",
+      "source": "ns-1",
+      "target": "ns-1-class-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-1-class-1-0",
+      "source": "ns-1-class-1",
+      "target": "ns-1-class-1-method-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-1-class-1-1",
+      "source": "ns-1-class-1",
+      "target": "ns-1-class-1-method-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-1-class-1-2",
+      "source": "ns-1-class-1",
+      "target": "ns-1-class-1-method-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-1-1",
+      "source": "ns-1",
+      "target": "ns-1-class-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-1-class-2-0",
+      "source": "ns-1-class-2",
+      "target": "ns-1-class-2-method-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-1-class-2-1",
+      "source": "ns-1-class-2",
+      "target": "ns-1-class-2-method-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-1-class-2-2",
+      "source": "ns-1-class-2",
+      "target": "ns-1-class-2-method-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-1-2",
+      "source": "ns-1",
+      "target": "ns-1-class-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-1-class-3-0",
+      "source": "ns-1-class-3",
+      "target": "ns-1-class-3-method-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-1-class-3-1",
+      "source": "ns-1-class-3",
+      "target": "ns-1-class-3-method-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-1-class-3-2",
+      "source": "ns-1-class-3",
+      "target": "ns-1-class-3-method-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "namespace-flow-0",
+      "source": "ns-1",
+      "target": "ns-2",
+      "kind": "depends-on",
+      "directed": true,
+      "weight": 0.5,
+      "metrics": {
+        "callCount": 26,
+        "dependencyWeight": 0.5
+      }
+    },
+    {
+      "id": "contains-ns-2-0",
+      "source": "ns-2",
+      "target": "ns-2-class-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-2-class-1-0",
+      "source": "ns-2-class-1",
+      "target": "ns-2-class-1-method-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-2-class-1-1",
+      "source": "ns-2-class-1",
+      "target": "ns-2-class-1-method-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-2-class-1-2",
+      "source": "ns-2-class-1",
+      "target": "ns-2-class-1-method-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-2-1",
+      "source": "ns-2",
+      "target": "ns-2-class-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-2-class-2-0",
+      "source": "ns-2-class-2",
+      "target": "ns-2-class-2-method-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-2-class-2-1",
+      "source": "ns-2-class-2",
+      "target": "ns-2-class-2-method-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-2-class-2-2",
+      "source": "ns-2-class-2",
+      "target": "ns-2-class-2-method-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-2-2",
+      "source": "ns-2",
+      "target": "ns-2-class-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-2-class-3-0",
+      "source": "ns-2-class-3",
+      "target": "ns-2-class-3-method-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-2-class-3-1",
+      "source": "ns-2-class-3",
+      "target": "ns-2-class-3-method-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-2-class-3-2",
+      "source": "ns-2-class-3",
+      "target": "ns-2-class-3-method-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "namespace-flow-1",
+      "source": "ns-2",
+      "target": "ns-3",
+      "kind": "depends-on",
+      "directed": true,
+      "weight": 0.5,
+      "metrics": {
+        "callCount": 26,
+        "dependencyWeight": 0.5
+      }
+    },
+    {
+      "id": "contains-ns-3-0",
+      "source": "ns-3",
+      "target": "ns-3-class-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-3-class-1-0",
+      "source": "ns-3-class-1",
+      "target": "ns-3-class-1-method-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-3-class-1-1",
+      "source": "ns-3-class-1",
+      "target": "ns-3-class-1-method-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-3-class-1-2",
+      "source": "ns-3-class-1",
+      "target": "ns-3-class-1-method-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-3-1",
+      "source": "ns-3",
+      "target": "ns-3-class-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-3-class-2-0",
+      "source": "ns-3-class-2",
+      "target": "ns-3-class-2-method-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-3-class-2-1",
+      "source": "ns-3-class-2",
+      "target": "ns-3-class-2-method-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-3-class-2-2",
+      "source": "ns-3-class-2",
+      "target": "ns-3-class-2-method-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-3-2",
+      "source": "ns-3",
+      "target": "ns-3-class-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-3-class-3-0",
+      "source": "ns-3-class-3",
+      "target": "ns-3-class-3-method-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-3-class-3-1",
+      "source": "ns-3-class-3",
+      "target": "ns-3-class-3-method-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-3-class-3-2",
+      "source": "ns-3-class-3",
+      "target": "ns-3-class-3-method-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "namespace-flow-2",
+      "source": "ns-3",
+      "target": "ns-4",
+      "kind": "depends-on",
+      "directed": true,
+      "weight": 0.5,
+      "metrics": {
+        "callCount": 26,
+        "dependencyWeight": 0.5
+      }
+    },
+    {
+      "id": "contains-ns-4-0",
+      "source": "ns-4",
+      "target": "ns-4-class-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-4-class-1-0",
+      "source": "ns-4-class-1",
+      "target": "ns-4-class-1-method-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-4-class-1-1",
+      "source": "ns-4-class-1",
+      "target": "ns-4-class-1-method-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-4-class-1-2",
+      "source": "ns-4-class-1",
+      "target": "ns-4-class-1-method-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-4-1",
+      "source": "ns-4",
+      "target": "ns-4-class-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-4-class-2-0",
+      "source": "ns-4-class-2",
+      "target": "ns-4-class-2-method-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-4-class-2-1",
+      "source": "ns-4-class-2",
+      "target": "ns-4-class-2-method-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-4-class-2-2",
+      "source": "ns-4-class-2",
+      "target": "ns-4-class-2-method-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-4-2",
+      "source": "ns-4",
+      "target": "ns-4-class-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-4-class-3-0",
+      "source": "ns-4-class-3",
+      "target": "ns-4-class-3-method-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-4-class-3-1",
+      "source": "ns-4-class-3",
+      "target": "ns-4-class-3-method-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-4-class-3-2",
+      "source": "ns-4-class-3",
+      "target": "ns-4-class-3-method-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "namespace-flow-3",
+      "source": "ns-4",
+      "target": "ns-1",
+      "kind": "depends-on",
+      "directed": true,
+      "weight": 0.5,
+      "metrics": {
+        "callCount": 26,
+        "dependencyWeight": 0.5
+      }
+    },
+    {
+      "id": "call-0",
+      "source": "ns-1-class-1-method-1",
+      "target": "ns-1-class-2-method-1",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.25,
+      "metrics": {
+        "callCount": 16,
+        "dependencyWeight": 0.25
+      }
+    },
+    {
+      "id": "call-1",
+      "source": "ns-1-class-1-method-2",
+      "target": "ns-1-class-2-method-2",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.35,
+      "metrics": {
+        "callCount": 16,
+        "dependencyWeight": 0.35
+      }
+    },
+    {
+      "id": "call-2",
+      "source": "ns-1-class-1-method-3",
+      "target": "ns-1-class-2-method-3",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.45,
+      "metrics": {
+        "callCount": 16,
+        "dependencyWeight": 0.45
+      }
+    },
+    {
+      "id": "call-3",
+      "source": "ns-1-class-2-method-1",
+      "target": "ns-1-class-3-method-1",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.55,
+      "metrics": {
+        "callCount": 16,
+        "dependencyWeight": 0.55
+      }
+    },
+    {
+      "id": "call-4",
+      "source": "ns-1-class-2-method-2",
+      "target": "ns-1-class-3-method-2",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.65,
+      "metrics": {
+        "callCount": 16,
+        "dependencyWeight": 0.65
+      }
+    },
+    {
+      "id": "call-5",
+      "source": "ns-1-class-2-method-3",
+      "target": "ns-1-class-3-method-3",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.25,
+      "metrics": {
+        "callCount": 16,
+        "dependencyWeight": 0.25
+      }
+    },
+    {
+      "id": "call-6",
+      "source": "ns-1-class-3-method-1",
+      "target": "ns-2-class-1-method-1",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.35,
+      "metrics": {
+        "callCount": 16,
+        "dependencyWeight": 0.35
+      }
+    },
+    {
+      "id": "call-7",
+      "source": "ns-1-class-3-method-2",
+      "target": "ns-2-class-1-method-2",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.45,
+      "metrics": {
+        "callCount": 16,
+        "dependencyWeight": 0.45
+      }
+    },
+    {
+      "id": "call-8",
+      "source": "ns-1-class-3-method-3",
+      "target": "ns-2-class-1-method-3",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.55,
+      "metrics": {
+        "callCount": 16,
+        "dependencyWeight": 0.55
+      }
+    },
+    {
+      "id": "call-9",
+      "source": "ns-2-class-1-method-1",
+      "target": "ns-2-class-2-method-1",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.65,
+      "metrics": {
+        "callCount": 16,
+        "dependencyWeight": 0.65
+      }
+    },
+    {
+      "id": "call-10",
+      "source": "ns-2-class-1-method-2",
+      "target": "ns-2-class-2-method-2",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.25,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.25
+      }
+    },
+    {
+      "id": "call-11",
+      "source": "ns-2-class-1-method-3",
+      "target": "ns-2-class-2-method-3",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.35,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.35
+      }
+    },
+    {
+      "id": "call-12",
+      "source": "ns-2-class-2-method-1",
+      "target": "ns-2-class-3-method-1",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.45,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.45
+      }
+    },
+    {
+      "id": "call-13",
+      "source": "ns-2-class-2-method-2",
+      "target": "ns-2-class-3-method-2",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.55,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.55
+      }
+    },
+    {
+      "id": "call-14",
+      "source": "ns-2-class-2-method-3",
+      "target": "ns-2-class-3-method-3",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.65,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.65
+      }
+    },
+    {
+      "id": "call-15",
+      "source": "ns-2-class-3-method-1",
+      "target": "ns-3-class-1-method-1",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.25,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.25
+      }
+    },
+    {
+      "id": "call-16",
+      "source": "ns-2-class-3-method-2",
+      "target": "ns-3-class-1-method-2",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.35,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.35
+      }
+    },
+    {
+      "id": "call-17",
+      "source": "ns-2-class-3-method-3",
+      "target": "ns-3-class-1-method-3",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.45,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.45
+      }
+    },
+    {
+      "id": "call-18",
+      "source": "ns-3-class-1-method-1",
+      "target": "ns-3-class-2-method-1",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.55,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.55
+      }
+    },
+    {
+      "id": "call-19",
+      "source": "ns-3-class-1-method-2",
+      "target": "ns-3-class-2-method-2",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.65,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.65
+      }
+    },
+    {
+      "id": "call-20",
+      "source": "ns-3-class-1-method-3",
+      "target": "ns-3-class-2-method-3",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.25,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.25
+      }
+    },
+    {
+      "id": "call-21",
+      "source": "ns-3-class-2-method-1",
+      "target": "ns-3-class-3-method-1",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.35,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.35
+      }
+    },
+    {
+      "id": "call-22",
+      "source": "ns-3-class-2-method-2",
+      "target": "ns-3-class-3-method-2",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.45,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.45
+      }
+    },
+    {
+      "id": "call-23",
+      "source": "ns-3-class-2-method-3",
+      "target": "ns-3-class-3-method-3",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.55,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.55
+      }
+    },
+    {
+      "id": "call-24",
+      "source": "ns-3-class-3-method-1",
+      "target": "ns-4-class-1-method-1",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.65,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.65
+      }
+    },
+    {
+      "id": "call-25",
+      "source": "ns-3-class-3-method-2",
+      "target": "ns-4-class-1-method-2",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.25,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.25
+      }
+    },
+    {
+      "id": "call-26",
+      "source": "ns-3-class-3-method-3",
+      "target": "ns-4-class-1-method-3",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.35,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.35
+      }
+    },
+    {
+      "id": "call-27",
+      "source": "ns-4-class-1-method-1",
+      "target": "ns-4-class-2-method-1",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.45,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.45
+      }
+    },
+    {
+      "id": "call-28",
+      "source": "ns-4-class-1-method-2",
+      "target": "ns-4-class-2-method-2",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.55,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.55
+      }
+    },
+    {
+      "id": "call-29",
+      "source": "ns-4-class-1-method-3",
+      "target": "ns-4-class-2-method-3",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.65,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.65
+      }
+    },
+    {
+      "id": "call-30",
+      "source": "ns-4-class-2-method-1",
+      "target": "ns-4-class-3-method-1",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.25,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.25
+      }
+    },
+    {
+      "id": "call-31",
+      "source": "ns-4-class-2-method-2",
+      "target": "ns-4-class-3-method-2",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.35,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.35
+      }
+    },
+    {
+      "id": "call-32",
+      "source": "ns-4-class-2-method-3",
+      "target": "ns-4-class-3-method-3",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.45,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.45
+      }
+    },
+    {
+      "id": "call-33",
+      "source": "ns-4-class-3-method-1",
+      "target": "ns-1-class-1-method-1",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.55,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.55
+      }
+    },
+    {
+      "id": "call-34",
+      "source": "ns-4-class-3-method-2",
+      "target": "ns-1-class-1-method-2",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.65,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.65
+      }
+    },
+    {
+      "id": "call-35",
+      "source": "ns-4-class-3-method-3",
+      "target": "ns-1-class-1-method-3",
+      "kind": "calls",
+      "directed": true,
+      "weight": 0.25,
+      "metrics": {
+        "callCount": 17,
+        "dependencyWeight": 0.25
+      }
+    },
+    {
+      "id": "dependency-0",
+      "source": "ns-1-class-1",
+      "target": "ns-1-class-2",
+      "kind": "depends-on",
+      "directed": true,
+      "weight": 0.4,
+      "metrics": {
+        "callCount": 22,
+        "dependencyWeight": 0.4
+      }
+    },
+    {
+      "id": "dependency-1",
+      "source": "ns-1-class-2",
+      "target": "ns-1-class-3",
+      "kind": "depends-on",
+      "directed": true,
+      "weight": 0.5,
+      "metrics": {
+        "callCount": 22,
+        "dependencyWeight": 0.5
+      }
+    },
+    {
+      "id": "dependency-2",
+      "source": "ns-1-class-3",
+      "target": "ns-2-class-1",
+      "kind": "depends-on",
+      "directed": true,
+      "weight": 0.6000000000000001,
+      "metrics": {
+        "callCount": 22,
+        "dependencyWeight": 0.6000000000000001
+      }
+    },
+    {
+      "id": "dependency-3",
+      "source": "ns-2-class-1",
+      "target": "ns-2-class-2",
+      "kind": "depends-on",
+      "directed": true,
+      "weight": 0.7,
+      "metrics": {
+        "callCount": 22,
+        "dependencyWeight": 0.7
+      }
+    },
+    {
+      "id": "dependency-4",
+      "source": "ns-2-class-2",
+      "target": "ns-2-class-3",
+      "kind": "depends-on",
+      "directed": true,
+      "weight": 0.4,
+      "metrics": {
+        "callCount": 22,
+        "dependencyWeight": 0.4
+      }
+    },
+    {
+      "id": "dependency-5",
+      "source": "ns-2-class-3",
+      "target": "ns-3-class-1",
+      "kind": "depends-on",
+      "directed": true,
+      "weight": 0.5,
+      "metrics": {
+        "callCount": 22,
+        "dependencyWeight": 0.5
+      }
+    },
+    {
+      "id": "dependency-6",
+      "source": "ns-3-class-1",
+      "target": "ns-3-class-2",
+      "kind": "depends-on",
+      "directed": true,
+      "weight": 0.6000000000000001,
+      "metrics": {
+        "callCount": 22,
+        "dependencyWeight": 0.6000000000000001
+      }
+    },
+    {
+      "id": "dependency-7",
+      "source": "ns-3-class-2",
+      "target": "ns-3-class-3",
+      "kind": "depends-on",
+      "directed": true,
+      "weight": 0.7,
+      "metrics": {
+        "callCount": 22,
+        "dependencyWeight": 0.7
+      }
+    },
+    {
+      "id": "dependency-8",
+      "source": "ns-3-class-3",
+      "target": "ns-4-class-1",
+      "kind": "depends-on",
+      "directed": true,
+      "weight": 0.4,
+      "metrics": {
+        "callCount": 22,
+        "dependencyWeight": 0.4
+      }
+    },
+    {
+      "id": "dependency-9",
+      "source": "ns-4-class-1",
+      "target": "ns-4-class-2",
+      "kind": "depends-on",
+      "directed": true,
+      "weight": 0.5,
+      "metrics": {
+        "callCount": 22,
+        "dependencyWeight": 0.5
+      }
+    },
+    {
+      "id": "dependency-10",
+      "source": "ns-4-class-2",
+      "target": "ns-4-class-3",
+      "kind": "depends-on",
+      "directed": true,
+      "weight": 0.6000000000000001,
+      "metrics": {
+        "callCount": 23,
+        "dependencyWeight": 0.6000000000000001
+      }
+    },
+    {
+      "id": "dependency-11",
+      "source": "ns-4-class-3",
+      "target": "ns-1-class-1",
+      "kind": "depends-on",
+      "directed": true,
+      "weight": 0.7,
+      "metrics": {
+        "callCount": 23,
+        "dependencyWeight": 0.7
+      }
+    }
+  ]
+}
