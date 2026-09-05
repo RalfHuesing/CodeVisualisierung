@@ -22,10 +22,10 @@
 
 ### Phase 2 – Erste 3D-Ansicht
 
-- [ ] Three.js-basierter 3D-Renderer, zunächst mit `3d-force-graph`.
-- [ ] Nodes, Links und Richtung in 3D darstellen.
-- [ ] Kamera- und Resize-Verhalten.
-- [ ] Einfache, erklärbare Größen- und Breiten-Mappings.
+- [X] Three.js-basierter 3D-Renderer mit `3d-force-graph`.
+- [X] Nodes, Links und Richtung in 3D darstellen.
+- [X] Kamera- und Resize-Verhalten.
+- [X] Einfache, erklärbare Größen- und Breiten-Mappings.
 
 **Ergebnis:** Der Graph ist navigierbar und nicht nur ein Screenshot.
 

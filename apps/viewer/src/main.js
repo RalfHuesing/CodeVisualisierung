@@ -1,6 +1,7 @@
 import sampleGraph from "../../../contracts/graph-universe/fixtures/minimal.json";
 import { normalizeGraph, parseGraphText, validateGraph } from "./domain/graph.js";
-import { applyGraphFocus, applyGraphSearch, getNodeNeighborhood, renderGraph } from "./rendering/visualization.js";
+import { createGraphRenderer } from "./rendering/visualization.js";
+import { getNodeNeighborhood } from "./rendering/graph-mapping.js";
 
 const fileInput = document.querySelector("#graph-file");
 const dropZone = document.querySelector("#drop-zone");
@@ -9,6 +10,7 @@ const detailsButton = document.querySelector("#toggle-details");
 const closeDetailsButton = document.querySelector("#close-details");
 const resetButton = document.querySelector("#reset-view");
 const searchInput = document.querySelector("#node-search");
+const nodeSelect = document.querySelector("#node-select");
 const status = document.querySelector("#graph-status");
 const dropHint = document.querySelector("#drop-hint");
 const errorsPanel = document.querySelector("#graph-errors");
@@ -23,6 +25,7 @@ const detailsDescription = document.querySelector("#details-description");
 const nodeCount = document.querySelector("#node-count");
 const linkCount = document.querySelector("#link-count");
 const selectedDetails = document.querySelector("#selected-node-details");
+const graphRenderer = createGraphRenderer(graphCanvas, handleNodeClick);
 
 let currentGraph;
 
@@ -34,7 +37,7 @@ detailsButton.addEventListener("click", toggleGraphDetails);
 closeDetailsButton.addEventListener("click", closeDetails);
 resetButton.addEventListener("click", resetView);
 searchInput.addEventListener("input", handleSearch);
-graphCanvas.addEventListener("click", handleGraphClick);
+nodeSelect.addEventListener("change", handleNodeSelection);
 document.addEventListener("keydown", handleKeyDown);
 dropZone.addEventListener("dragover", handleDragOver);
 dropZone.addEventListener("dragleave", handleDragLeave);
@@ -96,9 +99,10 @@ function showGraph(graph, sourceName) {
   errorList.replaceChildren();
   dropHint.hidden = true;
   selectedDetails.hidden = true;
-  renderGraph(graphCanvas, graph);
-  applyGraphFocus(graphCanvas, graph, null);
-  applyGraphSearch(graphCanvas, graph, searchInput.value);
+  graphRenderer.render(graph);
+  graphRenderer.focus(null);
+  graphRenderer.search(searchInput.value);
+  updateNodeSelector(graph);
   graphTitle.textContent = graph.meta?.title ?? sourceName;
   graphMeta.textContent = getGraphMeta(graph, sourceName);
   nodeCount.textContent = String(graph.nodes.length);
@@ -119,26 +123,30 @@ function showErrors(errors) {
   status.textContent = "Die Graphdaten sind ungültig.";
 }
 
-function handleGraphClick(event) {
-  if (event.target === graphCanvas) {
+function handleNodeClick(nodeId) {
+  if (!nodeId) {
     clearSelection();
     return;
   }
 
-  const nodeElement = event.target.closest(".graph-node");
-  if (!nodeElement || !currentGraph) {
+  if (!currentGraph) {
     return;
   }
 
-  const node = currentGraph.nodes.find((item) => item.id === nodeElement.dataset.nodeId);
+  const node = currentGraph.nodes.find((item) => item.id === nodeId);
   if (node) {
     showNodeDetails(node);
   }
 }
 
+function handleNodeSelection(event) {
+  handleNodeClick(event.target.value || null);
+}
+
 function showNodeDetails(node) {
   const neighborhood = getNodeNeighborhood(currentGraph, node.id);
-  applyGraphFocus(graphCanvas, currentGraph, node.id);
+  graphRenderer.focus(node.id);
+  nodeSelect.value = node.id;
   detailsKicker.textContent = "Ausgewählter Node";
   detailsTitle.textContent = node.label ?? node.id;
   detailsDescription.textContent = node.kind ?? "Node";
@@ -168,7 +176,7 @@ function showGraphDetails() {
     return;
   }
 
-  applyGraphFocus(graphCanvas, currentGraph, null);
+  graphRenderer.focus(null);
   selectedDetails.hidden = true;
   detailsKicker.textContent = "Graphdetails";
   detailsTitle.textContent = currentGraph.meta?.title ?? "Graph";
@@ -188,9 +196,9 @@ function closeDetails() {
 
 function resetView() {
   searchInput.value = "";
+  nodeSelect.value = "";
   if (currentGraph) {
-    applyGraphFocus(graphCanvas, currentGraph, null);
-    applyGraphSearch(graphCanvas, currentGraph, "");
+    graphRenderer.reset();
   }
   selectedDetails.hidden = true;
   closeDetails();
@@ -201,14 +209,15 @@ function clearSelection() {
     return;
   }
 
-  applyGraphFocus(graphCanvas, currentGraph, null);
+  graphRenderer.focus(null);
+  nodeSelect.value = "";
   selectedDetails.hidden = true;
   closeDetails();
 }
 
 function handleSearch() {
   if (currentGraph) {
-    applyGraphSearch(graphCanvas, currentGraph, searchInput.value);
+    graphRenderer.search(searchInput.value);
   }
 }
 
@@ -216,6 +225,19 @@ function handleKeyDown(event) {
   if (event.key === "Escape") {
     clearSelection();
   }
+}
+
+function updateNodeSelector(graph) {
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "";
+  defaultOption.textContent = "Node auswählen";
+  nodeSelect.replaceChildren(defaultOption);
+  graph.nodes.forEach((node) => {
+    const option = document.createElement("option");
+    option.value = node.id;
+    option.textContent = node.label ?? node.id;
+    nodeSelect.append(option);
+  });
 }
 
 function getGraphMeta(graph, sourceName) {

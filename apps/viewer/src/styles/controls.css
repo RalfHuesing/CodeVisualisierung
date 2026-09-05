@@ -20,7 +20,8 @@ button:hover,
   color: var(--foreground);
 }
 
-input[type="search"] {
+input[type="search"],
+select {
   width: 10rem;
   min-height: 2.25rem;
   padding: 0.45rem 0.65rem;
@@ -32,7 +33,8 @@ input[type="search"] {
   font-size: 0.875rem;
 }
 
-input[type="search"]:focus {
+input[type="search"]:focus,
+select:focus {
   border-color: var(--primary);
   outline: 2px solid rgb(56 189 248 / 35%);
   outline-offset: 1px;
@@ -57,7 +59,8 @@ input[type="search"]:focus {
     gap: 0.25rem;
   }
 
-  input[type="search"] {
+  input[type="search"],
+  select {
     width: 8rem;
   }
 

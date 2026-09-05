@@ -25,6 +25,12 @@
             <span class="visually-hidden">Nodes suchen</span>
             <input id="node-search" type="search" placeholder="Nodes suchen" autocomplete="off">
           </label>
+          <label class="node-picker">
+            <span class="visually-hidden">Node auswählen</span>
+            <select id="node-select">
+              <option value="">Node auswählen</option>
+            </select>
+          </label>
           <label class="toolbar-button">
             JSON laden
             <input id="graph-file" class="visually-hidden" type="file" accept=".json,application/json">
@@ -36,7 +42,7 @@
       </header>
 
       <main id="drop-zone" class="universe-stage" aria-label="Graph-Universum">
-        <svg id="graph-canvas" class="graph-canvas" role="img" aria-label="Graphvisualisierung"></svg>
+        <div id="graph-canvas" class="graph-canvas" role="img" aria-label="3D-Graphvisualisierung"></div>
         <div id="drop-hint" class="drop-hint">
           <strong>JSON-Datei hier ablegen</strong>
           <span>oder oben über „JSON laden“ auswählen</span>
