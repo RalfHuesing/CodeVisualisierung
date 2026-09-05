@@ -99,3 +99,7 @@ Wir messen stattdessen:
 - Verhalten bei fehlenden oder extremen Metrikwerten.
 
 Für größere Graphen brauchen wir später Aggregation, Detailstufen und gegebenenfalls vorgegebene Positionen. Pruning darf nicht stillschweigend Daten löschen; es muss als Darstellungsentscheidung sichtbar und rückgängig machbar sein. Eine separate 2D-Ansicht ist nicht Bestandteil des Produkts.
+
+Die aktuelle Übersicht blendet ausschließlich Nodes mit `kind: "method"` aus. Die Detailstufe ist sichtbar auswählbar und über „Detail“ vollständig rückgängig machbar; die Quelldaten bleiben dabei unverändert.
+
+Der deterministische Aufbereitungs-Benchmark läuft mit `npm run benchmark` über feste Fixtures und 20 Wiederholungen. Der aktuelle Performance-Graph umfasst 684 Nodes und 1.260 Links; auf dem Entwicklungsrechner lag die Aufbereitung bei 7,94 ms pro Durchlauf. Das ist noch kein Versprechen für die WebGL-Bildrate, sondern ein reproduzierbarer Grenzwert für Filterung und visuelles Mapping.

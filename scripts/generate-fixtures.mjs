@@ -22,10 +22,13 @@ function createGraph(title, description, namespaceCount, classesPerNamespace, me
     namespaces.push(namespaceId);
     nodes.push(createNode(namespaceId, `Namespace ${namespaceIndex + 1}`, "namespace", namespaceId, ["boundary"]));
     for (let classIndex = 0; classIndex < classesPerNamespace; classIndex += 1) {
+      const fileId = `${namespaceId}-file-${classIndex + 1}`;
+      nodes.push(createNode(fileId, `Component ${namespaceIndex + 1}.${classIndex + 1}.js`, "file", namespaceId, ["source"]));
+      links.push(createLink(`contains-${namespaceId}-file-${classIndex}`, namespaceId, fileId, "contains", false, 1));
       const classId = `${namespaceId}-class-${classIndex + 1}`;
       classes.push(classId);
       nodes.push(createNode(classId, `Component ${namespaceIndex + 1}.${classIndex + 1}`, "class", namespaceId, ["type:component"]));
-      links.push(createLink(`contains-${namespaceId}-${classIndex}`, namespaceId, classId, "contains", false, 1));
+      links.push(createLink(`contains-${fileId}`, fileId, classId, "contains", false, 1));
       for (let methodIndex = 0; methodIndex < methodsPerClass; methodIndex += 1) {
         const methodId = `${classId}-method-${methodIndex + 1}`;
         methods.push(methodId);

@@ -394,9 +394,13 @@ function updateLegend() {
     const sample = document.createElement("span");
     sample.className = "legend-swatch";
     sample.style.backgroundColor = getNodeKindColor({ kind }, currentGraph);
-    item.append(sample, document.createTextNode(kind));
+    item.append(sample, document.createTextNode(`${kind} · ${getShapeLabel(kind)}`));
     legendKinds.append(item);
   });
+}
+
+function getShapeLabel(kind) {
+  return { class: "Würfel", file: "Zylinder", method: "Oktaeder", namespace: "Kugel" }[kind] ?? "Tetraeder";
 }
 
 function updateAccessibleNodes(graph = currentGraph) {

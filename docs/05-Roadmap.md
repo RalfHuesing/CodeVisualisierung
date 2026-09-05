@@ -56,7 +56,7 @@ Jede dieser Aussagen braucht mindestens einen automatisierten Test; Größen- un
 - [X] Nodes, Links und Richtung in 3D darstellen.
 - [X] Kamera- und Resize-Verhalten.
 - [X] Einfache, erklärbare Größen- und Breiten-Mappings.
-- [ ] Lade-, Leer-, Fehler- und WebGL-Fehlerzustände vollständig als 3D-Viewer-Zustände behandeln.
+- [X] Lade-, Leer-, Fehler- und WebGL-Fehlerzustände vollständig als 3D-Viewer-Zustände behandeln.
 - [ ] Renderer-Verhalten bei Node-, Link- und Gruppenzahlen aus den Ziel-Fixtures verifizieren.
 
 **Ergebnis:** Der Graph ist navigierbar und nicht nur ein Screenshot.
@@ -70,7 +70,7 @@ Jede dieser Aussagen braucht mindestens einen automatisierten Test; Größen- un
 - [X] Optionale Filter nach Node-Art, Gruppe, Tag und Link-Art.
 - [X] Legende und aktive Metrik sichtbar machen.
 - [X] Eine zentrale, explizite Auswahl der Node- und Linkmetriken ermöglichen.
-- [ ] Node-Arten mit mehr als Farbe unterscheiden, sofern der Renderer das ohne unnötige Komplexität unterstützt.
+- [X] Node-Arten mit mehr als Farbe unterscheiden, sofern der Renderer das ohne unnötige Komplexität unterstützt.
 - [X] Tastaturbedienung, Fokuszustände und sinnvolle zugängliche HTML-Alternativen für die 3D-Szene ergänzen.
 - [ ] Lade-, leere, ungültige und nicht unterstützte Zustände im Browser testen.
 
@@ -84,7 +84,7 @@ Jede dieser Aussagen braucht mindestens einen automatisierten Test; Größen- un
 - [X] `groupId` für Cluster und semantische Orientierung verwenden, ohne verschachtelte JSON-Strukturen vorauszusetzen.
 - [X] Gruppen sichtbar und ein-/ausblendbar machen.
 - [X] Semantischen Zoom mit klarer UI-Rückmeldung ergänzen.
-- [ ] Je nach Zoomstufe Nodes aggregieren oder ausblenden, ohne Daten stillschweigend zu löschen.
+- [X] Je nach Zoomstufe Nodes aggregieren oder ausblenden, ohne Daten stillschweigend zu löschen.
 - [ ] Ausgewählte Beziehungen und Gruppen auch in dichter 3D-Darstellung nachvollziehbar halten.
 
 **Ergebnis:** Größere Graphen bleiben untersuchbar.

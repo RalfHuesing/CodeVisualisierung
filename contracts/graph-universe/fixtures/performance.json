@@ -58,6 +58,23 @@
       }
     },
     {
+      "id": "ns-1-file-1",
+      "label": "Component 1.1.js",
+      "kind": "file",
+      "groupId": "ns-1",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-1-class-1",
       "label": "Component 1.1",
       "kind": "class",
@@ -154,6 +171,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-1-file-2",
+      "label": "Component 1.2.js",
+      "kind": "file",
+      "groupId": "ns-1",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -262,6 +296,23 @@
       }
     },
     {
+      "id": "ns-1-file-3",
+      "label": "Component 1.3.js",
+      "kind": "file",
+      "groupId": "ns-1",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-1-class-3",
       "label": "Component 1.3",
       "kind": "class",
@@ -358,6 +409,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-1-file-4",
+      "label": "Component 1.4.js",
+      "kind": "file",
+      "groupId": "ns-1",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -466,6 +534,23 @@
       }
     },
     {
+      "id": "ns-1-file-5",
+      "label": "Component 1.5.js",
+      "kind": "file",
+      "groupId": "ns-1",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-1-class-5",
       "label": "Component 1.5",
       "kind": "class",
@@ -562,6 +647,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-1-file-6",
+      "label": "Component 1.6.js",
+      "kind": "file",
+      "groupId": "ns-1",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -670,6 +772,23 @@
       }
     },
     {
+      "id": "ns-1-file-7",
+      "label": "Component 1.7.js",
+      "kind": "file",
+      "groupId": "ns-1",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-1-class-7",
       "label": "Component 1.7",
       "kind": "class",
@@ -766,6 +885,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-1-file-8",
+      "label": "Component 1.8.js",
+      "kind": "file",
+      "groupId": "ns-1",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -891,6 +1027,23 @@
       }
     },
     {
+      "id": "ns-2-file-1",
+      "label": "Component 2.1.js",
+      "kind": "file",
+      "groupId": "ns-2",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-2-class-1",
       "label": "Component 2.1",
       "kind": "class",
@@ -987,6 +1140,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-2-file-2",
+      "label": "Component 2.2.js",
+      "kind": "file",
+      "groupId": "ns-2",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -1095,6 +1265,23 @@
       }
     },
     {
+      "id": "ns-2-file-3",
+      "label": "Component 2.3.js",
+      "kind": "file",
+      "groupId": "ns-2",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-2-class-3",
       "label": "Component 2.3",
       "kind": "class",
@@ -1191,6 +1378,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-2-file-4",
+      "label": "Component 2.4.js",
+      "kind": "file",
+      "groupId": "ns-2",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -1299,6 +1503,23 @@
       }
     },
     {
+      "id": "ns-2-file-5",
+      "label": "Component 2.5.js",
+      "kind": "file",
+      "groupId": "ns-2",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-2-class-5",
       "label": "Component 2.5",
       "kind": "class",
@@ -1395,6 +1616,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-2-file-6",
+      "label": "Component 2.6.js",
+      "kind": "file",
+      "groupId": "ns-2",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -1503,6 +1741,23 @@
       }
     },
     {
+      "id": "ns-2-file-7",
+      "label": "Component 2.7.js",
+      "kind": "file",
+      "groupId": "ns-2",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-2-class-7",
       "label": "Component 2.7",
       "kind": "class",
@@ -1599,6 +1854,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-2-file-8",
+      "label": "Component 2.8.js",
+      "kind": "file",
+      "groupId": "ns-2",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -1724,6 +1996,23 @@
       }
     },
     {
+      "id": "ns-3-file-1",
+      "label": "Component 3.1.js",
+      "kind": "file",
+      "groupId": "ns-3",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-3-class-1",
       "label": "Component 3.1",
       "kind": "class",
@@ -1820,6 +2109,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-3-file-2",
+      "label": "Component 3.2.js",
+      "kind": "file",
+      "groupId": "ns-3",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -1928,6 +2234,23 @@
       }
     },
     {
+      "id": "ns-3-file-3",
+      "label": "Component 3.3.js",
+      "kind": "file",
+      "groupId": "ns-3",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-3-class-3",
       "label": "Component 3.3",
       "kind": "class",
@@ -2024,6 +2347,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-3-file-4",
+      "label": "Component 3.4.js",
+      "kind": "file",
+      "groupId": "ns-3",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -2132,6 +2472,23 @@
       }
     },
     {
+      "id": "ns-3-file-5",
+      "label": "Component 3.5.js",
+      "kind": "file",
+      "groupId": "ns-3",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-3-class-5",
       "label": "Component 3.5",
       "kind": "class",
@@ -2228,6 +2585,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-3-file-6",
+      "label": "Component 3.6.js",
+      "kind": "file",
+      "groupId": "ns-3",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -2336,6 +2710,23 @@
       }
     },
     {
+      "id": "ns-3-file-7",
+      "label": "Component 3.7.js",
+      "kind": "file",
+      "groupId": "ns-3",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-3-class-7",
       "label": "Component 3.7",
       "kind": "class",
@@ -2432,6 +2823,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-3-file-8",
+      "label": "Component 3.8.js",
+      "kind": "file",
+      "groupId": "ns-3",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -2557,6 +2965,23 @@
       }
     },
     {
+      "id": "ns-4-file-1",
+      "label": "Component 4.1.js",
+      "kind": "file",
+      "groupId": "ns-4",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-4-class-1",
       "label": "Component 4.1",
       "kind": "class",
@@ -2653,6 +3078,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-4-file-2",
+      "label": "Component 4.2.js",
+      "kind": "file",
+      "groupId": "ns-4",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -2761,6 +3203,23 @@
       }
     },
     {
+      "id": "ns-4-file-3",
+      "label": "Component 4.3.js",
+      "kind": "file",
+      "groupId": "ns-4",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-4-class-3",
       "label": "Component 4.3",
       "kind": "class",
@@ -2857,6 +3316,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-4-file-4",
+      "label": "Component 4.4.js",
+      "kind": "file",
+      "groupId": "ns-4",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -2965,6 +3441,23 @@
       }
     },
     {
+      "id": "ns-4-file-5",
+      "label": "Component 4.5.js",
+      "kind": "file",
+      "groupId": "ns-4",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-4-class-5",
       "label": "Component 4.5",
       "kind": "class",
@@ -3061,6 +3554,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-4-file-6",
+      "label": "Component 4.6.js",
+      "kind": "file",
+      "groupId": "ns-4",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -3169,6 +3679,23 @@
       }
     },
     {
+      "id": "ns-4-file-7",
+      "label": "Component 4.7.js",
+      "kind": "file",
+      "groupId": "ns-4",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-4-class-7",
       "label": "Component 4.7",
       "kind": "class",
@@ -3265,6 +3792,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-4-file-8",
+      "label": "Component 4.8.js",
+      "kind": "file",
+      "groupId": "ns-4",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -3390,6 +3934,23 @@
       }
     },
     {
+      "id": "ns-5-file-1",
+      "label": "Component 5.1.js",
+      "kind": "file",
+      "groupId": "ns-5",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-5-class-1",
       "label": "Component 5.1",
       "kind": "class",
@@ -3486,6 +4047,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-5-file-2",
+      "label": "Component 5.2.js",
+      "kind": "file",
+      "groupId": "ns-5",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -3594,6 +4172,23 @@
       }
     },
     {
+      "id": "ns-5-file-3",
+      "label": "Component 5.3.js",
+      "kind": "file",
+      "groupId": "ns-5",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-5-class-3",
       "label": "Component 5.3",
       "kind": "class",
@@ -3690,6 +4285,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-5-file-4",
+      "label": "Component 5.4.js",
+      "kind": "file",
+      "groupId": "ns-5",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -3798,6 +4410,23 @@
       }
     },
     {
+      "id": "ns-5-file-5",
+      "label": "Component 5.5.js",
+      "kind": "file",
+      "groupId": "ns-5",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-5-class-5",
       "label": "Component 5.5",
       "kind": "class",
@@ -3894,6 +4523,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-5-file-6",
+      "label": "Component 5.6.js",
+      "kind": "file",
+      "groupId": "ns-5",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -4002,6 +4648,23 @@
       }
     },
     {
+      "id": "ns-5-file-7",
+      "label": "Component 5.7.js",
+      "kind": "file",
+      "groupId": "ns-5",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-5-class-7",
       "label": "Component 5.7",
       "kind": "class",
@@ -4098,6 +4761,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-5-file-8",
+      "label": "Component 5.8.js",
+      "kind": "file",
+      "groupId": "ns-5",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -4223,6 +4903,23 @@
       }
     },
     {
+      "id": "ns-6-file-1",
+      "label": "Component 6.1.js",
+      "kind": "file",
+      "groupId": "ns-6",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-6-class-1",
       "label": "Component 6.1",
       "kind": "class",
@@ -4319,6 +5016,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-6-file-2",
+      "label": "Component 6.2.js",
+      "kind": "file",
+      "groupId": "ns-6",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -4427,6 +5141,23 @@
       }
     },
     {
+      "id": "ns-6-file-3",
+      "label": "Component 6.3.js",
+      "kind": "file",
+      "groupId": "ns-6",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-6-class-3",
       "label": "Component 6.3",
       "kind": "class",
@@ -4523,6 +5254,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-6-file-4",
+      "label": "Component 6.4.js",
+      "kind": "file",
+      "groupId": "ns-6",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -4631,6 +5379,23 @@
       }
     },
     {
+      "id": "ns-6-file-5",
+      "label": "Component 6.5.js",
+      "kind": "file",
+      "groupId": "ns-6",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-6-class-5",
       "label": "Component 6.5",
       "kind": "class",
@@ -4727,6 +5492,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-6-file-6",
+      "label": "Component 6.6.js",
+      "kind": "file",
+      "groupId": "ns-6",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -4835,6 +5617,23 @@
       }
     },
     {
+      "id": "ns-6-file-7",
+      "label": "Component 6.7.js",
+      "kind": "file",
+      "groupId": "ns-6",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-6-class-7",
       "label": "Component 6.7",
       "kind": "class",
@@ -4931,6 +5730,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-6-file-8",
+      "label": "Component 6.8.js",
+      "kind": "file",
+      "groupId": "ns-6",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -5056,6 +5872,23 @@
       }
     },
     {
+      "id": "ns-7-file-1",
+      "label": "Component 7.1.js",
+      "kind": "file",
+      "groupId": "ns-7",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-7-class-1",
       "label": "Component 7.1",
       "kind": "class",
@@ -5152,6 +5985,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-7-file-2",
+      "label": "Component 7.2.js",
+      "kind": "file",
+      "groupId": "ns-7",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -5260,6 +6110,23 @@
       }
     },
     {
+      "id": "ns-7-file-3",
+      "label": "Component 7.3.js",
+      "kind": "file",
+      "groupId": "ns-7",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-7-class-3",
       "label": "Component 7.3",
       "kind": "class",
@@ -5356,6 +6223,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-7-file-4",
+      "label": "Component 7.4.js",
+      "kind": "file",
+      "groupId": "ns-7",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -5464,6 +6348,23 @@
       }
     },
     {
+      "id": "ns-7-file-5",
+      "label": "Component 7.5.js",
+      "kind": "file",
+      "groupId": "ns-7",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-7-class-5",
       "label": "Component 7.5",
       "kind": "class",
@@ -5560,6 +6461,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-7-file-6",
+      "label": "Component 7.6.js",
+      "kind": "file",
+      "groupId": "ns-7",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -5668,6 +6586,23 @@
       }
     },
     {
+      "id": "ns-7-file-7",
+      "label": "Component 7.7.js",
+      "kind": "file",
+      "groupId": "ns-7",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-7-class-7",
       "label": "Component 7.7",
       "kind": "class",
@@ -5764,6 +6699,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-7-file-8",
+      "label": "Component 7.8.js",
+      "kind": "file",
+      "groupId": "ns-7",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -5889,6 +6841,23 @@
       }
     },
     {
+      "id": "ns-8-file-1",
+      "label": "Component 8.1.js",
+      "kind": "file",
+      "groupId": "ns-8",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-8-class-1",
       "label": "Component 8.1",
       "kind": "class",
@@ -5985,6 +6954,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-8-file-2",
+      "label": "Component 8.2.js",
+      "kind": "file",
+      "groupId": "ns-8",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -6093,6 +7079,23 @@
       }
     },
     {
+      "id": "ns-8-file-3",
+      "label": "Component 8.3.js",
+      "kind": "file",
+      "groupId": "ns-8",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-8-class-3",
       "label": "Component 8.3",
       "kind": "class",
@@ -6189,6 +7192,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-8-file-4",
+      "label": "Component 8.4.js",
+      "kind": "file",
+      "groupId": "ns-8",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -6297,6 +7317,23 @@
       }
     },
     {
+      "id": "ns-8-file-5",
+      "label": "Component 8.5.js",
+      "kind": "file",
+      "groupId": "ns-8",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-8-class-5",
       "label": "Component 8.5",
       "kind": "class",
@@ -6393,6 +7430,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-8-file-6",
+      "label": "Component 8.6.js",
+      "kind": "file",
+      "groupId": "ns-8",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -6501,6 +7555,23 @@
       }
     },
     {
+      "id": "ns-8-file-7",
+      "label": "Component 8.7.js",
+      "kind": "file",
+      "groupId": "ns-8",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-8-class-7",
       "label": "Component 8.7",
       "kind": "class",
@@ -6597,6 +7668,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-8-file-8",
+      "label": "Component 8.8.js",
+      "kind": "file",
+      "groupId": "ns-8",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -6722,6 +7810,23 @@
       }
     },
     {
+      "id": "ns-9-file-1",
+      "label": "Component 9.1.js",
+      "kind": "file",
+      "groupId": "ns-9",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-9-class-1",
       "label": "Component 9.1",
       "kind": "class",
@@ -6818,6 +7923,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-9-file-2",
+      "label": "Component 9.2.js",
+      "kind": "file",
+      "groupId": "ns-9",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -6926,6 +8048,23 @@
       }
     },
     {
+      "id": "ns-9-file-3",
+      "label": "Component 9.3.js",
+      "kind": "file",
+      "groupId": "ns-9",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-9-class-3",
       "label": "Component 9.3",
       "kind": "class",
@@ -7022,6 +8161,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-9-file-4",
+      "label": "Component 9.4.js",
+      "kind": "file",
+      "groupId": "ns-9",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -7130,6 +8286,23 @@
       }
     },
     {
+      "id": "ns-9-file-5",
+      "label": "Component 9.5.js",
+      "kind": "file",
+      "groupId": "ns-9",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-9-class-5",
       "label": "Component 9.5",
       "kind": "class",
@@ -7226,6 +8399,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-9-file-6",
+      "label": "Component 9.6.js",
+      "kind": "file",
+      "groupId": "ns-9",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -7334,6 +8524,23 @@
       }
     },
     {
+      "id": "ns-9-file-7",
+      "label": "Component 9.7.js",
+      "kind": "file",
+      "groupId": "ns-9",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
       "id": "ns-9-class-7",
       "label": "Component 9.7",
       "kind": "class",
@@ -7430,6 +8637,23 @@
         "complexity": 7,
         "fanIn": 4,
         "lines": 228
+      },
+      "attributes": {
+        "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-9-file-8",
+      "label": "Component 9.8.js",
+      "kind": "file",
+      "groupId": "ns-9",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 9,
+        "fanIn": 3,
+        "lines": 124
       },
       "attributes": {
         "visibility": "internal"
@@ -7555,6 +8779,23 @@
       }
     },
     {
+      "id": "ns-10-file-1",
+      "label": "Component 10.1.js",
+      "kind": "file",
+      "groupId": "ns-10",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
       "id": "ns-10-class-1",
       "label": "Component 10.1",
       "kind": "class",
@@ -7654,6 +8895,23 @@
       },
       "attributes": {
         "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-10-file-2",
+      "label": "Component 10.2.js",
+      "kind": "file",
+      "groupId": "ns-10",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
       }
     },
     {
@@ -7759,6 +9017,23 @@
       }
     },
     {
+      "id": "ns-10-file-3",
+      "label": "Component 10.3.js",
+      "kind": "file",
+      "groupId": "ns-10",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
       "id": "ns-10-class-3",
       "label": "Component 10.3",
       "kind": "class",
@@ -7858,6 +9133,23 @@
       },
       "attributes": {
         "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-10-file-4",
+      "label": "Component 10.4.js",
+      "kind": "file",
+      "groupId": "ns-10",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
       }
     },
     {
@@ -7963,6 +9255,23 @@
       }
     },
     {
+      "id": "ns-10-file-5",
+      "label": "Component 10.5.js",
+      "kind": "file",
+      "groupId": "ns-10",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
       "id": "ns-10-class-5",
       "label": "Component 10.5",
       "kind": "class",
@@ -8062,6 +9371,23 @@
       },
       "attributes": {
         "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-10-file-6",
+      "label": "Component 10.6.js",
+      "kind": "file",
+      "groupId": "ns-10",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
       }
     },
     {
@@ -8167,6 +9493,23 @@
       }
     },
     {
+      "id": "ns-10-file-7",
+      "label": "Component 10.7.js",
+      "kind": "file",
+      "groupId": "ns-10",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
       "id": "ns-10-class-7",
       "label": "Component 10.7",
       "kind": "class",
@@ -8266,6 +9609,23 @@
       },
       "attributes": {
         "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-10-file-8",
+      "label": "Component 10.8.js",
+      "kind": "file",
+      "groupId": "ns-10",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
       }
     },
     {
@@ -8388,6 +9748,23 @@
       }
     },
     {
+      "id": "ns-11-file-1",
+      "label": "Component 11.1.js",
+      "kind": "file",
+      "groupId": "ns-11",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
       "id": "ns-11-class-1",
       "label": "Component 11.1",
       "kind": "class",
@@ -8487,6 +9864,23 @@
       },
       "attributes": {
         "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-11-file-2",
+      "label": "Component 11.2.js",
+      "kind": "file",
+      "groupId": "ns-11",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
       }
     },
     {
@@ -8592,6 +9986,23 @@
       }
     },
     {
+      "id": "ns-11-file-3",
+      "label": "Component 11.3.js",
+      "kind": "file",
+      "groupId": "ns-11",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
       "id": "ns-11-class-3",
       "label": "Component 11.3",
       "kind": "class",
@@ -8691,6 +10102,23 @@
       },
       "attributes": {
         "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-11-file-4",
+      "label": "Component 11.4.js",
+      "kind": "file",
+      "groupId": "ns-11",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
       }
     },
     {
@@ -8796,6 +10224,23 @@
       }
     },
     {
+      "id": "ns-11-file-5",
+      "label": "Component 11.5.js",
+      "kind": "file",
+      "groupId": "ns-11",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
       "id": "ns-11-class-5",
       "label": "Component 11.5",
       "kind": "class",
@@ -8895,6 +10340,23 @@
       },
       "attributes": {
         "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-11-file-6",
+      "label": "Component 11.6.js",
+      "kind": "file",
+      "groupId": "ns-11",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
       }
     },
     {
@@ -9000,6 +10462,23 @@
       }
     },
     {
+      "id": "ns-11-file-7",
+      "label": "Component 11.7.js",
+      "kind": "file",
+      "groupId": "ns-11",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
       "id": "ns-11-class-7",
       "label": "Component 11.7",
       "kind": "class",
@@ -9099,6 +10578,23 @@
       },
       "attributes": {
         "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-11-file-8",
+      "label": "Component 11.8.js",
+      "kind": "file",
+      "groupId": "ns-11",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
       }
     },
     {
@@ -9221,6 +10717,23 @@
       }
     },
     {
+      "id": "ns-12-file-1",
+      "label": "Component 12.1.js",
+      "kind": "file",
+      "groupId": "ns-12",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
       "id": "ns-12-class-1",
       "label": "Component 12.1",
       "kind": "class",
@@ -9320,6 +10833,23 @@
       },
       "attributes": {
         "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-12-file-2",
+      "label": "Component 12.2.js",
+      "kind": "file",
+      "groupId": "ns-12",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
       }
     },
     {
@@ -9425,6 +10955,23 @@
       }
     },
     {
+      "id": "ns-12-file-3",
+      "label": "Component 12.3.js",
+      "kind": "file",
+      "groupId": "ns-12",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
       "id": "ns-12-class-3",
       "label": "Component 12.3",
       "kind": "class",
@@ -9524,6 +11071,23 @@
       },
       "attributes": {
         "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-12-file-4",
+      "label": "Component 12.4.js",
+      "kind": "file",
+      "groupId": "ns-12",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
       }
     },
     {
@@ -9629,6 +11193,23 @@
       }
     },
     {
+      "id": "ns-12-file-5",
+      "label": "Component 12.5.js",
+      "kind": "file",
+      "groupId": "ns-12",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
       "id": "ns-12-class-5",
       "label": "Component 12.5",
       "kind": "class",
@@ -9728,6 +11309,23 @@
       },
       "attributes": {
         "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-12-file-6",
+      "label": "Component 12.6.js",
+      "kind": "file",
+      "groupId": "ns-12",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
       }
     },
     {
@@ -9833,6 +11431,23 @@
       }
     },
     {
+      "id": "ns-12-file-7",
+      "label": "Component 12.7.js",
+      "kind": "file",
+      "groupId": "ns-12",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
+      }
+    },
+    {
       "id": "ns-12-class-7",
       "label": "Component 12.7",
       "kind": "class",
@@ -9932,6 +11547,23 @@
       },
       "attributes": {
         "visibility": "internal"
+      }
+    },
+    {
+      "id": "ns-12-file-8",
+      "label": "Component 12.8.js",
+      "kind": "file",
+      "groupId": "ns-12",
+      "tags": [
+        "source"
+      ],
+      "metrics": {
+        "complexity": 10,
+        "fanIn": 4,
+        "lines": 137
+      },
+      "attributes": {
+        "visibility": "public"
       }
     },
     {
@@ -10039,8 +11671,20 @@
   ],
   "links": [
     {
-      "id": "contains-ns-1-0",
+      "id": "contains-ns-1-file-0",
       "source": "ns-1",
+      "target": "ns-1-file-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-1-file-1",
+      "source": "ns-1-file-1",
       "target": "ns-1-class-1",
       "kind": "contains",
       "directed": false,
@@ -10111,8 +11755,20 @@
       }
     },
     {
-      "id": "contains-ns-1-1",
+      "id": "contains-ns-1-file-1",
       "source": "ns-1",
+      "target": "ns-1-file-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-1-file-2",
+      "source": "ns-1-file-2",
       "target": "ns-1-class-2",
       "kind": "contains",
       "directed": false,
@@ -10183,8 +11839,20 @@
       }
     },
     {
-      "id": "contains-ns-1-2",
+      "id": "contains-ns-1-file-2",
       "source": "ns-1",
+      "target": "ns-1-file-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-1-file-3",
+      "source": "ns-1-file-3",
       "target": "ns-1-class-3",
       "kind": "contains",
       "directed": false,
@@ -10255,8 +11923,20 @@
       }
     },
     {
-      "id": "contains-ns-1-3",
+      "id": "contains-ns-1-file-3",
       "source": "ns-1",
+      "target": "ns-1-file-4",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-1-file-4",
+      "source": "ns-1-file-4",
       "target": "ns-1-class-4",
       "kind": "contains",
       "directed": false,
@@ -10327,8 +12007,20 @@
       }
     },
     {
-      "id": "contains-ns-1-4",
+      "id": "contains-ns-1-file-4",
       "source": "ns-1",
+      "target": "ns-1-file-5",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-1-file-5",
+      "source": "ns-1-file-5",
       "target": "ns-1-class-5",
       "kind": "contains",
       "directed": false,
@@ -10399,8 +12091,20 @@
       }
     },
     {
-      "id": "contains-ns-1-5",
+      "id": "contains-ns-1-file-5",
       "source": "ns-1",
+      "target": "ns-1-file-6",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-1-file-6",
+      "source": "ns-1-file-6",
       "target": "ns-1-class-6",
       "kind": "contains",
       "directed": false,
@@ -10471,8 +12175,20 @@
       }
     },
     {
-      "id": "contains-ns-1-6",
+      "id": "contains-ns-1-file-6",
       "source": "ns-1",
+      "target": "ns-1-file-7",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-1-file-7",
+      "source": "ns-1-file-7",
       "target": "ns-1-class-7",
       "kind": "contains",
       "directed": false,
@@ -10543,8 +12259,20 @@
       }
     },
     {
-      "id": "contains-ns-1-7",
+      "id": "contains-ns-1-file-7",
       "source": "ns-1",
+      "target": "ns-1-file-8",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-1-file-8",
+      "source": "ns-1-file-8",
       "target": "ns-1-class-8",
       "kind": "contains",
       "directed": false,
@@ -10627,8 +12355,20 @@
       }
     },
     {
-      "id": "contains-ns-2-0",
+      "id": "contains-ns-2-file-0",
       "source": "ns-2",
+      "target": "ns-2-file-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-2-file-1",
+      "source": "ns-2-file-1",
       "target": "ns-2-class-1",
       "kind": "contains",
       "directed": false,
@@ -10699,8 +12439,20 @@
       }
     },
     {
-      "id": "contains-ns-2-1",
+      "id": "contains-ns-2-file-1",
       "source": "ns-2",
+      "target": "ns-2-file-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-2-file-2",
+      "source": "ns-2-file-2",
       "target": "ns-2-class-2",
       "kind": "contains",
       "directed": false,
@@ -10771,8 +12523,20 @@
       }
     },
     {
-      "id": "contains-ns-2-2",
+      "id": "contains-ns-2-file-2",
       "source": "ns-2",
+      "target": "ns-2-file-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-2-file-3",
+      "source": "ns-2-file-3",
       "target": "ns-2-class-3",
       "kind": "contains",
       "directed": false,
@@ -10843,8 +12607,20 @@
       }
     },
     {
-      "id": "contains-ns-2-3",
+      "id": "contains-ns-2-file-3",
       "source": "ns-2",
+      "target": "ns-2-file-4",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-2-file-4",
+      "source": "ns-2-file-4",
       "target": "ns-2-class-4",
       "kind": "contains",
       "directed": false,
@@ -10915,8 +12691,20 @@
       }
     },
     {
-      "id": "contains-ns-2-4",
+      "id": "contains-ns-2-file-4",
       "source": "ns-2",
+      "target": "ns-2-file-5",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-2-file-5",
+      "source": "ns-2-file-5",
       "target": "ns-2-class-5",
       "kind": "contains",
       "directed": false,
@@ -10987,8 +12775,20 @@
       }
     },
     {
-      "id": "contains-ns-2-5",
+      "id": "contains-ns-2-file-5",
       "source": "ns-2",
+      "target": "ns-2-file-6",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-2-file-6",
+      "source": "ns-2-file-6",
       "target": "ns-2-class-6",
       "kind": "contains",
       "directed": false,
@@ -11059,8 +12859,20 @@
       }
     },
     {
-      "id": "contains-ns-2-6",
+      "id": "contains-ns-2-file-6",
       "source": "ns-2",
+      "target": "ns-2-file-7",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-2-file-7",
+      "source": "ns-2-file-7",
       "target": "ns-2-class-7",
       "kind": "contains",
       "directed": false,
@@ -11131,8 +12943,20 @@
       }
     },
     {
-      "id": "contains-ns-2-7",
+      "id": "contains-ns-2-file-7",
       "source": "ns-2",
+      "target": "ns-2-file-8",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-2-file-8",
+      "source": "ns-2-file-8",
       "target": "ns-2-class-8",
       "kind": "contains",
       "directed": false,
@@ -11215,8 +13039,20 @@
       }
     },
     {
-      "id": "contains-ns-3-0",
+      "id": "contains-ns-3-file-0",
       "source": "ns-3",
+      "target": "ns-3-file-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-3-file-1",
+      "source": "ns-3-file-1",
       "target": "ns-3-class-1",
       "kind": "contains",
       "directed": false,
@@ -11287,8 +13123,20 @@
       }
     },
     {
-      "id": "contains-ns-3-1",
+      "id": "contains-ns-3-file-1",
       "source": "ns-3",
+      "target": "ns-3-file-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-3-file-2",
+      "source": "ns-3-file-2",
       "target": "ns-3-class-2",
       "kind": "contains",
       "directed": false,
@@ -11359,8 +13207,20 @@
       }
     },
     {
-      "id": "contains-ns-3-2",
+      "id": "contains-ns-3-file-2",
       "source": "ns-3",
+      "target": "ns-3-file-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-3-file-3",
+      "source": "ns-3-file-3",
       "target": "ns-3-class-3",
       "kind": "contains",
       "directed": false,
@@ -11431,8 +13291,20 @@
       }
     },
     {
-      "id": "contains-ns-3-3",
+      "id": "contains-ns-3-file-3",
       "source": "ns-3",
+      "target": "ns-3-file-4",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-3-file-4",
+      "source": "ns-3-file-4",
       "target": "ns-3-class-4",
       "kind": "contains",
       "directed": false,
@@ -11503,8 +13375,20 @@
       }
     },
     {
-      "id": "contains-ns-3-4",
+      "id": "contains-ns-3-file-4",
       "source": "ns-3",
+      "target": "ns-3-file-5",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-3-file-5",
+      "source": "ns-3-file-5",
       "target": "ns-3-class-5",
       "kind": "contains",
       "directed": false,
@@ -11575,8 +13459,20 @@
       }
     },
     {
-      "id": "contains-ns-3-5",
+      "id": "contains-ns-3-file-5",
       "source": "ns-3",
+      "target": "ns-3-file-6",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-3-file-6",
+      "source": "ns-3-file-6",
       "target": "ns-3-class-6",
       "kind": "contains",
       "directed": false,
@@ -11647,8 +13543,20 @@
       }
     },
     {
-      "id": "contains-ns-3-6",
+      "id": "contains-ns-3-file-6",
       "source": "ns-3",
+      "target": "ns-3-file-7",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-3-file-7",
+      "source": "ns-3-file-7",
       "target": "ns-3-class-7",
       "kind": "contains",
       "directed": false,
@@ -11719,8 +13627,20 @@
       }
     },
     {
-      "id": "contains-ns-3-7",
+      "id": "contains-ns-3-file-7",
       "source": "ns-3",
+      "target": "ns-3-file-8",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-3-file-8",
+      "source": "ns-3-file-8",
       "target": "ns-3-class-8",
       "kind": "contains",
       "directed": false,
@@ -11803,8 +13723,20 @@
       }
     },
     {
-      "id": "contains-ns-4-0",
+      "id": "contains-ns-4-file-0",
       "source": "ns-4",
+      "target": "ns-4-file-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-4-file-1",
+      "source": "ns-4-file-1",
       "target": "ns-4-class-1",
       "kind": "contains",
       "directed": false,
@@ -11875,8 +13807,20 @@
       }
     },
     {
-      "id": "contains-ns-4-1",
+      "id": "contains-ns-4-file-1",
       "source": "ns-4",
+      "target": "ns-4-file-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-4-file-2",
+      "source": "ns-4-file-2",
       "target": "ns-4-class-2",
       "kind": "contains",
       "directed": false,
@@ -11947,8 +13891,20 @@
       }
     },
     {
-      "id": "contains-ns-4-2",
+      "id": "contains-ns-4-file-2",
       "source": "ns-4",
+      "target": "ns-4-file-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-4-file-3",
+      "source": "ns-4-file-3",
       "target": "ns-4-class-3",
       "kind": "contains",
       "directed": false,
@@ -12019,8 +13975,20 @@
       }
     },
     {
-      "id": "contains-ns-4-3",
+      "id": "contains-ns-4-file-3",
       "source": "ns-4",
+      "target": "ns-4-file-4",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-4-file-4",
+      "source": "ns-4-file-4",
       "target": "ns-4-class-4",
       "kind": "contains",
       "directed": false,
@@ -12091,8 +14059,20 @@
       }
     },
     {
-      "id": "contains-ns-4-4",
+      "id": "contains-ns-4-file-4",
       "source": "ns-4",
+      "target": "ns-4-file-5",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-4-file-5",
+      "source": "ns-4-file-5",
       "target": "ns-4-class-5",
       "kind": "contains",
       "directed": false,
@@ -12163,8 +14143,20 @@
       }
     },
     {
-      "id": "contains-ns-4-5",
+      "id": "contains-ns-4-file-5",
       "source": "ns-4",
+      "target": "ns-4-file-6",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-4-file-6",
+      "source": "ns-4-file-6",
       "target": "ns-4-class-6",
       "kind": "contains",
       "directed": false,
@@ -12235,8 +14227,20 @@
       }
     },
     {
-      "id": "contains-ns-4-6",
+      "id": "contains-ns-4-file-6",
       "source": "ns-4",
+      "target": "ns-4-file-7",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-4-file-7",
+      "source": "ns-4-file-7",
       "target": "ns-4-class-7",
       "kind": "contains",
       "directed": false,
@@ -12307,8 +14311,20 @@
       }
     },
     {
-      "id": "contains-ns-4-7",
+      "id": "contains-ns-4-file-7",
       "source": "ns-4",
+      "target": "ns-4-file-8",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-4-file-8",
+      "source": "ns-4-file-8",
       "target": "ns-4-class-8",
       "kind": "contains",
       "directed": false,
@@ -12391,8 +14407,20 @@
       }
     },
     {
-      "id": "contains-ns-5-0",
+      "id": "contains-ns-5-file-0",
       "source": "ns-5",
+      "target": "ns-5-file-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-5-file-1",
+      "source": "ns-5-file-1",
       "target": "ns-5-class-1",
       "kind": "contains",
       "directed": false,
@@ -12463,8 +14491,20 @@
       }
     },
     {
-      "id": "contains-ns-5-1",
+      "id": "contains-ns-5-file-1",
       "source": "ns-5",
+      "target": "ns-5-file-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-5-file-2",
+      "source": "ns-5-file-2",
       "target": "ns-5-class-2",
       "kind": "contains",
       "directed": false,
@@ -12535,8 +14575,20 @@
       }
     },
     {
-      "id": "contains-ns-5-2",
+      "id": "contains-ns-5-file-2",
       "source": "ns-5",
+      "target": "ns-5-file-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-5-file-3",
+      "source": "ns-5-file-3",
       "target": "ns-5-class-3",
       "kind": "contains",
       "directed": false,
@@ -12607,8 +14659,20 @@
       }
     },
     {
-      "id": "contains-ns-5-3",
+      "id": "contains-ns-5-file-3",
       "source": "ns-5",
+      "target": "ns-5-file-4",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-5-file-4",
+      "source": "ns-5-file-4",
       "target": "ns-5-class-4",
       "kind": "contains",
       "directed": false,
@@ -12679,8 +14743,20 @@
       }
     },
     {
-      "id": "contains-ns-5-4",
+      "id": "contains-ns-5-file-4",
       "source": "ns-5",
+      "target": "ns-5-file-5",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-5-file-5",
+      "source": "ns-5-file-5",
       "target": "ns-5-class-5",
       "kind": "contains",
       "directed": false,
@@ -12751,8 +14827,20 @@
       }
     },
     {
-      "id": "contains-ns-5-5",
+      "id": "contains-ns-5-file-5",
       "source": "ns-5",
+      "target": "ns-5-file-6",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-5-file-6",
+      "source": "ns-5-file-6",
       "target": "ns-5-class-6",
       "kind": "contains",
       "directed": false,
@@ -12823,8 +14911,20 @@
       }
     },
     {
-      "id": "contains-ns-5-6",
+      "id": "contains-ns-5-file-6",
       "source": "ns-5",
+      "target": "ns-5-file-7",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-5-file-7",
+      "source": "ns-5-file-7",
       "target": "ns-5-class-7",
       "kind": "contains",
       "directed": false,
@@ -12895,8 +14995,20 @@
       }
     },
     {
-      "id": "contains-ns-5-7",
+      "id": "contains-ns-5-file-7",
       "source": "ns-5",
+      "target": "ns-5-file-8",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-5-file-8",
+      "source": "ns-5-file-8",
       "target": "ns-5-class-8",
       "kind": "contains",
       "directed": false,
@@ -12979,8 +15091,20 @@
       }
     },
     {
-      "id": "contains-ns-6-0",
+      "id": "contains-ns-6-file-0",
       "source": "ns-6",
+      "target": "ns-6-file-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-6-file-1",
+      "source": "ns-6-file-1",
       "target": "ns-6-class-1",
       "kind": "contains",
       "directed": false,
@@ -13051,8 +15175,20 @@
       }
     },
     {
-      "id": "contains-ns-6-1",
+      "id": "contains-ns-6-file-1",
       "source": "ns-6",
+      "target": "ns-6-file-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-6-file-2",
+      "source": "ns-6-file-2",
       "target": "ns-6-class-2",
       "kind": "contains",
       "directed": false,
@@ -13123,8 +15259,20 @@
       }
     },
     {
-      "id": "contains-ns-6-2",
+      "id": "contains-ns-6-file-2",
       "source": "ns-6",
+      "target": "ns-6-file-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-6-file-3",
+      "source": "ns-6-file-3",
       "target": "ns-6-class-3",
       "kind": "contains",
       "directed": false,
@@ -13195,8 +15343,20 @@
       }
     },
     {
-      "id": "contains-ns-6-3",
+      "id": "contains-ns-6-file-3",
       "source": "ns-6",
+      "target": "ns-6-file-4",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-6-file-4",
+      "source": "ns-6-file-4",
       "target": "ns-6-class-4",
       "kind": "contains",
       "directed": false,
@@ -13267,8 +15427,20 @@
       }
     },
     {
-      "id": "contains-ns-6-4",
+      "id": "contains-ns-6-file-4",
       "source": "ns-6",
+      "target": "ns-6-file-5",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-6-file-5",
+      "source": "ns-6-file-5",
       "target": "ns-6-class-5",
       "kind": "contains",
       "directed": false,
@@ -13339,8 +15511,20 @@
       }
     },
     {
-      "id": "contains-ns-6-5",
+      "id": "contains-ns-6-file-5",
       "source": "ns-6",
+      "target": "ns-6-file-6",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-6-file-6",
+      "source": "ns-6-file-6",
       "target": "ns-6-class-6",
       "kind": "contains",
       "directed": false,
@@ -13411,8 +15595,20 @@
       }
     },
     {
-      "id": "contains-ns-6-6",
+      "id": "contains-ns-6-file-6",
       "source": "ns-6",
+      "target": "ns-6-file-7",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-6-file-7",
+      "source": "ns-6-file-7",
       "target": "ns-6-class-7",
       "kind": "contains",
       "directed": false,
@@ -13483,8 +15679,20 @@
       }
     },
     {
-      "id": "contains-ns-6-7",
+      "id": "contains-ns-6-file-7",
       "source": "ns-6",
+      "target": "ns-6-file-8",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-6-file-8",
+      "source": "ns-6-file-8",
       "target": "ns-6-class-8",
       "kind": "contains",
       "directed": false,
@@ -13567,8 +15775,20 @@
       }
     },
     {
-      "id": "contains-ns-7-0",
+      "id": "contains-ns-7-file-0",
       "source": "ns-7",
+      "target": "ns-7-file-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-7-file-1",
+      "source": "ns-7-file-1",
       "target": "ns-7-class-1",
       "kind": "contains",
       "directed": false,
@@ -13639,8 +15859,20 @@
       }
     },
     {
-      "id": "contains-ns-7-1",
+      "id": "contains-ns-7-file-1",
       "source": "ns-7",
+      "target": "ns-7-file-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-7-file-2",
+      "source": "ns-7-file-2",
       "target": "ns-7-class-2",
       "kind": "contains",
       "directed": false,
@@ -13711,8 +15943,20 @@
       }
     },
     {
-      "id": "contains-ns-7-2",
+      "id": "contains-ns-7-file-2",
       "source": "ns-7",
+      "target": "ns-7-file-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-7-file-3",
+      "source": "ns-7-file-3",
       "target": "ns-7-class-3",
       "kind": "contains",
       "directed": false,
@@ -13783,8 +16027,20 @@
       }
     },
     {
-      "id": "contains-ns-7-3",
+      "id": "contains-ns-7-file-3",
       "source": "ns-7",
+      "target": "ns-7-file-4",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-7-file-4",
+      "source": "ns-7-file-4",
       "target": "ns-7-class-4",
       "kind": "contains",
       "directed": false,
@@ -13855,8 +16111,20 @@
       }
     },
     {
-      "id": "contains-ns-7-4",
+      "id": "contains-ns-7-file-4",
       "source": "ns-7",
+      "target": "ns-7-file-5",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-7-file-5",
+      "source": "ns-7-file-5",
       "target": "ns-7-class-5",
       "kind": "contains",
       "directed": false,
@@ -13927,8 +16195,20 @@
       }
     },
     {
-      "id": "contains-ns-7-5",
+      "id": "contains-ns-7-file-5",
       "source": "ns-7",
+      "target": "ns-7-file-6",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-7-file-6",
+      "source": "ns-7-file-6",
       "target": "ns-7-class-6",
       "kind": "contains",
       "directed": false,
@@ -13999,8 +16279,20 @@
       }
     },
     {
-      "id": "contains-ns-7-6",
+      "id": "contains-ns-7-file-6",
       "source": "ns-7",
+      "target": "ns-7-file-7",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-7-file-7",
+      "source": "ns-7-file-7",
       "target": "ns-7-class-7",
       "kind": "contains",
       "directed": false,
@@ -14071,8 +16363,20 @@
       }
     },
     {
-      "id": "contains-ns-7-7",
+      "id": "contains-ns-7-file-7",
       "source": "ns-7",
+      "target": "ns-7-file-8",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-7-file-8",
+      "source": "ns-7-file-8",
       "target": "ns-7-class-8",
       "kind": "contains",
       "directed": false,
@@ -14155,8 +16459,20 @@
       }
     },
     {
-      "id": "contains-ns-8-0",
+      "id": "contains-ns-8-file-0",
       "source": "ns-8",
+      "target": "ns-8-file-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-8-file-1",
+      "source": "ns-8-file-1",
       "target": "ns-8-class-1",
       "kind": "contains",
       "directed": false,
@@ -14227,8 +16543,20 @@
       }
     },
     {
-      "id": "contains-ns-8-1",
+      "id": "contains-ns-8-file-1",
       "source": "ns-8",
+      "target": "ns-8-file-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-8-file-2",
+      "source": "ns-8-file-2",
       "target": "ns-8-class-2",
       "kind": "contains",
       "directed": false,
@@ -14299,8 +16627,20 @@
       }
     },
     {
-      "id": "contains-ns-8-2",
+      "id": "contains-ns-8-file-2",
       "source": "ns-8",
+      "target": "ns-8-file-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-8-file-3",
+      "source": "ns-8-file-3",
       "target": "ns-8-class-3",
       "kind": "contains",
       "directed": false,
@@ -14371,8 +16711,20 @@
       }
     },
     {
-      "id": "contains-ns-8-3",
+      "id": "contains-ns-8-file-3",
       "source": "ns-8",
+      "target": "ns-8-file-4",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-8-file-4",
+      "source": "ns-8-file-4",
       "target": "ns-8-class-4",
       "kind": "contains",
       "directed": false,
@@ -14443,8 +16795,20 @@
       }
     },
     {
-      "id": "contains-ns-8-4",
+      "id": "contains-ns-8-file-4",
       "source": "ns-8",
+      "target": "ns-8-file-5",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-8-file-5",
+      "source": "ns-8-file-5",
       "target": "ns-8-class-5",
       "kind": "contains",
       "directed": false,
@@ -14515,8 +16879,20 @@
       }
     },
     {
-      "id": "contains-ns-8-5",
+      "id": "contains-ns-8-file-5",
       "source": "ns-8",
+      "target": "ns-8-file-6",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-8-file-6",
+      "source": "ns-8-file-6",
       "target": "ns-8-class-6",
       "kind": "contains",
       "directed": false,
@@ -14587,8 +16963,20 @@
       }
     },
     {
-      "id": "contains-ns-8-6",
+      "id": "contains-ns-8-file-6",
       "source": "ns-8",
+      "target": "ns-8-file-7",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-8-file-7",
+      "source": "ns-8-file-7",
       "target": "ns-8-class-7",
       "kind": "contains",
       "directed": false,
@@ -14659,8 +17047,20 @@
       }
     },
     {
-      "id": "contains-ns-8-7",
+      "id": "contains-ns-8-file-7",
       "source": "ns-8",
+      "target": "ns-8-file-8",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-8-file-8",
+      "source": "ns-8-file-8",
       "target": "ns-8-class-8",
       "kind": "contains",
       "directed": false,
@@ -14743,8 +17143,20 @@
       }
     },
     {
-      "id": "contains-ns-9-0",
+      "id": "contains-ns-9-file-0",
       "source": "ns-9",
+      "target": "ns-9-file-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-9-file-1",
+      "source": "ns-9-file-1",
       "target": "ns-9-class-1",
       "kind": "contains",
       "directed": false,
@@ -14815,8 +17227,20 @@
       }
     },
     {
-      "id": "contains-ns-9-1",
+      "id": "contains-ns-9-file-1",
       "source": "ns-9",
+      "target": "ns-9-file-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-9-file-2",
+      "source": "ns-9-file-2",
       "target": "ns-9-class-2",
       "kind": "contains",
       "directed": false,
@@ -14887,8 +17311,20 @@
       }
     },
     {
-      "id": "contains-ns-9-2",
+      "id": "contains-ns-9-file-2",
       "source": "ns-9",
+      "target": "ns-9-file-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-9-file-3",
+      "source": "ns-9-file-3",
       "target": "ns-9-class-3",
       "kind": "contains",
       "directed": false,
@@ -14959,8 +17395,20 @@
       }
     },
     {
-      "id": "contains-ns-9-3",
+      "id": "contains-ns-9-file-3",
       "source": "ns-9",
+      "target": "ns-9-file-4",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-9-file-4",
+      "source": "ns-9-file-4",
       "target": "ns-9-class-4",
       "kind": "contains",
       "directed": false,
@@ -15031,8 +17479,20 @@
       }
     },
     {
-      "id": "contains-ns-9-4",
+      "id": "contains-ns-9-file-4",
       "source": "ns-9",
+      "target": "ns-9-file-5",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-9-file-5",
+      "source": "ns-9-file-5",
       "target": "ns-9-class-5",
       "kind": "contains",
       "directed": false,
@@ -15103,8 +17563,20 @@
       }
     },
     {
-      "id": "contains-ns-9-5",
+      "id": "contains-ns-9-file-5",
       "source": "ns-9",
+      "target": "ns-9-file-6",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-9-file-6",
+      "source": "ns-9-file-6",
       "target": "ns-9-class-6",
       "kind": "contains",
       "directed": false,
@@ -15175,8 +17647,20 @@
       }
     },
     {
-      "id": "contains-ns-9-6",
+      "id": "contains-ns-9-file-6",
       "source": "ns-9",
+      "target": "ns-9-file-7",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-9-file-7",
+      "source": "ns-9-file-7",
       "target": "ns-9-class-7",
       "kind": "contains",
       "directed": false,
@@ -15247,8 +17731,20 @@
       }
     },
     {
-      "id": "contains-ns-9-7",
+      "id": "contains-ns-9-file-7",
       "source": "ns-9",
+      "target": "ns-9-file-8",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-9-file-8",
+      "source": "ns-9-file-8",
       "target": "ns-9-class-8",
       "kind": "contains",
       "directed": false,
@@ -15331,8 +17827,20 @@
       }
     },
     {
-      "id": "contains-ns-10-0",
+      "id": "contains-ns-10-file-0",
       "source": "ns-10",
+      "target": "ns-10-file-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-10-file-1",
+      "source": "ns-10-file-1",
       "target": "ns-10-class-1",
       "kind": "contains",
       "directed": false,
@@ -15403,8 +17911,20 @@
       }
     },
     {
-      "id": "contains-ns-10-1",
+      "id": "contains-ns-10-file-1",
       "source": "ns-10",
+      "target": "ns-10-file-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-10-file-2",
+      "source": "ns-10-file-2",
       "target": "ns-10-class-2",
       "kind": "contains",
       "directed": false,
@@ -15475,8 +17995,20 @@
       }
     },
     {
-      "id": "contains-ns-10-2",
+      "id": "contains-ns-10-file-2",
       "source": "ns-10",
+      "target": "ns-10-file-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-10-file-3",
+      "source": "ns-10-file-3",
       "target": "ns-10-class-3",
       "kind": "contains",
       "directed": false,
@@ -15547,8 +18079,20 @@
       }
     },
     {
-      "id": "contains-ns-10-3",
+      "id": "contains-ns-10-file-3",
       "source": "ns-10",
+      "target": "ns-10-file-4",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-10-file-4",
+      "source": "ns-10-file-4",
       "target": "ns-10-class-4",
       "kind": "contains",
       "directed": false,
@@ -15619,8 +18163,20 @@
       }
     },
     {
-      "id": "contains-ns-10-4",
+      "id": "contains-ns-10-file-4",
       "source": "ns-10",
+      "target": "ns-10-file-5",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-10-file-5",
+      "source": "ns-10-file-5",
       "target": "ns-10-class-5",
       "kind": "contains",
       "directed": false,
@@ -15691,8 +18247,20 @@
       }
     },
     {
-      "id": "contains-ns-10-5",
+      "id": "contains-ns-10-file-5",
       "source": "ns-10",
+      "target": "ns-10-file-6",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-10-file-6",
+      "source": "ns-10-file-6",
       "target": "ns-10-class-6",
       "kind": "contains",
       "directed": false,
@@ -15763,8 +18331,20 @@
       }
     },
     {
-      "id": "contains-ns-10-6",
+      "id": "contains-ns-10-file-6",
       "source": "ns-10",
+      "target": "ns-10-file-7",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-10-file-7",
+      "source": "ns-10-file-7",
       "target": "ns-10-class-7",
       "kind": "contains",
       "directed": false,
@@ -15835,8 +18415,20 @@
       }
     },
     {
-      "id": "contains-ns-10-7",
+      "id": "contains-ns-10-file-7",
       "source": "ns-10",
+      "target": "ns-10-file-8",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-10-file-8",
+      "source": "ns-10-file-8",
       "target": "ns-10-class-8",
       "kind": "contains",
       "directed": false,
@@ -15919,8 +18511,20 @@
       }
     },
     {
-      "id": "contains-ns-11-0",
+      "id": "contains-ns-11-file-0",
       "source": "ns-11",
+      "target": "ns-11-file-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-11-file-1",
+      "source": "ns-11-file-1",
       "target": "ns-11-class-1",
       "kind": "contains",
       "directed": false,
@@ -15991,8 +18595,20 @@
       }
     },
     {
-      "id": "contains-ns-11-1",
+      "id": "contains-ns-11-file-1",
       "source": "ns-11",
+      "target": "ns-11-file-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-11-file-2",
+      "source": "ns-11-file-2",
       "target": "ns-11-class-2",
       "kind": "contains",
       "directed": false,
@@ -16063,8 +18679,20 @@
       }
     },
     {
-      "id": "contains-ns-11-2",
+      "id": "contains-ns-11-file-2",
       "source": "ns-11",
+      "target": "ns-11-file-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-11-file-3",
+      "source": "ns-11-file-3",
       "target": "ns-11-class-3",
       "kind": "contains",
       "directed": false,
@@ -16135,8 +18763,20 @@
       }
     },
     {
-      "id": "contains-ns-11-3",
+      "id": "contains-ns-11-file-3",
       "source": "ns-11",
+      "target": "ns-11-file-4",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-11-file-4",
+      "source": "ns-11-file-4",
       "target": "ns-11-class-4",
       "kind": "contains",
       "directed": false,
@@ -16207,8 +18847,20 @@
       }
     },
     {
-      "id": "contains-ns-11-4",
+      "id": "contains-ns-11-file-4",
       "source": "ns-11",
+      "target": "ns-11-file-5",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-11-file-5",
+      "source": "ns-11-file-5",
       "target": "ns-11-class-5",
       "kind": "contains",
       "directed": false,
@@ -16279,8 +18931,20 @@
       }
     },
     {
-      "id": "contains-ns-11-5",
+      "id": "contains-ns-11-file-5",
       "source": "ns-11",
+      "target": "ns-11-file-6",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-11-file-6",
+      "source": "ns-11-file-6",
       "target": "ns-11-class-6",
       "kind": "contains",
       "directed": false,
@@ -16351,8 +19015,20 @@
       }
     },
     {
-      "id": "contains-ns-11-6",
+      "id": "contains-ns-11-file-6",
       "source": "ns-11",
+      "target": "ns-11-file-7",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-11-file-7",
+      "source": "ns-11-file-7",
       "target": "ns-11-class-7",
       "kind": "contains",
       "directed": false,
@@ -16423,8 +19099,20 @@
       }
     },
     {
-      "id": "contains-ns-11-7",
+      "id": "contains-ns-11-file-7",
       "source": "ns-11",
+      "target": "ns-11-file-8",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-11-file-8",
+      "source": "ns-11-file-8",
       "target": "ns-11-class-8",
       "kind": "contains",
       "directed": false,
@@ -16507,8 +19195,20 @@
       }
     },
     {
-      "id": "contains-ns-12-0",
+      "id": "contains-ns-12-file-0",
       "source": "ns-12",
+      "target": "ns-12-file-1",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-12-file-1",
+      "source": "ns-12-file-1",
       "target": "ns-12-class-1",
       "kind": "contains",
       "directed": false,
@@ -16579,8 +19279,20 @@
       }
     },
     {
-      "id": "contains-ns-12-1",
+      "id": "contains-ns-12-file-1",
       "source": "ns-12",
+      "target": "ns-12-file-2",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-12-file-2",
+      "source": "ns-12-file-2",
       "target": "ns-12-class-2",
       "kind": "contains",
       "directed": false,
@@ -16651,8 +19363,20 @@
       }
     },
     {
-      "id": "contains-ns-12-2",
+      "id": "contains-ns-12-file-2",
       "source": "ns-12",
+      "target": "ns-12-file-3",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-12-file-3",
+      "source": "ns-12-file-3",
       "target": "ns-12-class-3",
       "kind": "contains",
       "directed": false,
@@ -16723,8 +19447,20 @@
       }
     },
     {
-      "id": "contains-ns-12-3",
+      "id": "contains-ns-12-file-3",
       "source": "ns-12",
+      "target": "ns-12-file-4",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-12-file-4",
+      "source": "ns-12-file-4",
       "target": "ns-12-class-4",
       "kind": "contains",
       "directed": false,
@@ -16795,8 +19531,20 @@
       }
     },
     {
-      "id": "contains-ns-12-4",
+      "id": "contains-ns-12-file-4",
       "source": "ns-12",
+      "target": "ns-12-file-5",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-12-file-5",
+      "source": "ns-12-file-5",
       "target": "ns-12-class-5",
       "kind": "contains",
       "directed": false,
@@ -16867,8 +19615,20 @@
       }
     },
     {
-      "id": "contains-ns-12-5",
+      "id": "contains-ns-12-file-5",
       "source": "ns-12",
+      "target": "ns-12-file-6",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-12-file-6",
+      "source": "ns-12-file-6",
       "target": "ns-12-class-6",
       "kind": "contains",
       "directed": false,
@@ -16939,8 +19699,20 @@
       }
     },
     {
-      "id": "contains-ns-12-6",
+      "id": "contains-ns-12-file-6",
       "source": "ns-12",
+      "target": "ns-12-file-7",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-12-file-7",
+      "source": "ns-12-file-7",
       "target": "ns-12-class-7",
       "kind": "contains",
       "directed": false,
@@ -17011,8 +19783,20 @@
       }
     },
     {
-      "id": "contains-ns-12-7",
+      "id": "contains-ns-12-file-7",
       "source": "ns-12",
+      "target": "ns-12-file-8",
+      "kind": "contains",
+      "directed": false,
+      "weight": 1,
+      "metrics": {
+        "callCount": 0,
+        "dependencyWeight": 1
+      }
+    },
+    {
+      "id": "contains-ns-12-file-8",
+      "source": "ns-12-file-8",
       "target": "ns-12-class-8",
       "kind": "contains",
       "directed": false,

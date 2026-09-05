@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { normalizeGraph, parseGraphText, validateGraph } from "../apps/viewer/src/domain/graph.js";
 import { EXAMPLE_CATALOG, getExampleGraph } from "../apps/viewer/src/domain/catalog.js";
+import invalidFixture from "../contracts/graph-universe/fixtures/invalid.json" with { type: "json" };
 
 const fixturePath = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -11,7 +12,7 @@ const fixturePath = path.resolve(
 );
 const validGraph = JSON.parse(fs.readFileSync(fixturePath, "utf8"));
 
-describe("validateGraph", () => {
+describe("fixture catalog", () => {
   it("provides several deterministic valid examples", () => {
     expect(EXAMPLE_CATALOG.map((example) => example.id)).toEqual([
       "minimal",
@@ -21,11 +22,22 @@ describe("validateGraph", () => {
       "performance"
     ]);
     expect(EXAMPLE_CATALOG.every((example) => validateGraph(example.graph).valid)).toBe(true);
-    expect(getExampleGraph("medium").nodes.length).toBe(52);
+    expect(getExampleGraph("medium").nodes.length).toBe(64);
   });
+});
+
+describe("validateGraph", () => {
 
   it("accepts the minimal graph fixture", () => {
     expect(validateGraph(validGraph)).toEqual({ valid: true, errors: [] });
+  });
+
+  it("rejects the deliberately invalid fixture", () => {
+    const validation = validateGraph(invalidFixture);
+
+    expect(validation.valid).toBe(false);
+    expect(validation.errors.some((error) => error.message.includes("duplicated"))).toBe(true);
+    expect(validation.errors.some((error) => error.message.includes("does not reference"))).toBe(true);
   });
 
   it("rejects duplicate node IDs", () => {

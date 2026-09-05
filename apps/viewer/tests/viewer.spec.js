@@ -62,8 +62,8 @@ test("switches examples and exposes active visual metrics", async ({ page }) => 
   await page.goto("/");
 
   await page.locator("#example-select").selectOption("small");
-  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "14");
-  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-link-count", "26");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "18");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-link-count", "30");
   await expect(page.locator("#legend-node-metric")).toContainText("Komplexität");
   await expect(page.locator("#legend-link-metric")).toContainText("Gewicht");
 });
@@ -74,7 +74,7 @@ test("filters the 3d graph without losing the source graph", async ({ page }) =>
 
   await page.locator("#zoom-select").selectOption("overview");
   await expect(page.locator("#graph-status")).toContainText("Übersicht");
-  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "6");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "10");
   await page.locator("#zoom-select").selectOption("detail");
 
   await page.locator("#kind-filter").selectOption("method");
@@ -82,9 +82,9 @@ test("filters the 3d graph without losing the source graph", async ({ page }) =>
   await expect(page.locator("#accessible-nodes li")).toHaveCount(8);
 
   await page.locator("#reset-filters").click();
-  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "14");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "18");
   await page.locator("#toggle-details").click();
-  await expect(page.locator("#accessible-nodes li")).toHaveCount(14);
+  await expect(page.locator("#accessible-nodes li")).toHaveCount(18);
 });
 
 test("reports an empty but valid graph clearly", async ({ page }) => {
@@ -97,4 +97,31 @@ test("reports an empty but valid graph clearly", async ({ page }) => {
 
   await expect(page.locator("#graph-status")).toHaveText("empty.json geladen: Der Graph ist leer.");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "0");
+});
+
+test("renders the large target fixture and survives a resize", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#example-select").selectOption("large");
+
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "248");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-link-count", "448");
+  await page.setViewportSize({ width: 1024, height: 700 });
+  await expect(page.locator("#graph-canvas canvas")).toBeVisible();
+});
+
+test("shows schema and semantic errors for an invalid graph", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#graph-file").setInputFiles({
+    buffer: Buffer.from(JSON.stringify({
+      format: { name: "graph-universe", version: "0.1" },
+      nodes: [{ id: "same" }, { id: "same" }],
+      links: [{ source: "same", target: "missing" }]
+    })),
+    mimeType: "application/json",
+    name: "invalid.json"
+  });
+
+  await expect(page.locator("#graph-errors")).toBeVisible();
+  await expect(page.locator("#graph-error-list")).toContainText("duplicated");
+  await expect(page.locator("#graph-error-list")).toContainText("does not reference");
 });

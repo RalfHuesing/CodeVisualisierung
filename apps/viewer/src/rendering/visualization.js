@@ -1,4 +1,5 @@
 import ForceGraph3D from "3d-force-graph";
+import * as THREE from "three";
 import { createVisualGraphData, filterGraph, findSearchMatches, getNodeNeighborhood, VIEWER_CONFIG } from "./graph-mapping.js";
 
 const INCOMING_COLOR = "#fbbf24";
@@ -25,7 +26,8 @@ export function createGraphRenderer(container, onNodeClick) {
       onNodeClick,
       visualData,
       (node) => getNodeColor(node, currentGraph, selectedNodeId, searchQuery),
-      (link) => getLinkColor(link, selectedNodeId, searchQuery)
+      (link) => getLinkColor(link, selectedNodeId, searchQuery),
+      (node) => createNodeObject(node, getNodeColor(node, currentGraph, selectedNodeId, searchQuery))
     );
     updateDataAttributes(visualData);
     refreshStyles();
@@ -73,6 +75,7 @@ export function createGraphRenderer(container, onNodeClick) {
 
     graphInstance
       .nodeColor((node) => getNodeColor(node, currentGraph, selectedNodeId, searchQuery))
+      .nodeThreeObject((node) => createNodeObject(node, getNodeColor(node, currentGraph, selectedNodeId, searchQuery)))
       .linkColor((link) => getLinkColor(link, selectedNodeId, searchQuery))
       .linkDirectionalArrowColor((link) => getLinkColor(link, selectedNodeId, searchQuery));
   }
@@ -120,7 +123,7 @@ function getNodeColor(node, graph, selectedNodeId, searchQuery) {
 }
 
 
-function createForceGraph(container, onNodeClick, visualData, nodeColor, linkColor) {
+function createForceGraph(container, onNodeClick, visualData, nodeColor, linkColor, nodeObject) {
   const graphInstance = new ForceGraph3D(container, { controlType: "orbit" })
     .backgroundColor(VIEWER_CONFIG.background)
     .showNavInfo(false)
@@ -128,6 +131,7 @@ function createForceGraph(container, onNodeClick, visualData, nodeColor, linkCol
     .nodeLabel((node) => `${node.label} (${node.kind})`)
     .nodeVal((node) => node.visualValue)
     .nodeColor(nodeColor)
+    .nodeThreeObject(nodeObject)
     .nodeOpacity(1)
     .linkLabel((link) => link.kind)
     .linkWidth((link) => link.visualWidth)
@@ -145,6 +149,30 @@ function createForceGraph(container, onNodeClick, visualData, nodeColor, linkCol
   graphInstance.d3Force("charge").strength(VIEWER_CONFIG.link.chargeStrength);
   graphInstance.graphData(visualData);
   return graphInstance;
+}
+
+function createNodeObject(node, color) {
+  const geometry = getNodeGeometry(node.kind);
+  const material = new THREE.MeshBasicMaterial({ color });
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.scale.setScalar(Math.max(0.75, node.visualValue / 2));
+  return mesh;
+}
+
+function getNodeGeometry(kind) {
+  if (kind === "namespace") {
+    return new THREE.SphereGeometry(1, 12, 8);
+  }
+  if (kind === "class") {
+    return new THREE.BoxGeometry(1.5, 1.5, 1.5);
+  }
+  if (kind === "method") {
+    return new THREE.OctahedronGeometry(1.2, 0);
+  }
+  if (kind === "file") {
+    return new THREE.CylinderGeometry(0.9, 0.9, 1.5, 10);
+  }
+  return new THREE.TetrahedronGeometry(1.2, 0);
 }
 
 function getLinkColor(link, selectedNodeId, searchQuery) {
