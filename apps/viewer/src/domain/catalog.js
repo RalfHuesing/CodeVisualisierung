@@ -6,10 +6,10 @@ import smallGraph from "../../../../contracts/graph-universe/fixtures/small.json
 
 export const EXAMPLE_CATALOG = Object.freeze([
   createExample("minimal", "Minimal", "3 Nodes · 2 Links", minimalGraph),
-  createExample("small", "Klein", "14 Nodes · 26 Links", smallGraph),
-  createExample("medium", "Mittel", "52 Nodes · 100 Links", mediumGraph),
-  createExample("large", "Groß", "208 Nodes · 408 Links", largeGraph),
-  createExample("performance", "Belastung", "588 Nodes · 1.164 Links", performanceGraph)
+  createExample("small", "Klein", "18 Nodes · 30 Links", smallGraph),
+  createExample("medium", "Mittel", "64 Nodes · 112 Links", mediumGraph),
+  createExample("large", "Groß", "248 Nodes · 448 Links", largeGraph),
+  createExample("performance", "Belastung", "684 Nodes · 1.260 Links", performanceGraph)
 ]);
 
 export function getExampleGraph(exampleId) {
