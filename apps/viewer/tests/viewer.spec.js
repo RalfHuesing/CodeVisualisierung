@@ -6,6 +6,9 @@ test("loads the sample graph and shows its summary", async ({ page }) => {
   await expect(page.locator("#graph-status")).toHaveText("Beispieldaten erfolgreich geladen.");
   await expect(page.locator("#node-count")).toHaveText("3");
   await expect(page.locator("#link-count")).toHaveText("2");
+  await expect(page.locator("#graph-canvas .graph-node")).toHaveCount(3);
+  await expect(page.locator("#graph-canvas .graph-link")).toHaveCount(2);
+  await expect(page.locator("#graph-canvas .graph-link[marker-end]")).toHaveCount(2);
 });
 
 test("shows a useful error for malformed uploaded JSON", async ({ page }) => {

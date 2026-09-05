@@ -1,5 +1,6 @@
 import sampleGraph from "../../../contracts/graph-universe/fixtures/minimal.json";
 import { normalizeGraph, parseGraphText, validateGraph } from "./domain/graph.js";
+import { renderGraph } from "./visualization.js";
 
 const fileInput = document.querySelector("#graph-file");
 const dropZone = document.querySelector("#drop-zone");
@@ -10,6 +11,7 @@ const errorList = document.querySelector("#graph-error-list");
 const graphTitle = document.querySelector("#graph-title");
 const nodeCount = document.querySelector("#node-count");
 const linkCount = document.querySelector("#link-count");
+const graphCanvas = document.querySelector("#graph-canvas");
 
 loadSampleGraph();
 
@@ -72,6 +74,7 @@ function loadSampleGraph() {
 function showGraph(graph, sourceName) {
   errorsPanel.hidden = true;
   errorList.replaceChildren();
+  renderGraph(graphCanvas, graph);
   graphTitle.textContent = graph.meta?.title ?? sourceName;
   nodeCount.textContent = String(graph.nodes.length);
   linkCount.textContent = String(graph.links.length);
