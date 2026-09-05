@@ -21,6 +21,7 @@ Der Nutzer bevorzugt einfachen, expliziten und gut lesbaren Code. Weniger Code i
 - [Tests und Größenlimits](.agents/rules/20-testing-and-quality.md)
 - [HTML, CSS und Browser-Code](.agents/rules/30-ui-structure.md)
 - [Arbeitsablauf und Git](.agents/rules/40-workflow.md)
+- [Orchestrierung und Subagenten](.agents/rules/50-orchestration.md)
 
 ## Pflicht vor Abschluss einer Änderung
 
@@ -31,3 +32,7 @@ Der Nutzer bevorzugt einfachen, expliziten und gut lesbaren Code. Weniger Code i
 5. Im Abschluss kurz nennen, was geändert und wie es geprüft wurde.
 
 Benutzeranweisungen haben Vorrang. Bei unklarer Reichweite zuerst die bereits autorisierte, reversible Arbeit erledigen und nur bei einer echten Richtungsentscheidung nachfragen.
+
+Bei ausdrücklichen Orchestrator-, Rollen- oder Subagentenaufträgen zuerst
+`.agents/skills/project-orchestrator/SKILL.md` und die referenzierten Rollen
+lesen.
