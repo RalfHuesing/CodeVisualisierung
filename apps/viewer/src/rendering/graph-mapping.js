@@ -1,14 +1,17 @@
 export const VIEWER_CONFIG = Object.freeze({
   background: "#0b1120",
   link: Object.freeze({
-    arrowLength: 5,
-    maxWidth: 5,
-    minWidth: 1
+    arrowLength: 3,
+    chargeStrength: -120,
+    distance: 90,
+    maxWidth: 0.8,
+    minWidth: 0.2
   }),
   node: Object.freeze({
     colors: Object.freeze(["#38bdf8", "#a78bfa", "#34d399", "#fbbf24"]),
     maxValue: 8,
-    minValue: 1
+    minValue: 2,
+    relativeSize: 4
   })
 });
 

@@ -11,8 +11,8 @@ describe("graph visualization calculations", () => {
     expect(findNodeMetric(graph)).toBe("importance");
     expect(visualData.nodes.map(({ id, visualValue }) => ({ id, visualValue: Number(visualValue.toFixed(2)) }))).toEqual([
       { id: "api", visualValue: 8 },
-      { id: "orders", visualValue: 4.5 },
-      { id: "database", visualValue: 1 }
+      { id: "orders", visualValue: 5 },
+      { id: "database", visualValue: 2 }
     ]);
     expect(visualData.links.every((link) => link.source && link.target)).toBe(true);
   });

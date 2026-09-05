@@ -1,12 +1,12 @@
 import ForceGraph3D from "3d-force-graph";
 import { createVisualGraphData, findSearchMatches, getNodeNeighborhood, VIEWER_CONFIG } from "./graph-mapping.js";
 
-const DIMMED_OPACITY = 0.12;
-const VISIBLE_LINK_OPACITY = 0.8;
 const INCOMING_COLOR = "#fbbf24";
 const OUTGOING_COLOR = "#38bdf8";
 const RELATED_COLOR = "#a78bfa";
 const DEFAULT_LINK_COLOR = "#94a3b8";
+const DIMMED_NODE_COLOR = "#1e293b";
+const DIMMED_LINK_COLOR = "#1e293b";
 
 export function createGraphRenderer(container, onNodeClick) {
   let graphInstance;
@@ -21,23 +21,26 @@ export function createGraphRenderer(container, onNodeClick) {
     graphInstance = new ForceGraph3D(container, { controlType: "orbit" })
       .backgroundColor(VIEWER_CONFIG.background)
       .showNavInfo(false)
+      .nodeRelSize(VIEWER_CONFIG.node.relativeSize)
       .nodeLabel((node) => `${node.label} (${node.kind})`)
       .nodeVal((node) => node.visualValue)
       .nodeColor((node) => getNodeColor(node, currentGraph, selectedNodeId, searchQuery))
-      .nodeOpacity((node) => getNodeOpacity(node, currentGraph, selectedNodeId, searchQuery))
+      .nodeOpacity(1)
       .linkLabel((link) => link.kind)
       .linkWidth((link) => link.visualWidth)
-      .linkColor((link) => getLinkColor(link, selectedNodeId))
-      .linkOpacity((link) => getLinkOpacity(link, currentGraph, selectedNodeId, searchQuery))
+      .linkColor((link) => getLinkColor(link, selectedNodeId, searchQuery))
+      .linkOpacity(1)
       .linkDirectionalArrowLength((link) => link.directed ? VIEWER_CONFIG.link.arrowLength : 0)
       .linkDirectionalArrowRelPos(1)
-      .linkDirectionalArrowColor((link) => getLinkColor(link, selectedNodeId))
+      .linkDirectionalArrowColor((link) => getLinkColor(link, selectedNodeId, searchQuery))
       .onNodeClick((node) => onNodeClick(node.id))
       .onBackgroundClick(() => onNodeClick(null))
       .onEngineStop(() => graphInstance.zoomToFit(400, 40))
       .warmupTicks(80)
-      .cooldownTime(1500)
-      .graphData(visualData);
+      .cooldownTime(1500);
+    graphInstance.d3Force("link").distance(VIEWER_CONFIG.link.distance);
+    graphInstance.d3Force("charge").strength(VIEWER_CONFIG.link.chargeStrength);
+    graphInstance.graphData(visualData);
     container.dataset.nodeCount = String(graph.nodes.length);
     container.dataset.linkCount = String(graph.links.length);
     refreshStyles();
@@ -73,10 +76,8 @@ export function createGraphRenderer(container, onNodeClick) {
 
     graphInstance
       .nodeColor((node) => getNodeColor(node, currentGraph, selectedNodeId, searchQuery))
-      .nodeOpacity((node) => getNodeOpacity(node, currentGraph, selectedNodeId, searchQuery))
-      .linkColor((link) => getLinkColor(link, selectedNodeId))
-      .linkOpacity((link) => getLinkOpacity(link, currentGraph, selectedNodeId, searchQuery))
-      .linkDirectionalArrowColor((link) => getLinkColor(link, selectedNodeId));
+      .linkColor((link) => getLinkColor(link, selectedNodeId, searchQuery))
+      .linkDirectionalArrowColor((link) => getLinkColor(link, selectedNodeId, searchQuery));
   }
 
   function destroy() {
@@ -104,25 +105,27 @@ function getNodeColor(node, graph, selectedNodeId, searchQuery) {
   if (node.id === selectedNodeId) {
     return "#ffffff";
   }
+  const focus = getNodeFocus(graph, selectedNodeId);
+  const isFocusDimmed = selectedNodeId && !focus.neighbors.has(node.id);
+  const isSearchDimmed = searchQuery.trim() && !matchesSearch(node, searchQuery);
+  if (isFocusDimmed || isSearchDimmed) {
+    return DIMMED_NODE_COLOR;
+  }
   if (matchesSearch(node, searchQuery)) {
     return "#fbbf24";
   }
   return node.color;
 }
 
-function getNodeOpacity(node, graph, selectedNodeId, searchQuery) {
-  const focus = getNodeFocus(graph, selectedNodeId);
-  const isFocusDimmed = selectedNodeId && node.id !== selectedNodeId && !focus.neighbors.has(node.id);
-  const isSearchDimmed = searchQuery.trim() && !matchesSearch(node, searchQuery);
-  return isFocusDimmed || isSearchDimmed ? DIMMED_OPACITY : 1;
-}
-
-function getLinkColor(link, selectedNodeId) {
+function getLinkColor(link, selectedNodeId, searchQuery) {
+  const sourceId = getEndpointId(link.source);
+  const targetId = getEndpointId(link.target);
+  if (searchQuery.trim() && !matchesSearchId(sourceId, searchQuery) && !matchesSearchId(targetId, searchQuery)) {
+    return DIMMED_LINK_COLOR;
+  }
   if (!selectedNodeId) {
     return DEFAULT_LINK_COLOR;
   }
-  const sourceId = getEndpointId(link.source);
-  const targetId = getEndpointId(link.target);
   if (link.directed && targetId === selectedNodeId) {
     return INCOMING_COLOR;
   }
@@ -135,18 +138,13 @@ function getLinkColor(link, selectedNodeId) {
   return DEFAULT_LINK_COLOR;
 }
 
-function getLinkOpacity(link, graph, selectedNodeId, searchQuery) {
-  const sourceId = getEndpointId(link.source);
-  const targetId = getEndpointId(link.target);
-  const isFocusDimmed = selectedNodeId && sourceId !== selectedNodeId && targetId !== selectedNodeId;
-  const searchMatches = new Set(graph.nodes.filter((node) => matchesSearch(node, searchQuery)).map((node) => node.id));
-  const isSearchDimmed = searchQuery.trim() && !searchMatches.has(sourceId) && !searchMatches.has(targetId);
-  return isFocusDimmed || isSearchDimmed ? DIMMED_OPACITY : VISIBLE_LINK_OPACITY;
-}
-
 function matchesSearch(node, query) {
   const normalizedQuery = query.trim().toLocaleLowerCase();
   return normalizedQuery.length > 0 && `${node.id} ${node.label}`.toLocaleLowerCase().includes(normalizedQuery);
+}
+
+function matchesSearchId(nodeId, query) {
+  return nodeId.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase());
 }
 
 function getEndpointId(endpoint) {
