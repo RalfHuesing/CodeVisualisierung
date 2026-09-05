@@ -7,12 +7,21 @@ export default [
   },
   eslint.configs.recommended,
   {
-    files: ["scripts/**/*.{js,mjs,cjs}", "tests/**/*.{js,mjs,cjs}", "*.config.js"],
+    files: ["scripts/**/*.{js,mjs,cjs}", "tests/**/*.{js,mjs,cjs}", "apps/**/tests/**/*.{js,mjs,cjs}", "*.config.js"],
     languageOptions: {
       globals: {
         console: "readonly",
         process: "readonly",
+        Buffer: "readonly",
         structuredClone: "readonly"
+      }
+    }
+  },
+  {
+    files: ["apps/viewer/src/**/*.{js,mjs,cjs}"],
+    languageOptions: {
+      globals: {
+        document: "readonly"
       }
     }
   },

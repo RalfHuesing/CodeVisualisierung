@@ -7,9 +7,43 @@
     <title>Graph-Universum</title>
   </head>
   <body>
-    <main id="app">
-      <h1>Graph-Universum</h1>
-      <p>Die Visualisierung wird hier aufgebaut.</p>
+    <main id="app" class="app-shell">
+      <header class="app-header">
+        <p class="eyebrow">Graph-Universum</p>
+        <h1>Graphdaten im Browser untersuchen</h1>
+        <p class="intro">Lade eine JSON-Datei und prüfe zuerst, ob der Graphvertrag erfüllt ist.</p>
+      </header>
+
+      <section class="import-panel" aria-labelledby="import-title">
+        <h2 id="import-title">Graph laden</h2>
+        <label id="drop-zone" class="drop-zone">
+          <span class="drop-zone-title">JSON-Datei hier ablegen</span>
+          <span>oder zur Auswahl klicken</span>
+          <input id="graph-file" class="visually-hidden" type="file" accept=".json,application/json">
+        </label>
+        <button id="load-sample" type="button">Beispieldaten laden</button>
+        <p id="graph-status" class="status" role="status" aria-live="polite">Bereit zum Laden.</p>
+        <div id="graph-errors" class="error-panel" role="alert" hidden>
+          <h3>Die Graphdaten konnten nicht geladen werden</h3>
+          <ul id="graph-error-list"></ul>
+        </div>
+      </section>
+
+      <section class="graph-summary" aria-labelledby="summary-title">
+        <h2 id="summary-title">Geladener Graph</h2>
+        <p id="graph-title">Noch kein Graph geladen.</p>
+        <dl class="summary-list">
+          <div>
+            <dt>Nodes</dt>
+            <dd id="node-count">0</dd>
+          </div>
+          <div>
+            <dt>Links</dt>
+            <dd id="link-count">0</dd>
+          </div>
+        </dl>
+      </section>
     </main>
+    <script type="module" src="./src/main.js"></script>
   </body>
 </html>

@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { validateGraph } from "../apps/viewer/src/domain/graph.js";
+import { normalizeGraph, parseGraphText, validateGraph } from "../apps/viewer/src/domain/graph.js";
 
 const fixturePath = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -46,5 +46,43 @@ describe("validateGraph", () => {
       path: "/nodes/0/metrics/importance",
       message: "must be number"
     });
+  });
+
+  it("parses and normalizes valid JSON text", () => {
+    const result = parseGraphText(JSON.stringify(validGraph));
+
+    expect(result.valid).toBe(true);
+    expect(result.graph.nodes[0].label).toBe("API");
+    expect(result.graph.links[0].directed).toBe(true);
+  });
+
+  it("returns a JSON error for malformed text", () => {
+    expect(parseGraphText("{ broken")).toEqual({
+      errors: [{ kind: "json", path: "$", message: "Die Datei enthält kein gültiges JSON." }],
+      graph: null,
+      valid: false
+    });
+  });
+
+  it("fills display defaults without mutating the source graph", () => {
+    const graph = {
+      ...structuredClone(validGraph),
+      nodes: [{ id: "single" }],
+      links: [{ source: "single", target: "single" }]
+    };
+
+    const normalized = normalizeGraph(graph);
+
+    expect(normalized.nodes[0]).toMatchObject({
+      groupId: null,
+      kind: "node",
+      label: "single",
+      tags: []
+    });
+    expect(normalized.links[0]).toMatchObject({
+      directed: true,
+      kind: "related-to"
+    });
+    expect(graph.nodes[0]).toEqual({ id: "single" });
   });
 });

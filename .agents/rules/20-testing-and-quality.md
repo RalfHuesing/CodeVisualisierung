@@ -22,6 +22,7 @@ Der Check umfasst:
 - Stylelint für CSS
 - HTML-Validate für HTML
 - Vitest für Unit-Tests
+- Playwright für Browser-Smoke-Tests
 
 ## Größenlimits
 

@@ -4,6 +4,11 @@ import graphSchema from "../../../../contracts/graph-universe/schema/graph-unive
 
 const schemaValidator = createSchemaValidator();
 
+export const GRAPH_DEFAULTS = Object.freeze({
+  linkKind: "related-to",
+  nodeKind: "node"
+});
+
 export function validateGraph(graph) {
   const schemaIsValid = schemaValidator(graph);
   const errors = createSchemaErrors(schemaValidator.errors ?? []);
@@ -15,6 +20,57 @@ export function validateGraph(graph) {
   return {
     valid: errors.length === 0,
     errors
+  };
+}
+
+export function parseGraphText(text) {
+  let graph;
+
+  try {
+    graph = JSON.parse(text);
+  } catch {
+    return {
+      errors: [{ kind: "json", path: "$", message: "Die Datei enthält kein gültiges JSON." }],
+      graph: null,
+      valid: false
+    };
+  }
+
+  const validation = validateGraph(graph);
+  if (!validation.valid) {
+    return {
+      errors: validation.errors,
+      graph: null,
+      valid: false
+    };
+  }
+
+  return {
+    errors: [],
+    graph: normalizeGraph(graph),
+    valid: true
+  };
+}
+
+export function normalizeGraph(graph) {
+  return {
+    ...graph,
+    nodes: graph.nodes.map((node) => ({
+      ...node,
+      attributes: { ...(node.attributes ?? {}) },
+      groupId: node.groupId ?? null,
+      kind: node.kind ?? GRAPH_DEFAULTS.nodeKind,
+      label: node.label ?? node.id,
+      metrics: { ...(node.metrics ?? {}) },
+      tags: [...(node.tags ?? [])]
+    })),
+    links: graph.links.map((link) => ({
+      ...link,
+      attributes: { ...(link.attributes ?? {}) },
+      directed: link.directed ?? true,
+      kind: link.kind ?? GRAPH_DEFAULTS.linkKind,
+      metrics: { ...(link.metrics ?? {}) }
+    }))
   };
 }
 
