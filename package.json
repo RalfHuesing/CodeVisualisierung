@@ -1,0 +1,24 @@
+{
+  "name": "codevisualisierung",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "check": "npm run check:code-size && npm run lint:js && npm run lint:css && npm run lint:html && npm test",
+    "check:code-size": "node scripts/check-code-size.mjs",
+    "lint:js": "eslint .",
+    "lint:css": "stylelint \"apps/**/*.css\"",
+    "lint:html": "html-validate \"apps/**/*.html\"",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.10.0",
+    "html-validate": "11.14.0",
+    "stylelint": "17.15.0",
+    "stylelint-config-standard": "40.0.0",
+    "vite": "8.2.2",
+    "vitest": "5.0.0"
+  }
+}

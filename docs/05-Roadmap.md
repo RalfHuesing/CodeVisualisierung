@@ -65,7 +65,7 @@
 
 ## Empfohlener Entwicklungsstack
 
-- **TypeScript** für typisierte Datenmodelle und weniger Laufzeitfehler.
+- **Plain modernes JavaScript** für einen kleinen, gut lesbaren Einstieg. Typisierung wird erst ergänzt, wenn der konkrete Code davon profitiert.
 - **Vite** als Entwicklungs- und Buildwerkzeug; veröffentlicht wird nur das erzeugte statische `dist`-Verzeichnis.
 - **Three.js** als 3D-Basis.
 - **3d-force-graph** als erster Graph-Renderer, solange seine Abstraktion für das MVP ausreicht.
