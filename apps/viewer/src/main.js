@@ -1,6 +1,6 @@
 import sampleGraph from "../../../contracts/graph-universe/fixtures/minimal.json";
 import { normalizeGraph, parseGraphText, validateGraph } from "./domain/graph.js";
-import { applyGraphFocus, applyGraphSearch, getNodeNeighborhood, renderGraph } from "./visualization.js";
+import { applyGraphFocus, applyGraphSearch, getNodeNeighborhood, renderGraph } from "./rendering/visualization.js";
 
 const fileInput = document.querySelector("#graph-file");
 const dropZone = document.querySelector("#drop-zone");

@@ -36,6 +36,7 @@ tests/                       Bereichsübergreifende Unit-Tests
 ## Module und Verzeichnisse
 
 - Ein Verzeichnis entspricht einer verständlichen fachlichen oder technischen Verantwortung.
+- Im Viewer bleibt `src/main.js` der Einstieg; `src/domain/`, `src/rendering/` und `src/styles/` trennen Datenlogik, Darstellung und Styles.
 - Neue Unterverzeichnisse brauchen einen konkreten Grund; reine Namenshierarchien sind kein DDD.
 - Pro Verzeichnis gilt eine automatische Obergrenze für Quell-Dateien. Wird sie erreicht, nach Verantwortung aufteilen oder eine Datei sinnvoll zusammenlegen.
 - Kleine Bereiche dürfen wenige Dateien enthalten. Es gibt keine Pflicht, für jede Funktion, Klasse oder jedes Interface eine eigene Datei anzulegen.

@@ -7,7 +7,10 @@ Der Viewer darf nur vom Graphvertrag in `contracts/graph-universe/` abhängen. E
 Geplanter Einstieg:
 
 - `index.html`
-- `src/` für Anwendungscode
+- `src/main.js` als Anwendungseinstieg
+- `src/domain/` für quellenneutrale Graphlogik
+- `src/rendering/` für die Darstellung und ihre Berechnungen
+- `src/styles/` für nach Verantwortung getrennte Stylesheets
 - `tests/` für Browser- und Interaktionstests
 - `public/` für unveränderte statische Assets
 

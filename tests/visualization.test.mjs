@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import sampleGraph from "../contracts/graph-universe/fixtures/minimal.json" with { type: "json" };
 import { normalizeGraph } from "../apps/viewer/src/domain/graph.js";
-import { createGraphLayout, findNodeMetric, getNodeNeighborhood, scaleValue } from "../apps/viewer/src/visualization.js";
+import { createGraphLayout, findNodeMetric, getNodeNeighborhood, scaleValue } from "../apps/viewer/src/rendering/visualization.js";
 
 describe("graph visualization calculations", () => {
   it("uses the first available node metric and stable positions", () => {
