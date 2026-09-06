@@ -37,14 +37,13 @@ Delegated roles:
 
 Die vorbereitende C#-Grundlage ist vorhanden: Solution, CLI-Projekt,
 Testprojekt, gemeinsame .NET-/Paketvorgaben, AiNetLinter-Profil und die
-repo-lokale Temp-Testinfrastruktur. Sie wurde bewusst noch nicht als
-abgeschlossener Roadmap-Slice markiert.
+repo-lokale Temp-Testinfrastruktur. Die fachliche Vertragsklärung in Slice 0
+ist abgeschlossen; der Orchestrator beginnt mit Slice 1.
 
-Insbesondere fehlen weiterhin der belastbare Prozessvertrag für Analysefehler,
-das Workspace-Inventar, die Graph-/Contract-Schichten, die Roslyn-Auswertung
-und die vertragskonforme JSON-Ausgabe. Slice 0 und Slice 1 bleiben deshalb
+Weiterhin fehlen der Workspace-Inventargraph, die Graph-/Contract-Schichten,
+die Roslyn-Auswertung und die vertragskonforme JSON-Ausgabe. Slice 1 bleibt
 offen; die vorhandene Grundlage ist deren Ausgangspunkt, nicht deren
-Erfüllung.
+vollständige Erfüllung.
 
 ## Externer Vorgänger: Viewer-Layoutvertrag
 
@@ -57,7 +56,7 @@ deterministischen Viewer-Fallbacks umgesetzt. Dieser C#-Task nutzt die
 verabschiedete Vertragsform später; er enthält weiterhin keine Viewer- oder
 Layoutimplementierung.
 
-## [ ] Slice 0 – Vertrag und Entscheidungen einfrieren
+## [X] Slice 0 – Vertrag und Entscheidungen einfrieren
 
 Ziel: Die offenen fachlichen Richtungen beantworten und den Adaptervertrag
 konkret machen, bevor Produktionscode entsteht.
@@ -78,21 +77,20 @@ zusätzlich `docs/**` und `contracts/graph-universe/**`.
 
 Akzeptanzkriterien:
 
-- [ ] `OPEN-QUESTIONS.md` enthält keine ungelöste Richtungsentscheidung mehr,
+- [X] `OPEN-QUESTIONS.md` enthält keine ungelöste Richtungsentscheidung mehr,
   die den ersten Implementierungsslice blockiert.
-- [ ] `CONCEPT.md` und die allgemeine Graphdokumentation widersprechen sich
+- [X] `CONCEPT.md` und die allgemeine Graphdokumentation widersprechen sich
   nicht.
-- [ ] Alle folgenden Slices haben konkrete erlaubte Pfade und Prüfkriterien.
-- [ ] Der C#-Task referenziert die verabschiedete, quellenneutrale
+- [X] Alle folgenden Slices haben konkrete erlaubte Pfade und Prüfkriterien.
+- [X] Der C#-Task referenziert die verabschiedete, quellenneutrale
   `layoutProfiles`-Beschreibung korrekt.
-- [ ] Betroffene Vertrags- und Fachdokumente sind im selben Slice als Teil der
+- [X] Betroffene Vertrags- und Fachdokumente sind im selben Slice als Teil der
   Änderung vorgesehen; es gibt keine bewusst veraltete Dokumentation.
 
 Checks: Dokumentenreview, `git diff --check`.
 
-Stop: Eine Entscheidung würde den Graphvertrag oder den Viewerumfang
-grundsätzlich ändern und kann nicht sicher aus den vorhandenen Dokumenten
-abgeleitet werden.
+Ergebnis: Der v1-Vertrag ist eingefroren. Eine neue Richtungsentscheidung
+erfordert eine dokumentierte Scopeänderung.
 
 ## [ ] Slice 1 – .NET-Solution und CLI-Grenze
 

@@ -8,7 +8,8 @@ Orchestrator-Rolle umgesetzt.
   fachlichen Vertrag.
 - [ROADMAP.md](ROADMAP.md) beschreibt die abhängigen Umsetzungsslices mit
   Akzeptanzkriterien und Prüfungen.
-- [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md) enthält ungeklärte Entscheidungen.
+- [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md) enthält das Entscheidungslog für den
+  eingefrorenen v1-Vertrag.
 
 Der globale offene Status steht in
 [`docs/05-Roadmap.md`](../../docs/05-Roadmap.md). Dieser Task-Ordner enthält
@@ -22,6 +23,9 @@ Die fachliche Wahrheit für das Ausgabeformat bleibt in
 `docs/`. Diese Task-Dateien ergänzen die vorhandenen Dokumente um den
 konkreten C#-Auftrag; sie ersetzen den allgemeinen Graphvertrag nicht.
 
+Der v1-Fachvertrag ist entschieden. Die vorhandene C#-Grundlage ist noch kein
+Adapter; der nächste Umsetzungsschritt ist Slice 1 der [Roadmap](ROADMAP.md).
+
 ## Späterer Aufruf
 
 Der vorgesehene End-to-End-Aufruf soll nach der Implementierung ungefähr so
@@ -31,7 +35,7 @@ aussehen:
 codegraph-csharp path\to\application.slnx --output path\to\graph.json
 ```
 
-Der Produktname und die Grundsyntax sind entschieden. Als Eingabe werden
-`.slnx`, `.sln` und `.csproj` unterstützt. Detailentscheidungen zu
-Fehlercodes, Summary und Layoutvertrag stehen weiterhin in
+Der Produktname, die Grundsyntax, die Eingabetypen, Fehlercodes und das
+Summary-Format sind im v1-Vertrag entschieden. Die fachlichen Details stehen
+im [Konzept](CONCEPT.md), das Entscheidungslog in
 [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md).

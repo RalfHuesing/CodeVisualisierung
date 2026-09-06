@@ -28,6 +28,12 @@ fachlichen CLI-Fehlerfälle. Die folgenden Abschnitte beschreiben deshalb den
 verbindlichen Zielvertrag und die späteren Umsetzungsslices, nicht bereits
 vorhandene Funktionalität.
 
+Der Zielvertrag ist auf Solutions bis mindestens 180.000 Quellcodezeilen
+ausgelegt. Vollständige Analyse bedeutet dabei vollständige fachlich relevante
+Deklarationen und Beziehungen, nicht einen Node für jede lokale Variable oder
+jedes Syntaxdetail. Die vollständige Datenmenge bleibt erhalten; die
+Visualisierung arbeitet mit deklarativen Detailstufen und Projektionen.
+
 ## Zielbild
 
 Ein Nutzer kann eine Solution lokal analysieren:
@@ -54,9 +60,9 @@ Nicht jede Ansicht muss alle Nodes gleichzeitig anzeigen. Der Adapter liefert
 die Rohdaten und deklarierten Projektionen; der Viewer entscheidet über die
 Darstellung.
 
-Die Grundsyntax hat zunächst keine festgelegten Analyseoptionen. Auswahl und
-Berechnung zusätzlicher Metriken oder Projektionen werden nur eingeführt, wenn
-eine konkrete fachliche Entscheidung sie erfordert.
+Die Grundsyntax enthält in v1 keine freien Analyseoptionen. Die Ausgabe ist
+vollständig und enthält die festgelegten Metriken und Projektionen. Zusätzliche
+Optionen werden erst in einem getrennten Folgeauftrag eingeführt.
 
 ## Quellen der Wahrheit
 
@@ -91,6 +97,8 @@ Fixture, Viewer-Tests und Adapter-Tests behandelt.
 - mindestens ein eigenes xUnit-Testprojekt mit Unit-, Integrations-,
   Vertrags- und CLI-Tests,
 - kleine, private Test-Solutions mit repräsentativem C#-Code,
+- vollständige Ausgabe des eigenen Sourcecodes auch für große Solutions; keine
+  zufällige Top-Kürzung und kein stilles Pruning,
 - vollständige Aktualisierung der betroffenen Dokumentation, des
   Vertrags-README, der Adapter-README, der Roadmap und der Referenz-Docs,
   sobald sich Verhalten, Schema, Struktur oder Scope ändern,
@@ -125,10 +133,10 @@ Aufträge.
 Die Grundsyntax und die unterstützten Eingabetypen sind entschieden:
 
 ```text
-codegraph-csharp <solution.slnx> --output <graph.json>
+codegraph-csharp <input> --output <graph.json>
 ```
 
-Für den späteren Zielzustand gelten folgende Grundregeln:
+Für den v1-Zielzustand gelten folgende Grundregeln:
 
 - Der Positionsparameter ist der Eingabepfad.
 - `.slnx`, `.sln` und `.csproj` werden unterstützt. Bei einer Solution werden
@@ -138,26 +146,50 @@ Für den späteren Zielzustand gelten folgende Grundregeln:
   keinen dynamischen Nachlade- oder Streamingpfad.
 - `--output` ist der Zielpfad und wird nicht stillschweigend durch einen
   Standardpfad ersetzt.
+- Der Elternordner des Zielpfads muss existieren und beschreibbar sein; die CLI
+  legt keine Verzeichnisstruktur implizit an.
+- Die einzigen Optionen sind `<input>`, `--output <path>`, `--help` und
+  `--version`. Es gibt in v1 keine Konfigurations-, Filter-, Metrik- oder
+  Limitoptionen.
 - `--help` und `--version` beenden erfolgreich, ohne Analyse zu starten.
-- Fehler gehen verständlich nach `stderr`; strukturierte Graphdaten gehen
-  ausschließlich in die Ausgabedatei.
+- Die strukturierte Summary geht nach `stdout`, Diagnosen und Fehler gehen
+  nach `stderr`; strukturierte Graphdaten gehen ausschließlich in die
+  Ausgabedatei.
 - Roslyn-, Workspace- und Compilerdiagnosen werden auf der Konsole gemeldet,
   nicht in den Graph verschoben. Die Analyse versucht mit dem verwertbaren
   Teil weiterzuarbeiten und schreibt am Ende ein valides, gegebenenfalls
   partielles Dokument. Die Zusammenfassung nennt erledigte, übersprungene und
   fehlgeschlagene Analyseschritte jeweils mit Anzahl.
-- Ein erfolgreicher Lauf endet mit Exit-Code `0`.
-- Ungültige Argumente, nicht lesbare Eingaben, Analysefehler und
-  Ausgabefehler erhalten unterscheidbare, dokumentierte Exit-Code-Bereiche.
+- Ein vollständiger, valider Lauf endet mit Exit-Code `0`.
+- Ein valider, aber partieller Lauf endet mit Exit-Code `1`. Die Ausgabe ist
+  verwendbar, die Summary nennt alle ausgelassenen oder fehlgeschlagenen
+  Schritte.
+- Exit-Code `2` bezeichnet Argumentfehler, `3` nicht lesbare oder nicht
+  auswertbare Eingaben, `4` einen fatalen Analyse- oder Vertragsfehler und `5`
+  einen Ausgabe-/Dateisystemfehler. `--help` und `--version` verwenden `0`.
 - Die Ausgabe wird erst nach erfolgreicher Analyse und Vertragsvalidierung
-  geschrieben. Ein vorhandenes Ziel wird nicht durch ein fehlerhaftes
-  Zwischenergebnis ersetzt.
-- Flüchtige Werte wie die aktuelle Uhrzeit oder absolute lokale Pfade dürfen
-  die standardmäßige Vergleichbarkeit der Ausgabe nicht unnötig zerstören.
+  geschrieben. Sie wird über eine temporäre Datei im Zielordner atomar ersetzt;
+  ein vorhandenes Ziel bleibt bei Fehlern unverändert.
+- `meta.createdAt` wird standardmäßig nicht geschrieben. Absolute lokale Pfade,
+  Maschinenname, Prozess-ID und aktuelle Uhrzeit gehören nicht in die
+  reproduzierbare Graphausgabe.
 
-Optionen für Konfiguration, Metrikumfang, Exit-Code-Bereiche und die genaue
-Darstellung der Konsolenzusammenfassung werden noch konkretisiert. Externe und
-generierte Artefakte sind dagegen grundsätzlich außerhalb des Graphen.
+Die öffentliche CLI-Sprache ist Deutsch. Maschinenrelevante Feldnamen,
+Metriknamen, Node-/Linktypen, IDs und Summary-Schlüssel bleiben Englisch.
+
+Die Summary verwendet stabile `key=value`-Zeilen ohne Zeitstempel und ohne
+absolute Pfade:
+
+```text
+status=complete|partial
+input.kind=slnx|sln|csproj
+projects.loaded=... projects.analyzed=... projects.skipped=... projects.failed=...
+documents.analyzed=... documents.skipped=... documents.failed=...
+nodes.emitted=... links.emitted=...
+relations.externalDropped=... relations.unresolved=...
+diagnostics.warnings=... diagnostics.errors=...
+output.bytes=...
+```
 
 Die aktuelle Grundlage implementiert aus diesem Zielvertrag nur `--help` und
 `--version`; der Analysepfad und die Ausgabe sind ausdrücklich noch nicht
@@ -188,18 +220,28 @@ die kanonische Adapterausgabe ab.
 
 ### Beziehungen
 
-Die Zielmenge der Beziehungen umfasst:
+Die Zielmenge der in v1 emittierten Beziehungen umfasst:
 
 ```text
 contains, declares, calls, inherits, implements, overrides,
 constructs, reads, writes, uses-type, returns-type, parameter-type,
-references-assembly, project-reference, generated-from, tests
+references-assembly, project-reference, tests
 ```
+
+`generated-from` bleibt als mögliche spätere Beziehung dokumentiert, wird in
+v1 aber nicht emittiert, weil generierte Artefakte außerhalb des Graphen
+liegen. `tests` wird nur emittiert, wenn Test- und Produktprojekt gemeinsam
+als eigene Projekte geladen wurden.
 
 Jeder Link referenziert vorhandene Node-IDs. Richtungen, Herkunft und
 Aggregation werden explizit im Graph dokumentiert. Höhere Summary-Links sind
 auf zugrunde liegende Beziehungen zurückführbar, wenn Details oder Metriken
 das benötigen.
+
+Ein aggregierter Summary-Link trägt mindestens `metrics.occurrences`,
+`metrics.relationshipWeight` und `attributes.aggregation` mit Quell- und
+Ziellevel. Die Detailbeziehungen bleiben im vollständigen Graph enthalten;
+eine Summary-Projektion darf sie nur ausblenden.
 
 `references-assembly` und `project-reference` werden nur für eigene,
 ausdrücklich geladene Projekte ausgegeben. Beziehungen zu externen Assemblies
@@ -216,6 +258,9 @@ emittiert.
   andere deterministische fachliche Identität.
 - Nodes und Links werden vor der Serialisierung dedupliziert und stabil
   sortiert.
+- Jede Beziehung zwischen demselben Quell- und Zielknoten wird je Linktyp zu
+  einem Link aggregiert. Wiederholungen stehen als benannte Metriken am Link;
+  sie erzeugen keine Duplikatlinks.
 - Quellpositionen und lokale Pfade sind Diagnose-/Detaildaten, nicht die
   Identität eines Symbols.
 - Das sichtbare `label` bleibt kurz und menschenlesbar, zum Beispiel
@@ -232,9 +277,26 @@ emittiert.
   verwendeten Projektauflösungen gleich sind. Flüchtige Metadaten werden nur
   auf explizite Anforderung aufgenommen.
 
-Die genaue kanonische Signatur und die Behandlung von Solution-/Projekt-
-Identitäten werden vor dem ersten Implementierungsslice als Entscheidung
-festgeschrieben.
+Die kanonischen Identitätsregeln sind:
+
+- Pfade verwenden `/`, sind relativ zum Eingaberoot und enthalten keine
+  absoluten oder aufgelösten Maschinenpfade.
+- Struktur-IDs folgen dem Muster `solution:root`, `project:<relative-csproj>`,
+  `assembly:<project-id>:<assembly-name>`,
+  `module:<project-id>:<module-name>`,
+  `file:<project-id>:<relative-document>`,
+  `namespace:<project-id>:<fully-qualified-name>` und
+  `<type>:<project-id>:<canonical-symbol-signature>`.
+- Link-IDs folgen dem Muster `link:<link-type>:<source-id>:<target-id>`.
+- Symbolsignaturen verwenden eine vollqualifizierte, global eindeutige
+  Darstellung mit Symbolart, Generic-Arity und Parametertypen. Overloads,
+  Teiltypen und gleichnamige Member bleiben dadurch unterscheidbar.
+- Namespaces und Symbole sind projektbezogen. Gleichnamige Namespaces in zwei
+  Projekten werden nicht künstlich zu einem Node verschmolzen.
+- Quellpositionen sind 1-basierte Zeile/Spalte mit solution-relativem
+  Dokumentpfad. Sie sind Detaildaten, niemals Identitätsbestandteil.
+- `label` bleibt kurz; qualifizierter Name, Signatur, Projekt und Position
+  stehen in `attributes`.
 
 ## Räumliche Semantik
 
@@ -269,6 +331,19 @@ daraus die konkrete 3D-Position. Ein Profil kann mit `groupField`,
 Standard- und Eltern-Kind-Abstände deklarieren. Der Adapter liefert diese
 neutralen Vertragsdaten später als Quelle; er implementiert keine
 Viewer-Layoutlogik und berechnet keine Positionen selbst.
+
+Der Adapter liefert mindestens diese deklarativen v1-Detailstufen:
+
+- `overview`: Solution, Project, Assembly, Module und Namespace mit
+  Projekt-/Assemblyreferenzen und aggregierten Namespacebeziehungen,
+- `architecture`: zusätzlich Dateien und Typen mit Containment sowie
+  Typbeziehungen,
+- `member-detail`: zusätzlich Member und semantische Beziehungen.
+
+Der vollständige Graph bleibt unabhängig davon im Dokument erhalten. Eine
+Detailstufe ist eine sichtbare Projektion, keine Datenlöschung. Der Viewer
+startet bei großen Graphen mit `overview`; `member-detail` wird nicht als
+ungefilterte Standardansicht verwendet.
 
 ## Abgrenzung zur bestehenden Visualisierung
 
@@ -320,27 +395,47 @@ Für die v1 gilt folgende deterministische Berechnung:
 
 - `calls` und `constructs` erhalten das Beziehungsgewicht `3`.
 - `inherits`, `implements` und `overrides` erhalten das Beziehungsgewicht `2`.
-- `reads`, `writes` und `uses-type` erhalten das Beziehungsgewicht `1`.
+- `reads`, `writes`, `uses-type`, `returns-type` und `parameter-type` erhalten
+  das Beziehungsgewicht `1`.
 - Wiederholte Aufrufe oder Zugriffe erhöhen die aggregierte Beziehungshäufigkeit.
-- `contains`, `declares`, Summary-Links, Projekt- und Assemblyreferenzen
-  beeinflussen die Relevanz nicht.
+- `contains`, `declares`, `tests`, Summary-Links, Projekt- und
+  Assemblyreferenzen beeinflussen die Relevanz nicht.
 - Der Ebenenwert `importance` ist `0.7 * pageRankNormalized + 0.3 *
   weightedFanInNormalized` und liegt im Intervall `[0, 1]`.
 - `weightedFanInNormalized` basiert auf `log1p(weightedFanIn)`. Beide Anteile
   werden je Node-Ebene robust über das 5. und 95. Perzentil auf `[0, 1]`
-  geklemmt. Bei fehlender Streuung erhalten gleichartige Werte einen stabilen
-  neutralen Wert.
+  geklemmt. Bei fehlender Streuung erhalten gleichartige Werte den neutralen
+  Wert `0.5`.
 
-PageRank behandelt Zyklen nach der üblichen iterativen Berechnung; die
-Konvergenzgrenze und die maximale Iterationszahl sind technische
-Implementierungsdetails und müssen deterministisch festgelegt werden. Der
-Adapter liefert die Roh- und abgeleiteten Metriken mit Definitionen, der
-Viewer entscheidet über die Darstellung.
+Der vollständige v1-Metriksatz ist festgelegt:
+
+- Nodes: `loc`, `fanIn`, `fanOut`, `weightedFanIn`, `weightedFanOut`,
+  `pageRank`, `importance`, soweit die Ebene fachlich dafür geeignet ist.
+- Methoden und lokale Funktionen zusätzlich: `cyclomaticComplexity`.
+- Container zusätzlich: `fileCount`, `typeCount`, `memberCount`, soweit die
+  enthaltene Ebene definiert ist.
+- Links zusätzlich: `occurrences` für wiederholte Aufrufe/Zugriffe und
+  `relationshipWeight` für das gewichtete Aggregat.
+
+`loc` zählt eindeutige, nichtleere Quelltextzeilen innerhalb des jeweiligen
+Deklarations- oder Dokumentbereichs; bei Containern werden überlappende
+Bereiche nicht doppelt gezählt. `cyclomaticComplexity` startet bei `1` und
+zählt die syntaktisch erkennbaren Verzweigungspunkte. Betweenness, erreichbare Node-Anzahl,
+Komponentengröße, Zykluskennzeichnung und Testabdeckung sind nicht Bestandteil
+des v1-Exports.
+
+PageRank behandelt Zyklen nach der üblichen iterativen Berechnung mit
+Dämpfungsfaktor `0.85`, maximal `50` Iterationen und Abbruchgrenze `1e-8`.
+Der Startvektor ist gleichverteilt; Dangling-Nodes verteilen ihre Masse
+gleichverteilt. Konvergenz wird über die maximale absolute Wertänderung
+geprüft. Die Reihenfolge der Eingaben und Iterationen ist stabil. Der Adapter
+liefert die Roh- und abgeleiteten Metriken mit Definitionen, der Viewer
+entscheidet über die Darstellung.
 
 ## Technische Zielarchitektur
 
 Die Aufteilung folgt fachlichen Verantwortungen, nicht einzelnen Methoden.
-Ein möglicher, vorläufiger Zuschnitt ist:
+Der Zielzuschnitt ist:
 
 ```text
 adapters/csharp/
@@ -387,7 +482,8 @@ Integration. Die Pipeline bleibt nachvollziehbar:
 
 1. Argumente und Pfade prüfen.
 2. Die Solution laden und Projekte samt Dokumenten bestimmen.
-3. Kompilationen und Semantic Models kontrolliert anfordern.
+3. Kompilationen und Semantic Models kontrolliert anfordern; Semantic Models
+   werden dokumentweise verarbeitet und danach freigegeben.
 4. Deklarationen in einer stabilen Reihenfolge in Nodes überführen.
 5. Containment- und Referenzbeziehungen ergänzen.
 6. Aufruf- und Memberzugriffsbeziehungen aus Syntax plus Semantic Model
@@ -397,10 +493,12 @@ Integration. Die Pipeline bleibt nachvollziehbar:
 8. Metriken und Summary-Links berechnen.
 9. Graphvertrag validieren und atomar schreiben.
 
-Teure globale Referenzsuche in Schleifen ist zu vermeiden. Lokale Dokument-
-Analysen werden, sobald Semantik und Determinismus das erlauben, gebündelt
-und gemessen. Parallelisierung ist erst nach einem korrekten sequenziellen
-Referenzpfad zulässig.
+Teure globale Referenzsuche in Schleifen ist zu vermeiden. Die Analyse muss
+linear in Dokumenten und Symbolen sowie annähernd linear in Beziehungen
+arbeiten; All-Pairs-Vergleiche sind nicht zulässig. PageRank läuft mit dem
+festgelegten Dämpfungsfaktor, einer maximalen Iterationszahl von `50` und der
+Abbruchgrenze `1e-8`. Parallelisierung ist erst nach einem korrekten
+sequenziellen Referenzpfad und einer Messung der Deterministik zulässig.
 
 ## Tests und Qualität
 
@@ -419,6 +517,10 @@ fertig, wenn mindestens folgende Verhalten nachgewiesen sind:
 - deklarierte Containment-Hierarchie und räumliche Layoutregeln,
 - stabile IDs, Deduplizierung, Sortierung und reproduzierbare Ausgabe,
 - Metrikgrenzen und fehlende optionale Werte,
+- 180.000 LOC als Skalierungsprüfung ohne zufällige Top-Kürzung und ohne
+  quadratische Analysephase,
+- deklarierte Übersicht-, Architektur- und Member-Detailstufen für große
+  Graphen,
 - Ausgabevalidierung gegen die exakte Viewer-Schema-Datei,
 - ein C#-Referenzgraph, der die Anforderungen aus `docs/07-...` abdeckt.
 

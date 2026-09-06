@@ -36,7 +36,8 @@ abbilden können:
 - Operator
 - Local function
 - Type parameter
-- External type oder External assembly
+- External type oder External assembly (allgemeiner Vertragsfall, nicht im
+  C#-Adapter-v1-Export)
 
 Nicht jede Ansicht zeigt alle Ebenen gleichzeitig. Eine Übersicht kann
 Assemblies und Namespaces zeigen, eine Typansicht Klassen und Interfaces und
@@ -75,11 +76,13 @@ vorhanden – Quellposition.
 
 ## Externe Assemblies
 
-Externe Assemblies und externe Typen werden nicht als fehlende Linkziele
-behandelt. Sie können als Nodes mit allgemeinen Attributen wie `external`,
-`assemblyName`, `packageName` oder `framework` geliefert werden. Der Viewer
-kann sie standardmäßig dimmen oder über ein View-Profil ausblenden, ohne die
-Beziehung aus dem Quelldokument zu entfernen.
+Der allgemeine Graphvertrag kann externe Assemblies und externe Typen als Nodes
+mit Attributen wie `external`, `assemblyName`, `packageName` oder `framework`
+führen. Der C#-Adapter-v1-Task nutzt diese Möglichkeit bewusst nicht: Externe,
+Framework- und generierte Artefakte bleiben außerhalb des exportierten Graphen.
+Ihre verworfenen Beziehungen werden in der CLI-Summary gezählt. Eine spätere
+Erweiterung kann externe Nodes als separaten Scope ergänzen, ohne die v1-
+Identitäten oder die Viewerlogik zu verändern.
 
 ## Metriken
 
