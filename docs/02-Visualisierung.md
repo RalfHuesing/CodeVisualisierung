@@ -70,9 +70,9 @@ Der Graph-Universe-1.0-Vertrag bleibt quellenneutral. Die Quelle liefert
 Type-IDs und Rollen, benannte Metriken über `metricDefinitions` und
 `nodes[].metrics`/`links[].metrics`, die Werte des konfigurierten `groupField`,
 Containment- und Summary-Links sowie View- und Layoutprofile. `visualRole` und
-`baseSize` können an Node-Typen oder einzelnen Nodes die fachliche Rolle und
-relative Grundgröße beschreiben. Eine Quelle muss dafür keine Viewerbegriffe
-oder C#-Sonderfelder erfinden.
+`baseSize` können an Node-Typen die fachliche Rolle und relative Grundgröße
+beschreiben. Eine Quelle muss dafür keine Viewerbegriffe oder C#-Sonderfelder
+erfinden.
 
 Der Viewer bereitet diese Signale auf: Er wählt die aktive Node- und Linkmetrik,
 skaliert sie auf visuelle Größe und Linkbreite und kombiniert die Node-Größe mit

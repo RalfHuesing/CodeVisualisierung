@@ -156,11 +156,10 @@ Die letzten beiden im allgemeinen Referenzdokument genannten Typen
 auszugebenden Nodes. Die Scope-Policy dieses Konzepts hat Vorrang: Der Graph
 beschreibt den eigenen Sourcecode, nicht das Framework oder fremde Packages.
 
-Die Ausgabe verwendet die im aktuellen Vertrag gültige Form, insbesondere
-`typeId` für deklarierte Node-Typen. `kind` darf nicht als parallele, anders
-semantische C#-Sonderwelt eingeführt werden. Falls die Vertragsmigration noch
-beide Formen zulässt, wird eine einzige kanonische Adapterausgabe festgelegt
-und mit Fixtures abgesichert.
+Die Ausgabe verwendet ausschließlich die im aktuellen Vertrag gültige Form,
+insbesondere `typeId` für deklarierte Node-Typen. `kind` darf nicht als
+parallele, anders semantische C#-Sonderwelt eingeführt werden. Fixtures sichern
+die kanonische Adapterausgabe ab.
 
 ### Beziehungen
 
