@@ -66,6 +66,8 @@ Akzeptanzkriterien:
 - [ ] Alle folgenden Slices haben konkrete erlaubte Pfade und Prüfkriterien.
 - [ ] Der C#-Task referenziert die vom separaten Viewer-Layouttask
   verabschiedete, quellenneutrale Layoutbeschreibung korrekt.
+- [ ] Betroffene Vertrags- und Fachdokumente sind im selben Slice als Teil der
+  Änderung vorgesehen; es gibt keine bewusst veraltete Dokumentation.
 
 Checks: Dokumentenreview, `git diff --check`.
 
@@ -113,6 +115,8 @@ Akzeptanzkriterien:
   gemäß der festgelegten Policy verständlich behandelt.
 - [ ] Eine gültige Eingabe erzeugt auch bei partiellen Roslyn-Problemen ein
   valides JSON und eine Konsolensummary mit Zählungen.
+- [ ] CLI-README, Contract-README und die betroffenen Graph-/C#-Dokumente
+  beschreiben den tatsächlich implementierten Stand.
 
 Checks: Unit-Tests für Identitäten/Sortierung, Workspace-Integrationstest,
 Schema-Validierung, `dotnet test`.
@@ -185,6 +189,8 @@ Akzeptanzkriterien:
 - [ ] `metricDefinitions`, `nodeTypes`, `linkTypes`, Facetten, Profile und
   Layoutregeln bleiben mit dem gemeinsamen Vertrag kompatibel, sobald der
   externe Viewer-Layouttask den Vertrag erweitert hat.
+- [ ] Schema, Fixtures und die betroffenen allgemeinen und C#-Fachdokumente
+  werden gemeinsam aktualisiert.
 
 Erlaubte Pfade: `adapters/csharp/**`, `contracts/graph-universe/**` für
 Vertrag/Fixtures, `docs/**` bei erforderlicher Vertragsdokumentation,
@@ -208,6 +214,10 @@ Akzeptanzkriterien:
   sind als Prozessverhalten getestet.
 - [ ] README, C#-Adapterdokumentation, Schema-Referenz-Fixture und Taskstatus
   stimmen überein.
+- [ ] `docs/05-Roadmap.md`, `docs/03-Graphformat.md`,
+  `docs/06-Graphmodell-und-Visualisierungsprofile.md`,
+  `docs/07-CSharp-Referenzgraph.md` und die betroffenen READMEs sind auf dem
+  finalen Implementierungsstand.
 - [ ] Keine Architektur-/Dateigrößenregel des Repositorys ist verletzt.
 
 Erlaubte Pfade: `adapters/csharp/**`, zugehörige Tests/Fixtures,

@@ -70,7 +70,9 @@ Fixture, Viewer-Tests und Adapter-Tests behandelt.
 - mindestens ein eigenes xUnit-Testprojekt mit Unit-, Integrations-,
   Vertrags- und CLI-Tests,
 - kleine, private Test-Solutions mit repräsentativem C#-Code,
-- Dokumentation des Aufrufs und der fachlichen Grenzen,
+- vollständige Aktualisierung der betroffenen Dokumentation, des
+  Vertrags-README, der Adapter-README, der Roadmap und der Referenz-Docs,
+  sobald sich Verhalten, Schema, Struktur oder Scope ändern,
 - relevante .NET-Prüfungen sowie der bestehende Repository-Check.
 
 ### Ausdrücklich nicht enthalten
@@ -382,6 +384,29 @@ Prozesstests. Für den Adapter ist `dotnet test` der primäre Check; `npm run
 check` bleibt wegen der Repositoryregeln zusätzlich verpflichtend, sobald die
 Frontend-Infrastruktur installiert ist.
 
+## Dokumentationspflicht
+
+Dokumentation ist ein Bestandteil der Implementierung und kein nachgelagerter
+Aufräumschritt. Jede fachliche oder technische Änderung aktualisiert im selben
+Slice alle betroffenen Quellen, insbesondere:
+
+- `contracts/graph-universe/schema/graph-universe.schema.json` und Fixtures bei
+  Vertragsänderungen,
+- `contracts/graph-universe/README.md` bei Änderungen am Vertragsgebrauch,
+- `docs/03-Graphformat.md` und
+  `docs/06-Graphmodell-und-Visualisierungsprofile.md` bei Änderungen an
+  allgemeiner Graphsemantik,
+- `docs/07-CSharp-Referenzgraph.md` bei Änderungen an der C#-Semantik,
+- `docs/05-Roadmap.md` bei erledigten oder geänderten Roadmap-Punkten,
+- `adapters/csharp/README.md` bei Änderungen am CLI-Aufruf, Setup oder
+  Adapterumfang,
+- diese Task-Dateien bei Änderungen an Scope, Entscheidungen, Slices oder
+  Abschlusskriterien.
+
+Eine Änderung ist nicht abgeschlossen, wenn Code, Schema, Fixture und
+Dokumentation unterschiedliche Verträge beschreiben. Der Orchestrator prüft
+das vor jedem Slice-Commit.
+
 ## Abschlussbedingung des späteren Orchestrator-Tasks
 
 Der Task ist erst abgeschlossen, wenn:
@@ -390,6 +415,8 @@ Der Task ist erst abgeschlossen, wenn:
 - alle akzeptierten Node-/Link-Semantiken und offenen Richtungsentscheidungen
   aus den Task-Dateien umgesetzt oder ausdrücklich aus dem Scope genommen
   sind,
+- Schema, Fixtures, allgemeine Graphdokumentation, C#-Referenzdokumentation,
+  Adapter-README und Roadmap den implementierten Stand widerspiegeln,
 - jede erzeugte Ausgabe gegen den gemeinsamen Vertrag validiert wird,
 - `dotnet test` und die relevanten Repositorychecks erfolgreich sind,
 - `git diff --check` bestanden ist,
