@@ -7,8 +7,9 @@ Graphschichten werden in späteren Slices ergänzt; die Grundlage implementiert
 bewusst noch keinen Adapter.
 
 Gemeinsame MSBuild-Einstellungen für beide Projekte liegen in
-[Directory.Build.props](Directory.Build.props). Projektbezogene Eigenschaften
-und NuGet-Pakete bleiben in den jeweiligen Projektdateien.
+[Directory.Build.props](Directory.Build.props). Zentrale NuGet-Versionen liegen
+in [Directory.Packages.props](Directory.Packages.props); Projektdateien nennen
+nur noch die tatsächlich verwendeten Pakete.
 
 Die AiNetLinter-Integration wird über
 [ainetlinter.project.json](ainetlinter.project.json) und [rules.json](rules.json)
