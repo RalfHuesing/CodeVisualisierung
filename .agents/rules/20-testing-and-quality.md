@@ -6,6 +6,13 @@ Jede nichttriviale JavaScript-Funktion muss isoliert testbar sein. DOM-, Datei- 
 
 Tests müssen Verhalten prüfen. Ein Test, der nur die Implementierungszeilen wiederholt, ist kein ausreichender Test.
 
+Bei einem verhaltensrelevanten Fehler oder Finding wird zuerst ein gezielter
+Regressionstest geschrieben, der vor der Korrektur fehlschlägt und danach
+besteht. Reine Strukturänderungen wie Dead-Code-Entfernung oder eine
+verhaltensgleiche Refaktorierung erhalten keinen künstlichen Test; hier müssen
+bestehende Tests und passende statische bzw. semantische Prüfungen erhalten
+bleiben und erfolgreich laufen.
+
 ## Deterministische Checks
 
 Vor dem Abschluss:

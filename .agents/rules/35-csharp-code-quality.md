@@ -27,6 +27,11 @@ Aufrufregeln stehen ausschließlich in `AiNetLinter-McpWorkflow.mdc`.
 - Eine Änderung darf keinen neuen Befund erzeugen. Unterdrückungen sind nur
   eng begrenzt, mit konkreter Begründung und ohne pauschale Regelabschaltung
   zulässig.
+- Betrifft ein Finding beobachtbares oder fehlerhaftes Verhalten, zuerst einen
+  fokussierten Rot-Test als dauerhaften Regressionstest ergänzen, dann den
+  Befund beheben. Bei rein strukturellen Befunden keinen künstlichen Test
+  erzeugen; vorhandene Tests sowie die semantische Linter-Prüfung müssen die
+  Verhaltensgleichheit absichern.
 - Nach der Änderung die betroffenen Befunde erneut prüfen und relevante Tests
   ausführen. Verbleibende Befunde werden im Abschluss mit ihrer fachlichen
   Begründung genannt.
