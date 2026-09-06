@@ -124,12 +124,12 @@ Aus den Messungen wird keine neue Aggregation und keine zusätzliche Detailstufe
 ## Viewer-Version und fachlicher Meilenstein
 
 Der abgeschlossene Viewer-Meilenstein ist **Version 1.0.0**. Er umfasst den
-Graph-Universe-Datenvertrag 0.2, einen schema-gesteuerten und statisch
+Graph-Universe-Datenvertrag 1.0, einen schema-gesteuerten und statisch
 hostbaren 3D-Viewer, domänenneutrale Referenzdaten sowie den geprüften
 Qualitätsumfang aus Browser-Tests, Produktions-Smoke-Test und dokumentierten
 Skalierungsgrenzen.
 
 Die Versionsnummern haben getrennte Bedeutungen: `1.0.0` kennzeichnet die
-Viewer-Lieferung; `0.2` kennzeichnet die Version des Graph-Universe-Vertrags.
+Viewer-Lieferung; `1.0` kennzeichnet die Version des Graph-Universe-Vertrags.
 Spätere Datenquellen, insbesondere ein C#-/Roslyn-Exporter, sind kein Teil
 dieses Meilensteins.

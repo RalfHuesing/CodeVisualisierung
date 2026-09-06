@@ -25,8 +25,7 @@ npm run build
 ```
 
 Der statische Build liegt danach unter `dist/viewer/`. Die deterministische
-Aufbereitungs-Messung läuft mit `npm run benchmark`. Beispielgraphen können mit
-`node scripts/generate-fixtures.mjs` neu erzeugt werden.
+Aufbereitungs-Messung läuft mit `npm run benchmark`.
 
 Später folgt ein separater C#-/Roslyn-Exporter, der Code analysiert und dasselbe Graphformat erzeugt.
 
@@ -37,7 +36,7 @@ Später folgt ein separater C#-/Roslyn-Exporter, der Code analysiert und dasselb
 ├── apps/
 │   └── viewer/                 # Statische Browser-Anwendung
 ├── contracts/
-│   └── graph-universe/         # Versioniertes JSON-Format, Schema und Fixtures
+│   └── graph-universe/         # Graph-Universe 1.0, Schema und Fixtures
 ├── adapters/
 │   └── csharp/                 # Späterer C#-/Roslyn-Exporter
 ├── docs/                       # Vision, UX, Format, Quellen und Roadmap

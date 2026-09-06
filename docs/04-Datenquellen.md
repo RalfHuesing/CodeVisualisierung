@@ -12,7 +12,7 @@ Die beiden Teile kommunizieren ausschließlich über das versionierte Graphforma
 flowchart LR
     I[Quelldaten] --> E[Extraktion]
     E --> M[Mapping auf Nodes und Links]
-    M --> G[Graphformat 0.1]
+    M --> G[Graphformat 1.0]
     G --> B[Browser-Viewer]
 ```
 

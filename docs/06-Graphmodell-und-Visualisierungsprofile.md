@@ -7,9 +7,8 @@ keine Roslyn-Symbole und keine fachliche Domäne. Namespace, Klasse, Person,
 Unternehmen oder Familienmitglied sind für den Viewer lediglich vom Graph
 definierte Node-Typen.
 
-Dieses Dokument beschreibt die geplante Erweiterung des aktuellen Vertrags 0.1.
-Die Erweiterung wird als neuer Greenfield-Vertrag entworfen; ein
-Kompatibilitäts- oder Migrationspfad für alte Zwischenstände ist nicht nötig.
+Dieses Dokument beschreibt die deklarativen Erweiterungen des kanonischen
+`graph-universe`-Vertrags 1.0.
 
 ## Bausteine des Graphdokuments
 
@@ -144,10 +143,3 @@ Firmengeflecht kann Unternehmen, Beteiligungen und Lieferbeziehungen liefern.
 Ein C#-Graph kann Assemblies, Namespaces, Typen und Methoden liefern. Alle drei
 verwenden dieselbe Viewerlogik: Definitionsdaten, flache Nodes, flache Links,
 Filter, Projektionen und Visualisierungstokens.
-
-## Nächster Vertragsschritt
-
-Vor weiterer Viewer-Funktionalität werden Schema, Fixtures und reine Logik für
-`nodeTypes`, `linkTypes`, Facetten, View-Profile und Summary-Links festgelegt.
-Die Umsetzung wird in der [Roadmap](05-Roadmap.md) als eigener Vertragsslice
-geführt.

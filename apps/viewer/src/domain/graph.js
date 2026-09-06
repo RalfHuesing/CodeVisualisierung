@@ -135,9 +135,7 @@ function validateDefinitions(definitions, name, errors) {
   }
 
   const ids = new Set();
-  const entries = Array.isArray(definitions)
-    ? definitions.map((definition, index) => [definition?.id, index])
-    : Object.keys(definitions).map((id, index) => [id, index]);
+  const entries = definitions.map((definition, index) => [definition?.id, index]);
 
   entries.forEach(([id, index]) => {
     if (typeof id !== "string" || id.length === 0) {

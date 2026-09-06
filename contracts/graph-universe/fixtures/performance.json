@@ -1,22 +1,66 @@
 {
   "format": {
     "name": "graph-universe",
-    "version": "0.2"
+    "version": "1.0"
   },
-  "nodeTypes": {
-    "service": { "label": "Service", "visualToken": "node" },
-    "storage": { "label": "Storage", "visualToken": "node" },
-    "namespace": { "label": "Namespace", "visualToken": "node" },
-    "file": { "label": "File", "visualToken": "node" },
-    "class": { "label": "Class", "visualToken": "node" },
-    "method": { "label": "Method", "visualToken": "node" }
-  },
-  "linkTypes": {
-    "calls": { "label": "Calls", "role": "relation", "visualToken": "link" },
-    "depends-on": { "label": "Depends on", "role": "relation", "visualToken": "link" },
-    "contains": { "label": "Contains", "role": "containment", "visualToken": "link" },
-    "related-to": { "label": "Related to", "role": "relation", "visualToken": "link" }
-  },
+  "nodeTypes": [
+    {
+      "id": "service",
+      "label": "Service",
+      "visualToken": "node"
+    },
+    {
+      "id": "storage",
+      "label": "Storage",
+      "visualToken": "node"
+    },
+    {
+      "id": "namespace",
+      "label": "Namespace",
+      "visualToken": "node"
+    },
+    {
+      "id": "file",
+      "label": "File",
+      "visualToken": "node"
+    },
+    {
+      "id": "class",
+      "label": "Class",
+      "visualToken": "node"
+    },
+    {
+      "id": "method",
+      "label": "Method",
+      "visualToken": "node"
+    }
+  ],
+  "linkTypes": [
+    {
+      "id": "calls",
+      "label": "Calls",
+      "role": "relation",
+      "visualToken": "link"
+    },
+    {
+      "id": "depends-on",
+      "label": "Depends on",
+      "role": "relation",
+      "visualToken": "link"
+    },
+    {
+      "id": "contains",
+      "label": "Contains",
+      "role": "containment",
+      "visualToken": "link"
+    },
+    {
+      "id": "related-to",
+      "label": "Related to",
+      "role": "relation",
+      "visualToken": "link"
+    }
+  ],
   "facets": [
     { "id": "node-type", "label": "Node type", "source": { "scope": "node", "field": "typeId" } },
     { "id": "group", "label": "Group", "source": { "scope": "node", "field": "groupId" } },

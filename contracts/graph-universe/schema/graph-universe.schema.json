@@ -32,7 +32,7 @@
       "required": ["name", "version"],
       "properties": {
         "name": { "const": "graph-universe" },
-        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+$" }
+        "version": { "const": "1.0" }
       },
       "additionalProperties": false
     },
@@ -57,10 +57,8 @@
       "additionalProperties": true
     },
     "definitions": {
-      "oneOf": [
-        { "type": "array", "items": { "$ref": "#/$defs/typeDefinition" } },
-        { "type": "object", "additionalProperties": { "$ref": "#/$defs/legacyTypeDefinition" } }
-      ]
+      "type": "array",
+      "items": { "$ref": "#/$defs/typeDefinition" }
     },
     "typeDefinition": {
       "type": "object",
@@ -74,7 +72,6 @@
       },
       "additionalProperties": true
     },
-    "legacyTypeDefinition": { "type": "object", "additionalProperties": true },
     "facet": {
       "type": "object",
       "required": ["id"],

@@ -9,8 +9,7 @@ dupliziert.
 - Der aktuelle Lieferumfang ist ein allgemeiner, statisch hostbarer 3D-Viewer.
 - Der Viewer kennt keine C#-, Roslyn- oder andere Quelllogik.
 - 2D-Ansichten und 2D-Fallbacks gehören nicht zum Produkt.
-- Der aktuelle Viewer-MVP ist funktionsfähig; der allgemeine Vertrag ist noch
-  nicht auf dem geplanten Stand 0.2.
+- Der allgemeine Graphvertrag ist `graph-universe` 1.0.
 
 Grundlagen: [Vision](01-Vision.md), [Visualisierung](02-Visualisierung.md),
 [Graphformat](03-Graphformat.md), [Graphmodell und Visualisierungsprofile](06-Graphmodell-und-Visualisierungsprofile.md).
@@ -18,18 +17,18 @@ Grundlagen: [Vision](01-Vision.md), [Visualisierung](02-Visualisierung.md),
 ## Phase 0 – Bestand und Grundlagen
 
 - [X] Produktvision und 3D-Leitentscheidung dokumentieren → [01](01-Vision.md), [02](02-Visualisierung.md)
-- [X] Graphformat 0.1, Schema und reine Validierung anlegen → [03](03-Graphformat.md)
+- [X] Graphformat 1.0, Schema und reine Validierung anlegen → [03](03-Graphformat.md)
 - [X] Statischen Viewer-MVP mit Upload, 3D-Szene, Auswahl und Details liefern → [Viewer](../apps/viewer/README.md)
 - [X] Deterministische Tests und Größenlimits einrichten → [Viewer-Tests](../apps/viewer/tests/viewer.spec.js)
 
-## Phase 1 – Allgemeiner Graphvertrag 0.2
+## Phase 1 – Allgemeiner Graphvertrag 1.0
 
 - [X] `nodeTypes` und `linkTypes` als deklarative Definitionen festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
 - [X] Facetten, Filterquellen und benannte Metriken festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
 - [X] View-Profile und Detailstufen festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
 - [X] Hierarchie, Containment und Summary-Links festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
 - [X] Visualisierungstokens und Theme-Auflösung festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [X] Schema, gültige Fixtures und ungültige Fixtures für 0.2 ergänzen → [03](03-Graphformat.md), [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [X] Schema, gültige Fixtures und ungültige Fixtures für 1.0 ergänzen → [03](03-Graphformat.md), [06](06-Graphmodell-und-Visualisierungsprofile.md)
 
 ## Phase 2 – Domänenneutrale Referenzdaten
 

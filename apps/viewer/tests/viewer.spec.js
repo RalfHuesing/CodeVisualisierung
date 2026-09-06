@@ -93,7 +93,7 @@ test("filters the 3d graph without losing the source graph", async ({ page }) =>
 test("reports an empty but valid graph clearly", async ({ page }) => {
   await page.goto("/");
   await page.locator("#graph-file").setInputFiles({
-    buffer: Buffer.from(JSON.stringify({ format: { name: "graph-universe", version: "0.1" }, nodes: [], links: [] })),
+    buffer: Buffer.from(JSON.stringify({ format: { name: "graph-universe", version: "1.0" }, nodes: [], links: [] })),
     mimeType: "application/json",
     name: "empty.json"
   });
@@ -132,7 +132,7 @@ test("shows schema and semantic errors for an invalid graph", async ({ page }) =
   await page.goto("/");
   await page.locator("#graph-file").setInputFiles({
     buffer: Buffer.from(JSON.stringify({
-      format: { name: "graph-universe", version: "0.1" },
+      format: { name: "graph-universe", version: "1.0" },
       nodes: [{ id: "same" }, { id: "same" }],
       links: [{ source: "same", target: "missing" }]
     })),

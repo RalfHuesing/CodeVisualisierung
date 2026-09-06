@@ -247,9 +247,5 @@ function getItemValues(item, field) {
 }
 
 function getDefinition(definitions, id) {
-  if (Array.isArray(definitions)) {
-    return definitions.find((definition) => definition.id === id);
-  }
-
-  return definitions?.[id];
+  return definitions?.find((definition) => definition.id === id);
 }

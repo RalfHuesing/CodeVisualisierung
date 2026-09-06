@@ -2,134 +2,86 @@
 
 ## Zweck
 
-Das Format ist der Vertrag zwischen jedem Datenquellen-Adapter und dem Viewer. Es beschreibt einen flachen Graphen: Nodes stehen unabhängig voneinander in einer Liste und verweisen über Links aufeinander. Eine Hierarchie ist optional und wird nicht vorausgesetzt.
+`graph-universe` 1.0 ist der verbindliche Vertrag zwischen Datenquellen und
+Viewer. Das Dokument beschreibt einen flachen Graphen: Nodes stehen in einer
+Liste und Links verweisen über stabile IDs aufeinander. Eine Hierarchie ist
+optional und wird über deklarierte Typen und Beziehungen beschrieben.
 
-Der erste Entwurf erhält eine Versionsnummer und darf sich weiterentwickeln. Der Viewer soll unbekannte optionale Felder tolerieren, aber unbekannte Pflichtsemantik nicht erraten.
+## Kanonischer Rahmen
 
-## Entwurf `graph-universe` 0.1
+Jedes Graphdokument enthält mindestens:
 
 ```json
 {
   "format": {
     "name": "graph-universe",
-    "version": "0.1"
+    "version": "1.0"
   },
-  "meta": {
-    "title": "Example system",
-    "description": "Small demonstration graph",
-    "source": {
-      "name": "example-exporter",
-      "version": "0.1.0"
-    },
-    "createdAt": "2026-09-05T12:00:00Z"
-  },
-  "metricDefinitions": {
-    "loc": {
-      "label": "Lines of code",
-      "unit": "lines",
-      "valueType": "number"
-    },
-    "complexity": {
-      "label": "Cyclomatic complexity",
-      "unit": "score",
-      "valueType": "number"
-    },
-    "coverage": {
-      "label": "Test coverage",
-      "unit": "ratio",
-      "valueType": "number"
-    }
-  },
-  "nodes": [
-    {
-      "id": "orders.process-payment",
-      "label": "ProcessPayment",
-      "kind": "method",
-      "groupId": "orders",
-      "tags": ["public", "entrypoint"],
-      "metrics": {
-        "loc": 120,
-        "complexity": 8,
-        "coverage": 0.95
-      },
-      "attributes": {
-        "visibility": "public"
-      }
-    }
-  ],
-  "links": [
-    {
-      "id": "orders.controller->orders.process-payment",
-      "source": "orders.controller",
-      "target": "orders.process-payment",
-      "kind": "calls",
-      "directed": true,
-      "weight": 12,
-      "metrics": {
-        "callCount": 12
-      },
-      "attributes": {
-        "crossGroup": true
-      }
-    }
-  ]
+  "nodes": [],
+  "links": []
 }
 ```
+
+`format.version` ist die Version des Datenvertrags, nicht die Version des
+Viewers. `nodeTypes` und `linkTypes` sind, sofern vorhanden, ausschließlich
+Arrays deklarativer Definitionen. Jede Definition trägt ihre ID im Feld `id`.
 
 ## Semantik
 
 ### Format und Metadaten
 
-- `format.name` identifiziert das Format.
-- `format.version` ist die Version des Datenvertrags, nicht die Version der Webseite.
-- `meta.title` und `meta.description` sind Präsentationsmetadaten.
-- `meta.source` dokumentiert den Erzeuger, ohne ihn zur Voraussetzung des Viewers zu machen.
-- `metricDefinitions` erklärt optionale Metriknamen, Einheiten und Datentypen.
+- `format.name` ist immer `graph-universe`.
+- `format.version` ist immer `1.0`.
+- `meta.title` und `meta.description` sind optionale Präsentationsmetadaten.
+- `meta.source` dokumentiert den Erzeuger, ohne ihn zur Voraussetzung des
+  Viewers zu machen.
+- `metricDefinitions` erklärt optionale Metriknamen, Einheiten und Typen.
 
 ### Nodes
 
 - `id` ist innerhalb des Dokuments eindeutig und stabil.
-- `label` ist die menschenlesbare Beschriftung; wenn sie fehlt, darf der Viewer die ID verwenden.
-- `kind` beschreibt die fachliche Art des Nodes, zum Beispiel `class`, `method`, `file`, `service` oder `person`.
-- `groupId` ist ein optionaler Gruppierungsschlüssel. Er ist keine implizite Verschachtelung.
-- `tags` sind kurze kategorische Merkmale.
-- `metrics` enthält benannte numerische Messwerte.
-- `attributes` enthält zusätzliche, nicht zwingend numerische Eigenschaften.
+- `typeId` referenziert eine Definition aus `nodeTypes`, sofern das Dokument
+  Node-Typen deklariert.
+- `label` ist die menschenlesbare Beschriftung; fehlt sie, verwendet der
+  Viewer die ID.
+- `groupId`, `tags`, `metrics` und `attributes` sind optionale allgemeine
+  Eigenschaften.
 
 ### Links
 
 - `source` und `target` referenzieren Node-IDs.
-- Die Richtung ist immer `source` nach `target`; `directed` darf für ungerichtete Beziehungen `false` sein.
-- `kind` beschreibt die Beziehung, zum Beispiel `calls`, `depends-on`, `contains` oder `related-to`.
-- `weight` ist eine optionale allgemeine Beziehungsstärke. Wenn seine Bedeutung nicht aus dem Kontext klar ist, muss zusätzlich eine benannte Metrik verwendet werden.
-- `metrics` enthält konkrete Beziehungswerte wie `callCount`, `bytes` oder `distance`.
+- Die Richtung ist `source` nach `target`; `directed` darf für ungerichtete
+  Beziehungen `false` sein.
+- `typeId` referenziert eine Definition aus `linkTypes`, sofern das Dokument
+  Beziehungstypen deklariert.
+- `weight`, `metrics`, `summary` und `derivedFrom` dokumentieren optionale
+  Stärke, Herkunft und Aggregation einer Beziehung.
+
+### Optionale deklarative Bereiche
+
+Das Schema unterstützt zusätzlich `facets`, `filterSources`, `viewProfiles`,
+`projections`, `containmentRules`, `hierarchy`, `visualTokens` und `theme`.
+Diese Bereiche beschreiben Daten und Darstellungsregeln explizit. Der Viewer
+errät keine fachliche Bedeutung aus unbekannten Feldnamen.
 
 ## Invarianten für die Validierung
 
-1. Das Dokument ist ein JSON-Objekt.
-2. `format.name` und `format.version` sind vorhanden.
+1. Das Dokument ist ein JSON-Objekt mit `format`, `nodes` und `links`.
+2. `format.name` ist `graph-universe` und `format.version` ist `1.0`.
 3. `nodes` und `links` sind Arrays.
 4. Node-IDs sind nicht leer und eindeutig.
 5. Jeder Link verweist mit `source` und `target` auf vorhandene Nodes.
-6. Alle numerischen Metriken und Gewichte sind endlich; `NaN` und `Infinity` sind in JSON ohnehin nicht zulässig.
-7. Ein fehlender optionaler Wert ist nicht dasselbe wie `0`.
-8. Der Viewer darf keine fachliche Bedeutung aus dem Namen eines unbekannten Feldes ableiten.
+6. Definierte Node- und Linktypen sind Arrays mit eindeutigen `id`-Feldern.
+7. Alle numerischen Metriken und Gewichte sind endlich.
+8. Fehlende optionale Werte sind nicht dasselbe wie `0`.
 
 ## Bewusste Abgrenzungen
 
-- Es gibt zunächst keine Pflicht zu `parentId` oder verschachtelten Objekten.
+- Es gibt keine Pflicht zu verschachtelten Objekten oder `parentId`.
 - Die Datenquelle legt keine konkrete Farbe, Geometrie oder Animation fest.
 - Rohmetriken und normalisierte Anzeigegrößen bleiben getrennt.
-- Ansichtsprofile gehören später in eine eigene Konfiguration oder in lokale Viewer-Einstellungen.
-- Für die erste Version reicht ein JSON-Dokument; Streaming-Deltas kommen später.
+- Ein JSON-Dokument ist die Eingabegrenze; Streaming-Deltas gehören nicht zum
+  aktuellen Vertrag.
 
-## Geplante Vertragserweiterung 0.2
-
-Der aktuelle Vertrag 0.1 bleibt der geprüfte technische Ausgangspunkt. Für den
-Greenfield-Viewer wird als nächster Vertragsschritt eine deklarative Erweiterung
-für Node- und Linktypen, Facetten, View-Profile, Projektionen und
-Visualisierungstokens entworfen. Die fachlichen Regeln und Beispiele dafür
+Die fachlichen Regeln für Profile, Projektionen und Visualisierungstokens
 stehen in [06 – Graphmodell und Visualisierungsprofile](06-Graphmodell-und-Visualisierungsprofile.md).
-Die Erweiterung wird nicht aus C#-Begriffen abgeleitet; der spätere
-C#-Referenzfall ist separat in [07 – C#-Referenzgraph](07-CSharp-Referenzgraph.md)
-beschrieben.

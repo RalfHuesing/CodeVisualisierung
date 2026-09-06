@@ -219,7 +219,7 @@ describe("graph parsing", () => {
   });
 });
 
-describe("graph-universe 0.2 definitions", () => {
+describe("graph-universe 1.0 definitions", () => {
   it("validates type references and definition IDs", () => {
     const graph = structuredClone(validGraph);
 
@@ -256,26 +256,12 @@ describe("graph-universe 0.2 definitions", () => {
   });
 });
 
-describe("graph normalization compatibility", () => {
-  it("keeps 0.1-style graphs valid and adds only display defaults", () => {
-    const legacyGraph = {
-      format: { name: "graph-universe", version: "0.1" },
-      nodes: [{ id: "one" }],
-      links: [{ source: "one", target: "one" }]
-    };
+describe("graph normalization", () => {
+  it("rejects definition objects", () => {
+    const graph = structuredClone(validGraph);
+    graph.nodeTypes = { service: { label: "Service" } };
 
-    expect(validateGraph(legacyGraph)).toEqual({ valid: true, errors: [] });
-    expect(normalizeGraph(legacyGraph)).toMatchObject({
-      facets: [],
-      filterSources: [],
-      projections: [],
-      containmentRules: [],
-      hierarchy: { containmentLinkTypes: [], acyclic: true },
-      visualTokens: {},
-      theme: {},
-      nodes: [{ typeId: "node" }],
-      links: [{ typeId: "related-to" }]
-    });
+    expect(validateGraph(graph).valid).toBe(false);
   });
 
   it("resolves unknown visual tokens through the theme fallback", () => {

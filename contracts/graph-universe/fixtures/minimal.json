@@ -1,7 +1,7 @@
 {
   "format": {
     "name": "graph-universe",
-    "version": "0.2"
+    "version": "1.0"
   },
   "nodeTypes": [
     { "id": "service", "label": "Service", "visualToken": "node" },
@@ -62,7 +62,7 @@
     "createdAt": "2026-09-05T12:00:00Z",
     "source": {
       "name": "fixture",
-      "version": "0.1.0"
+      "version": "1.0.0"
     }
   },
   "metricDefinitions": {

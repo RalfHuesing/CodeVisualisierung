@@ -1,7 +1,7 @@
 {
   "format": {
     "name": "graph-universe",
-    "version": "0.2"
+    "version": "1.0"
   },
   "nodeTypes": [
     { "id": "portfolio", "label": "Portfolio", "visualToken": "portfolio" },
