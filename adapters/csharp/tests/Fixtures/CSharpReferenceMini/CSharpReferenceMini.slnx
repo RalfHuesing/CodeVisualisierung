@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CSharpReferenceMini.Contracts/CSharpReferenceMini.Contracts.csproj" />
+    <Project Path="src/CSharpReferenceMini.Application/CSharpReferenceMini.Application.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/CSharpReferenceMini.Tests/CSharpReferenceMini.Tests.csproj" />
+  </Folder>
+</Solution>

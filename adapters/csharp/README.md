@@ -16,6 +16,22 @@ Die AiNetLinter-Integration wird über
 adressiert. Der Test AiNetLinterTests führt die angegebene lokale Binary gegen
 die Solution aus.
 
+## Roslyn-Testinfrastruktur
+
+Die Testinfrastruktur trennt zwei Anwendungsfälle:
+
+- [RoslynTestSolutionFactory.cs](tests/CodeVisualisierung.CSharp.Tests/Infrastructure/RoslynTestSolutionFactory.cs)
+  erstellt kleine mehrprojektige `AdhocWorkspace`-Solutions direkt im Speicher.
+  `PreparedSolutionFixture` verwaltet deren Lebensdauer über die Testklasse.
+- [CSharpReferenceMini](tests/Fixtures/CSharpReferenceMini) ist eine physische
+  Contract-/Application-/Test-Solution für spätere `MSBuildWorkspace`- und
+  Projektdatei-Tests. Sie wird absichtlich nicht in die produktive Adapter-
+  Solution aufgenommen.
+
+Neue Roslyn-Tests sollen zuerst die In-Memory-Spec verwenden. Die physische
+Fixture ist für Tests gedacht, die echte `.slnx`-, `.csproj`- oder
+`ProjectReference`-Auflösung benötigen.
+
 Vorgesehene Namespace-Verantwortungen innerhalb des CLI-Projekts:
 
 - CodeVisualisierung.CSharp.Cli — Prozessgrenze und spätere CLI-Komposition

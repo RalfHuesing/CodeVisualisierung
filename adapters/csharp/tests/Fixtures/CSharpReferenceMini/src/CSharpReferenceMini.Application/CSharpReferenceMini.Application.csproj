@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>CodeVisualisierung.CSharp.Fixtures.Application</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../CSharpReferenceMini.Contracts/CSharpReferenceMini.Contracts.csproj" />
+  </ItemGroup>
+</Project>
