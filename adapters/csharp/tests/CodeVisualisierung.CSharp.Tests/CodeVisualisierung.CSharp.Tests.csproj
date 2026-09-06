@@ -7,6 +7,9 @@
 
   <ItemGroup>
     <ProjectReference Include="../../src/CodeVisualisierung.CSharp.Cli/CodeVisualisierung.CSharp.Cli.csproj" />
+    <PackageReference Include="Microsoft.Build.Locator" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="xunit.runner.visualstudio">
       <PrivateAssets>all</PrivateAssets>

@@ -32,6 +32,20 @@ Neue Roslyn-Tests sollen zuerst die In-Memory-Spec verwenden. Die physische
 Fixture ist für Tests gedacht, die echte `.slnx`-, `.csproj`- oder
 `ProjectReference`-Auflösung benötigen.
 
+`MsBuildWorkspaceTestHost` lädt die physische Fixture als xUnit-v3-
+Assembly-Fixture genau einmal. Der Host registriert MSBuild thread-sicher,
+besitzt den `MSBuildWorkspace` bis zur Assembly-Entsorgung und stellt eine
+lesbare Momentaufnahme aller `WorkspaceFailed`-Diagnosen bereit. Die
+`RoslynSemanticFixtureMatrix` beschreibt die kleinen, graphfreien Fälle für
+Partial Types, Überladungen/Generics, Vererbung/Interfaces/Overrides,
+Records/Structs/Enums/Delegates sowie Aufrufe, Konstruktionen, Lese-/Schreib-
+zugriffe und Typverwendungen.
+
+Ein generisches `Result<T>` wird in dieser Testinfrastruktur bewusst noch
+nicht eingeführt: Sein sinnvoller Vertrag hängt an der späteren Produktions-
+grenze für Analysefehler, Warnungen und partielle Ergebnisse. Bis dahin bleiben
+Solution und Workspace-Diagnosen am konkreten Testhost explizit.
+
 Vorgesehene Namespace-Verantwortungen innerhalb des CLI-Projekts:
 
 - CodeVisualisierung.CSharp.Cli — Prozessgrenze und spätere CLI-Komposition
