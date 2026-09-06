@@ -49,4 +49,9 @@ Die Dokumentation beginnt bei [docs/README.md](docs/README.md).
 
 ## Grundregel
 
-Der Viewer kennt nur den Graphvertrag. Datenquellen liefern Nodes, Links, Metriken und Attribute; die Anwendung entscheidet, wie diese Signale dargestellt werden.
+Der Viewer kennt nur den kanonischen Vertrag `graph-universe` 1.0. Eine Quelle
+liefert neutrale Type-IDs, optionale `visualRole`-/`baseSize`-Hinweise,
+benannte Metriken, `groupField`-Werte, Containment- und Summary-Links sowie
+View- und Layoutprofile. Der Viewer bereitet daraus visuelle Größe und
+deterministische Positionen auf. C#- oder andere Quellen erhalten keine
+Sonderlogik im Viewer.

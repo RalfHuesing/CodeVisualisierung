@@ -30,13 +30,14 @@ Delegated roles:
 
 ## Externer Vorgänger: Viewer-Layoutvertrag
 
-- [ ] Separater Viewer-/Graphvertrag-Task: generische Deklaration von
+- [X] Separater Viewer-/Graphvertrag-Task: generische Deklaration von
   Größenmetriken sowie Containment-, Orbit- und Gruppendistanzen.
 
-Dieser Punkt ist ausdrücklich außerhalb des C#-Tasks und wird von dessen
-Orchestrator nicht umgesetzt oder abgehakt. Der C#-Adapter muss die
-verabschiedete Vertragsform später verwenden; bis dahin bleiben die
-Containment- und Relevanzdaten im Adapter fachlich definiert.
+Der generische Vertrag ist in `graph-universe` 1.0 mit `visualRole`, `baseSize`,
+`layoutProfiles`, `groupField`, Gruppen-/Containment-Abständen und
+deterministischen Viewer-Fallbacks umgesetzt. Dieser C#-Task nutzt die
+verabschiedete Vertragsform später; er enthält weiterhin keine Viewer- oder
+Layoutimplementierung.
 
 ## [ ] Slice 0 – Vertrag und Entscheidungen einfrieren
 
@@ -52,7 +53,7 @@ Erwartete Inhalte:
 - deterministische Metadaten- und Fehlerpolicy,
 - Ausschluss-Policy für externe, Framework- und generierte Artefakte,
 - Metrikumfang und Compilerdiagnose-Policy,
-- Abhängigkeit vom separaten Viewer-Layoutvertrag.
+- Abhängigkeit vom verabschiedeten Viewer-Layoutvertrag.
 
 Erlaubte Pfade: `tasks/c-sharp-adapter/**`, bei expliziter Vertragsänderung
 zusätzlich `docs/**` und `contracts/graph-universe/**`.
@@ -64,8 +65,8 @@ Akzeptanzkriterien:
 - [ ] `CONCEPT.md` und die allgemeine Graphdokumentation widersprechen sich
   nicht.
 - [ ] Alle folgenden Slices haben konkrete erlaubte Pfade und Prüfkriterien.
-- [ ] Der C#-Task referenziert die vom separaten Viewer-Layouttask
-  verabschiedete, quellenneutrale Layoutbeschreibung korrekt.
+- [ ] Der C#-Task referenziert die verabschiedete, quellenneutrale
+  `layoutProfiles`-Beschreibung korrekt.
 - [ ] Betroffene Vertrags- und Fachdokumente sind im selben Slice als Teil der
   Änderung vorgesehen; es gibt keine bewusst veraltete Dokumentation.
 
@@ -187,8 +188,7 @@ Akzeptanzkriterien:
 - [ ] Summary-Links und ihre Herkunft sind explizit und gegen die
   Detailbeziehungen prüfbar.
 - [ ] `metricDefinitions`, `nodeTypes`, `linkTypes`, Facetten, Profile und
-  Layoutregeln bleiben mit dem gemeinsamen Vertrag kompatibel, sobald der
-  externe Viewer-Layouttask den Vertrag erweitert hat.
+  `layoutProfiles` bleiben mit dem gemeinsamen Vertrag kompatibel.
 - [ ] Schema, Fixtures und die betroffenen allgemeinen und C#-Fachdokumente
   werden gemeinsam aktualisiert.
 

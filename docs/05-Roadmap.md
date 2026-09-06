@@ -45,6 +45,7 @@ Grundlagen: [Vision](01-Vision.md), [Visualisierung](02-Visualisierung.md),
 - [X] Filter und Facetten vollständig aus dem Graph-JSON erzeugen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
 - [X] View-Profile aus dem Graph-JSON laden und auswählbar machen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
 - [X] Summary-Links und Projektionen bei jeder Detailstufe korrekt darstellen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [X] Typabhängige Größenrollen, Containment-Abstände und getrennte Gruppen generisch aus dem Graph-JSON aufbereiten → [02](02-Visualisierung.md), [06](06-Graphmodell-und-Visualisierungsprofile.md)
 - [X] Unbekannte Typen und Visualisierungstokens mit dokumentiertem Fallback behandeln → [06](06-Graphmodell-und-Visualisierungsprofile.md)
 - [X] C#-Begriffe vollständig aus dem Viewer-Code entfernen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
 

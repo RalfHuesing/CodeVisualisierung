@@ -239,29 +239,30 @@ seinem Namespace als ein Typ aus einem anderen Namespace; ein Member liegt
 näher an seinem deklarierenden Typ als an fremden Typen. Referenzen zwischen
 Klassen bilden Verbindungen zwischen Sonnensystemen, Referenzen zwischen
 Namespaces Verbindungen zwischen Galaxien. Der Adapter liefert dafür die
-Containment- und Beziehungsdaten sowie die generischen Layoutdeklarationen;
-der Viewer berechnet daraus die konkrete 3D-Position. Dafür muss der
-allgemeine Graphvertrag um eine quellenneutrale, deklarative
-Layoutbeschreibung ergänzt und gemeinsam mit dem Viewer geprüft werden. Diese
-Vertragserweiterung und ihre Viewer-Umsetzung sind ein eigener Vorgänger- bzw.
-Paralleltask außerhalb des C#-Adapters. Der Adapter implementiert keine
-Viewer-Layoutlogik.
+Containment- und Beziehungsdaten sowie `layoutProfiles`; der Viewer berechnet
+daraus die konkrete 3D-Position. Ein Profil kann mit `groupField`,
+`groupDistance`, `defaultDistance` und `containmentDistances` Gruppen-,
+Standard- und Eltern-Kind-Abstände deklarieren. Der Adapter liefert diese
+neutralen Vertragsdaten später als Quelle; er implementiert keine
+Viewer-Layoutlogik und berechnet keine Positionen selbst.
 
 ## Abgrenzung zur bestehenden Visualisierung
 
-Die aktuelle Visualisierung kann eine Node-Größe bereits aus einer benannten
-Node-Metrik beziehen: Ein `viewProfile.nodeMetric` wird auf `visualValue` und
-damit auf den Node-Radius abgebildet. Der C#-Adapter kann deshalb später
-`importance` als fachliche Größenmetrik liefern, ohne ein C#-spezifisches
-Größenfeld zu erfinden.
+Die aktuelle Visualisierung kann eine Node-Größe aus benannten Metriken,
+`visualRole` und `baseSize` ableiten. `metricDefinitions` beschreibt die
+fachliche Bedeutung von Namen wie `importance`; der Viewer skaliert die Werte
+und wendet die Grundgröße an. Der Adapter liefert später solche neutralen
+Metriken, ohne ein C#-spezifisches Größenfeld zu erfinden.
 
-Eine deklarative Übergabe von Abständen, Orbitradien und
-Containment-basierten Gruppenabständen fehlt im aktuellen Viewer dagegen noch.
-Der Renderer verwendet derzeit eine globale Linkdistanz und keine
-hierarchische Orbitberechnung. Dafür braucht es einen separaten
-Viewer-/Graphvertrag-Task. Dieser C#-Task darf ihn voraussetzen und mit
-Vertragsfixtures beliefern, übernimmt aber weder dessen Umsetzung noch dessen
-Abschluss.
+Der Graphvertrag enthält bereits `layoutProfiles`. Der Viewer wählt das
+angeforderte Profil, fällt bei unbekannter Auswahl auf das erste Profil und bei
+fehlenden Profilen auf interne Defaults zurück. Aus `groupField`-Werten,
+Containment-/Summary-Links und den deklarierten Abständen bereitet er
+deterministische Initialpositionen vor. Fehlende Gruppenwerte, Abstände,
+Metriken und Tokens werden durch stabile neutrale Defaults ergänzt. Die
+spätere Adapterausgabe muss diese Vertragsdaten nur liefern und validieren;
+ihre Nutzung im C#-Exporter ist ein nachgelagerter Umsetzungsschritt, keine
+zusätzliche Layoutimplementierung.
 
 ## Metriken und visuelle Größe
 

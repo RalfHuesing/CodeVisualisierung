@@ -46,9 +46,6 @@ Die Datei bleibt lokal im Browser. Ein späteres Laden einer mitgelieferten Beis
 
 ### Danach
 
-- Gruppierung und semantischer Zoom,
-- stabile lokale Orbits für Nodes mit gemeinsamer Gruppe,
-- gespeicherte Ansichtsprofile,
 - Zeitverlauf und Live-Deltas,
 - visuelle Zustände wie Hitze, Testabdeckung oder Änderungsfrequenz.
 
@@ -66,6 +63,33 @@ Die erste Version verwendet wenige, nachvollziehbare Kanäle:
 | Auswahl/Fokus | Hervorhebung und Dimmen | keine Veränderung der zugrunde liegenden Metrik |
 
 `mass`, `temperature`, `shieldActive` und ähnliche Begriffe sind keine festen Pflichtfelder des Graphformats. Sie können als benannte Metriken oder Attribute angeliefert und durch ein Ansichtsprofil interpretiert werden.
+
+## Graphvertrag und Aufbereitung
+
+Der Graph-Universe-1.0-Vertrag bleibt quellenneutral. Die Quelle liefert
+Type-IDs und Rollen, benannte Metriken über `metricDefinitions` und
+`nodes[].metrics`/`links[].metrics`, die Werte des konfigurierten `groupField`,
+Containment- und Summary-Links sowie View- und Layoutprofile. `visualRole` und
+`baseSize` können an Node-Typen oder einzelnen Nodes die fachliche Rolle und
+relative Grundgröße beschreiben. Eine Quelle muss dafür keine Viewerbegriffe
+oder C#-Sonderfelder erfinden.
+
+Der Viewer bereitet diese Signale auf: Er wählt die aktive Node- und Linkmetrik,
+skaliert sie auf visuelle Größe und Linkbreite und kombiniert die Node-Größe mit
+`baseSize`. Das aktive Layoutprofil beschreibt mit `groupField`,
+`groupDistance`, `defaultDistance` und `containmentDistances` die Abstände für
+Gruppen, normale Links und Eltern-Kind-Beziehungen. Containment- und
+Summary-Links bleiben fachliche Graphdaten; ihre räumliche Darstellung ist eine
+Viewerentscheidung.
+
+Die initialen `x`-/`y`-/`z`-Positionen werden deterministisch aus sortierten
+Gruppen, Nodes und Containment-Beziehungen vorbereitet. Ein nicht gefundenes
+angefordertes Layoutprofil fällt auf das erste deklarierte Profil zurück; ohne
+Profile gelten interne Standardwerte. Fehlen Gruppenwerte, werden zunächst
+`groupId` und danach `ungrouped` verwendet. Fehlende oder ungültige Abstände
+fallen auf positive Standardabstände zurück. Fehlende oder konstante Metriken
+erhalten eine neutrale mittlere Skalierung; fehlende Grundgrößen und visuelle
+Tokens erhalten stabile Viewer-Defaults.
 
 ## 3D-Entscheidung
 
@@ -100,7 +124,11 @@ Wir messen stattdessen:
 
 Für größere Graphen brauchen wir später Aggregation, Detailstufen und gegebenenfalls vorgegebene Positionen. Pruning darf nicht stillschweigend Daten löschen; es muss als Darstellungsentscheidung sichtbar und rückgängig machbar sein. Eine separate 2D-Ansicht ist nicht Bestandteil des Produkts.
 
-Die aktuelle Übersicht blendet ausschließlich Nodes mit `kind: "method"` aus. Die Detailstufe ist sichtbar auswählbar und über „Detail“ vollständig rückgängig machbar; die Quelldaten bleiben dabei unverändert.
+Die Übersicht verwendet das deklarierte View-Profil und dessen sichtbare
+Node-Type-IDs sowie Link-Type-IDs. Sie ist damit nicht an `kind: "method"` oder
+eine andere konkrete Domäne gebunden. Die Detailstufe ist sichtbar auswählbar
+und über das passende Profil vollständig rückgängig machbar; die Quelldaten
+bleiben dabei unverändert.
 
 Der deterministische Aufbereitungs-Benchmark läuft mit `npm run benchmark` über feste Fixtures und 20 Wiederholungen. Der aktuelle Performance-Graph umfasst 684 Nodes und 1.260 Links; mehrere lokale Läufe lagen zwischen 7,4 und 7,9 ms pro Durchlauf. Das ist noch kein Versprechen für die WebGL-Bildrate, sondern ein reproduzierbarer Grenzwert für Filterung und visuelles Mapping.
 
