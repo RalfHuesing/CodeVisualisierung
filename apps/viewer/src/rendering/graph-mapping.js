@@ -220,11 +220,19 @@ function matchesNodeFilters(node, filters, graph, profile) {
 }
 
 function matchesLinkFilters(link, filters, graph, profile) {
-  if (profile?.visibleLinkTypes && !profile.visibleLinkTypes.includes(link.typeId ?? link.kind)) {
+  if (profile?.visibleLinkTypes && !getVisibleLinkTypes(graph, profile).has(link.typeId ?? link.kind)) {
     return false;
   }
 
   return matchesFacetFilters(link, filters, graph, "link");
+}
+
+function getVisibleLinkTypes(graph, profile) {
+  const visibleLinkTypes = new Set(profile.visibleLinkTypes);
+  (graph.projections ?? [])
+    .filter((projection) => projection.toProfile === profile.id)
+    .forEach((projection) => visibleLinkTypes.add(projection.linkTypeId));
+  return visibleLinkTypes;
 }
 
 function matchesFacetFilters(item, filters, graph, scope) {

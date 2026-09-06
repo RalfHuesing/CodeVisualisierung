@@ -42,6 +42,7 @@ describe("graph visualization calculations", () => {
 
   it("creates filters and profiles from graph declarations", () => {
     const graph = normalizeGraph(sampleGraph);
+    const detailProfile = graph.viewProfiles[1];
 
     expect(getFilterOptions(graph).sources.map(({ id, field, values }) => ({ id, field, values }))).toEqual([
       { id: "node-type", field: "typeId", values: ["service", "storage"] },
@@ -51,7 +52,28 @@ describe("graph visualization calculations", () => {
     expect(filterGraph(graph, { "node-type": "storage" }).nodes.map((node) => node.id)).toEqual(["database"]);
     expect(getFilterOptions(graph)).toMatchObject({ groups: ["core", "data", "web"], kinds: ["service", "storage"] });
     expect(filterGraph(graph, {}, graph.viewProfiles[0]).nodes).toHaveLength(3);
-    expect(filterGraph(graph, {}, graph.viewProfiles[1]).links).toHaveLength(2);
+    expect(filterGraph(graph, {}, detailProfile).links.map((link) => link.id)).toEqual([
+      "summary-api-orders",
+      "depends-orders-database"
+    ]);
+  });
+
+  it("shows only declared projections for a profile and keeps existing summary links", () => {
+    const graph = normalizeGraph(sampleGraph);
+    const detailProfile = graph.viewProfiles[1];
+    const withoutProjection = { ...graph, projections: [] };
+    const withUnknownProjection = {
+      ...graph,
+      projections: [{ id: "unknown-path", fromProfile: "overview", toProfile: "detail", linkTypeId: "unknown" }]
+    };
+
+    expect(filterGraph(withoutProjection, {}, detailProfile).links.map((link) => link.id)).toEqual([
+      "depends-orders-database"
+    ]);
+    expect(filterGraph(graph, {}, detailProfile).links.map((link) => link.id)).toContain("summary-api-orders");
+    expect(filterGraph(withUnknownProjection, {}, detailProfile).links.map((link) => link.id)).toEqual([
+      "depends-orders-database"
+    ]);
   });
 
   it("resolves nested facet fields", () => {
@@ -76,7 +98,7 @@ describe("graph visualization calculations", () => {
       tokenId: "node",
       usedFallback: true
     });
-    expect(getLinkVisualStyle(graph.links[0], graph)).toMatchObject({
+    expect(getLinkVisualStyle(graph.links[1], graph)).toMatchObject({
       color: "#38bdf8",
       tokenId: "node",
       usedFallback: true
