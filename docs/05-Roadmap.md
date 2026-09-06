@@ -20,7 +20,19 @@ jeweiligen `tasks/<name>/`-Ordnern.
 
 ## Reihenfolge der offenen Vorhaben
 
-### 1. Mehrere Visualisierungsmodi — `planned`
+### 1. Graph-Pakete für große lokale Projekte — `planned`
+
+Ein lokal erzeugtes einzelnes `.graphpack`-Archiv soll große C#-Graphen im
+statischen Viewer über Manifest, Overview und lazy geladene Teilgraphen
+erkundbar machen.
+
+- [Taskvertrag](../tasks/graph-package-loading/README.md)
+- [Konzept](../tasks/graph-package-loading/CONCEPT.md)
+
+Abhängigkeit: Paketvertrag, CLI-Erzeugung und selektiver Viewer-Ladepfad müssen
+vor einer Validierung mit Großprojekten festgelegt werden.
+
+### 2. Mehrere Visualisierungsmodi — `planned`
 
 Eine Graph-JSON soll später zwischen Stadtkarte, Universum und biologischer
 Netzwerkansicht wechseln können.
