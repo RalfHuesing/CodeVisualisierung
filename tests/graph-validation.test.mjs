@@ -8,6 +8,7 @@ import invalidFixture from "../contracts/graph-universe/fixtures/invalid.json" w
 import edgeCasesFixture from "../contracts/graph-universe/fixtures/edge-cases.json" with { type: "json" };
 import familyFixture from "../contracts/graph-universe/fixtures/family.json" with { type: "json" };
 import companyFixture from "../contracts/graph-universe/fixtures/company.json" with { type: "json" };
+import csharpReferenceFixture from "../contracts/graph-universe/fixtures/csharp-reference.json" with { type: "json" };
 
 const fixturePath = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -48,6 +49,67 @@ describe("fixture catalog", () => {
     expect(companyFixture.links.find((link) => link.id === "exposure-portfolio-delta")).toMatchObject({
       summary: true,
       derivedFrom: ["owns-aurora-birch", "invests-birch-delta"]
+    });
+  });
+});
+
+describe("C# reference fixture", () => {
+  it("validates the deterministic C# reference fixture without catalog registration", () => {
+    const nodeIds = new Set(csharpReferenceFixture.nodes.map((node) => node.id));
+    const linkIds = new Set(csharpReferenceFixture.links.map((link) => link.id));
+    const nodeTypeIds = new Set(csharpReferenceFixture.nodeTypes.map((type) => type.id));
+    const linkTypeIds = new Set(csharpReferenceFixture.linkTypes.map((type) => type.id));
+
+    expect(validateGraph(csharpReferenceFixture)).toEqual({ valid: true, errors: [] });
+    expect(nodeIds.size).toBe(csharpReferenceFixture.nodes.length);
+    expect(linkIds.size).toBe(csharpReferenceFixture.links.length);
+    expect(csharpReferenceFixture.nodes.every((node) => nodeTypeIds.has(node.typeId))).toBe(true);
+    expect(csharpReferenceFixture.links.every((link) => linkTypeIds.has(link.typeId))).toBe(true);
+    expect(csharpReferenceFixture.links.every((link) => nodeIds.has(link.source) && nodeIds.has(link.target))).toBe(true);
+    expect(csharpReferenceFixture.links
+      .filter((link) => link.derivedFrom)
+      .every((link) => (Array.isArray(link.derivedFrom) ? link.derivedFrom : [link.derivedFrom])
+        .every((linkId) => linkIds.has(linkId)))).toBe(true);
+
+    expect(csharpReferenceFixture.nodes.find((node) => node.id === "class-repository")).toMatchObject({
+      typeId: "class",
+      attributes: { partial: true }
+    });
+    expect(csharpReferenceFixture.nodes.find((node) => node.id === "file-generated-client")).toMatchObject({
+      typeId: "generated-artifact",
+      attributes: { generated: true }
+    });
+    expect(csharpReferenceFixture.nodes.filter((node) => node.label === "Get")).toHaveLength(3);
+    expect(csharpReferenceFixture.nodes.find((node) => node.id === "method-repository-get-generic").attributes.genericArity).toBe(1);
+    expect(csharpReferenceFixture.links.filter((link) => link.summary)).toHaveLength(5);
+    expect(csharpReferenceFixture.links.find((link) => link.id === "summary-project-calls").derivedFrom).toEqual(["summary-assembly-calls"]);
+    expect(csharpReferenceFixture.viewProfiles.map((profile) => profile.id)).toEqual([
+      "assembly-overview",
+      "type-detail",
+      "method-detail"
+    ]);
+    expect(csharpReferenceFixture.projections).toEqual(expect.arrayContaining([
+      expect.objectContaining({ fromProfile: "assembly-overview", toProfile: "type-detail", linkTypeId: "summary-depends-on" }),
+      expect.objectContaining({ fromProfile: "type-detail", toProfile: "method-detail", linkTypeId: "summary-calls" })
+    ]));
+    const visualTokenIds = new Set(Object.keys(csharpReferenceFixture.visualTokens));
+    expect(csharpReferenceFixture.nodeTypes.every((type) => visualTokenIds.has(type.visualToken))).toBe(true);
+    expect(csharpReferenceFixture.linkTypes.every((type) => visualTokenIds.has(type.visualToken))).toBe(true);
+    expect(csharpReferenceFixture.linkTypes.map((type) => type.id)).toEqual(expect.arrayContaining([
+      "project-reference",
+      "references-assembly",
+      "inherits",
+      "implements",
+      "overrides",
+      "calls",
+      "uses-type",
+      "parameter-type",
+      "returns-type"
+    ]));
+    expect(csharpReferenceFixture.metricDefinitions).toMatchObject({
+      complexity: { unit: "score" },
+      callCount: { unit: "calls" },
+      dependencyStrength: { unit: "score" }
     });
   });
 });

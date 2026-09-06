@@ -130,3 +130,11 @@ erzeugte C#-Referenz-Fixture benötigt. Sie soll mindestens enthalten:
 Diese Fixture ist ein späterer Vertragstest. Sie ist kein Bestandteil der
 aktuellen allgemeinen Viewer-Fixtures und setzt keine C#-Infrastruktur im
 Browser voraus.
+
+Die konkrete deterministische Fixture liegt unter
+[`contracts/graph-universe/fixtures/csharp-reference.json`](../contracts/graph-universe/fixtures/csharp-reference.json).
+Sie wird bewusst nicht im allgemeinen Viewer-Katalog registriert. Der
+deterministische Vertragstest in
+[`tests/graph-validation.test.mjs`](../tests/graph-validation.test.mjs) prüft
+Schema- und Referenzgültigkeit sowie die geforderten Projekt-, Assembly-, Typ-,
+Methoden-, Metrik- und mehrstufigen Summary-Beispiele.

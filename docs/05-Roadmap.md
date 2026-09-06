@@ -37,7 +37,7 @@ Grundlagen: [Vision](01-Vision.md), [Visualisierung](02-Visualisierung.md),
 - [X] Edge Cases für leere, isolierte, parallele und unvollständige Graphen pflegen → [Edge Fixture](../contracts/graph-universe/fixtures/edge-cases.json)
 - [X] Einen Familienstammbaum als Nicht-Code-Graph ergänzen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
 - [X] Ein Firmen- oder Beteiligungsgeflecht als Nicht-Code-Graph ergänzen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [ ] Eine C#-Referenz-Fixture für den späteren Exporter spezifizieren und anlegen → [07](07-CSharp-Referenzgraph.md)
+- [X] Eine C#-Referenz-Fixture für den späteren Exporter spezifizieren und anlegen → [07](07-CSharp-Referenzgraph.md)
 
 ## Phase 3 – Schema-gesteuerter Viewer
 
