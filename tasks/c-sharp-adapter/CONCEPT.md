@@ -296,29 +296,46 @@ beide Werte in diesem Projekt absichtlich wenig unterscheidend. Eine Methode
 oder Klasse soll daher nicht allein wegen mehr Zeilen oder etwas höherer
 Komplexität größer erscheinen.
 
-Der erste fachliche Kandidat für Bedeutung und Größe ist strukturelle
-Relevanz aus dem eigenen Graphen:
+Die v1-Entscheidung für Bedeutung und Größe ist strukturelle Relevanz aus dem
+eigenen Graphen:
 
 - `fanIn` und `fanOut` zählen direkte eingehende und ausgehende Beziehungen,
 - `weightedFanIn` und `weightedFanOut` berücksichtigen Beziehungstyp und
   aggregierte Aufruf-/Referenzhäufigkeit,
-- `pageRank` oder ein vergleichbarer Einflusswert bewertet Nodes, die von
-  vielen wichtigen eigenen Nodes erreicht werden,
+- `pageRank` bewertet Nodes, die von vielen wichtigen eigenen Nodes erreicht
+  werden,
 - `betweenness` kann Brücken zwischen ansonsten getrennten Bereichen
   sichtbar machen,
 - `importance` ist ein benannter, dokumentierter abgeleiteter Wert, den ein
   View-Profil auf die visuelle Größe abbilden darf.
 
-Diese Werte müssen getrennt nach fachlicher Ebene sinnvoll aggregiert werden:
-Die Relevanz einer Klasse entsteht aus ihren Memberbeziehungen und direkten
-Typbeziehungen; die Relevanz eines Namespace entsteht aus den enthaltenen
-Typen und den Summary-Links. Eine Methode wird nicht automatisch nur deshalb
-groß, weil ihre Klasse wichtig ist. Der Adapter liefert Roh- und abgeleitete
-Metriken mit Definitionen, der Viewer entscheidet über die Darstellung.
+Die Berechnung erfolgt getrennt für Member, Typen und Namespaces. Für Typen
+werden Memberbeziehungen auf Typbeziehungen aggregiert; für Namespaces werden
+Typbeziehungen auf Namespacebeziehungen aggregiert. Eine Methode wird nicht
+automatisch nur deshalb groß, weil ihre Klasse wichtig ist. Die Werte sind
+innerhalb einer Node-Ebene vergleichbar, aber nicht als absolute Größen über
+verschiedene Ebenen hinweg zu lesen.
 
-Die konkrete Formel, Normalisierung und Behandlung von Zyklen werden als
-eigene Entscheidung mit kleinen Referenzgraphen getestet. Ein einzelner
-unbenannter `weight`-Wert ist dafür nicht ausreichend.
+Für die v1 gilt folgende deterministische Berechnung:
+
+- `calls` und `constructs` erhalten das Beziehungsgewicht `3`.
+- `inherits`, `implements` und `overrides` erhalten das Beziehungsgewicht `2`.
+- `reads`, `writes` und `uses-type` erhalten das Beziehungsgewicht `1`.
+- Wiederholte Aufrufe oder Zugriffe erhöhen die aggregierte Beziehungshäufigkeit.
+- `contains`, `declares`, Summary-Links, Projekt- und Assemblyreferenzen
+  beeinflussen die Relevanz nicht.
+- Der Ebenenwert `importance` ist `0.7 * pageRankNormalized + 0.3 *
+  weightedFanInNormalized` und liegt im Intervall `[0, 1]`.
+- `weightedFanInNormalized` basiert auf `log1p(weightedFanIn)`. Beide Anteile
+  werden je Node-Ebene robust über das 5. und 95. Perzentil auf `[0, 1]`
+  geklemmt. Bei fehlender Streuung erhalten gleichartige Werte einen stabilen
+  neutralen Wert.
+
+PageRank behandelt Zyklen nach der üblichen iterativen Berechnung; die
+Konvergenzgrenze und die maximale Iterationszahl sind technische
+Implementierungsdetails und müssen deterministisch festgelegt werden. Der
+Adapter liefert die Roh- und abgeleiteten Metriken mit Definitionen, der
+Viewer entscheidet über die Darstellung.
 
 ## Technische Zielarchitektur
 

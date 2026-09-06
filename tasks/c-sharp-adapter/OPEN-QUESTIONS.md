@@ -35,9 +35,9 @@ als Entscheidungslog erhalten.
   Detaildaten zum Wiederfinden. Keine absoluten Pfade in IDs oder sichtbaren
   Labels.
 - [X] Metrikrichtung: LOC und Komplexität sind Detailwerte, keine primäre
-  Größenmetrik. `fanIn`, `fanOut`, `callCount`/gewichtete Grade und PageRank
-  bilden zunächst die Grundlage für `importance`; Betweenness bleibt optional
-  und nachgelagert.
+  Größenmetrik. `importance` wird je Node-Ebene aus 70 Prozent PageRank und
+  30 Prozent logarithmisch normalisiertem gewichteten `fanIn` gebildet.
+  Betweenness bleibt optional und nachgelagert.
 - [X] Schema-Kopplung: Die CLI validiert jede erzeugte Ausgabe selbst gegen
   `contracts/graph-universe/schema/graph-universe.schema.json`.
 - [X] Teststruktur: zunächst ein Testprojekt mit fachlich getrennten
@@ -51,11 +51,17 @@ als Entscheidungslog erhalten.
 
 ### 1. Relevanz- und Größenmetriken
 
-- [ ] Genaue Formel und Normalisierung für `importance` festlegen.
-- [X] PageRank wird zunächst gegenüber Betweenness bevorzugt und mit `fanIn`,
-  `fanOut` und Beziehungshäufigkeit ergänzt.
-- [ ] Getrennte Berechnung für Methoden, Typen und Namespaces sowie die
-  Aggregation über Summary-Links festlegen.
+- [X] Genaue Formel und Normalisierung für `importance`: getrennte Berechnung
+  für Member, Typen und Namespaces; Beziehungseffekte mit den Gewichten 3 für
+  `calls`/`constructs`, 2 für `inherits`/`implements`/`overrides` und 1 für
+  `reads`/`writes`/`uses-type`; robuste 5./95.-Perzentil-Normalisierung auf
+  `[0, 1]`.
+- [X] PageRank wird zunächst gegenüber Betweenness bevorzugt und mit
+  gewichteter Eingangsrelevanz sowie Beziehungshäufigkeit kombiniert.
+- [X] Die Berechnung erfolgt getrennt für Methoden/Member, Typen und
+  Namespaces. Memberbeziehungen werden für Typen und Typbeziehungen für
+  Namespaces aggregiert. `contains`, `declares`, Summary-Links sowie Projekt-
+  und Assemblyreferenzen beeinflussen die Relevanz nicht.
 - [ ] Entscheiden, welche zusätzlichen Detailwerte im ersten vollständigen
   Release geliefert werden: etwa `loc`, Komplexität, direkte/gewichtete Grade,
   `callCount`, Anzahl referenzierender Projekte, Anzahl erreichbarer eigener
