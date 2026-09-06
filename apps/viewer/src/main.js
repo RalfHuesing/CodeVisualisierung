@@ -47,7 +47,6 @@ const detailsDescription = document.querySelector("#details-description");
 const legendNodeMetric = document.querySelector("#legend-node-metric");
 const legendLinkMetric = document.querySelector("#legend-link-metric");
 const legendKinds = document.querySelector("#legend-kinds");
-const accessibleNodes = document.querySelector("#accessible-nodes");
 const nodeCount = document.querySelector("#node-count");
 const linkCount = document.querySelector("#link-count");
 const selectedDetails = document.querySelector("#selected-node-details");
@@ -174,7 +173,6 @@ function showGraph(graph, sourceName) {
   nodeCount.textContent = String(graph.nodes.length);
   linkCount.textContent = String(graph.links.length);
   updateLegend();
-  updateAccessibleNodes();
   status.textContent = getLoadStatus(graph, sourceName);
   closeDetails();
 }
@@ -335,7 +333,6 @@ function refreshGraphView() {
     clearSelection();
   }
   updateLegend();
-  updateAccessibleNodes(visibleGraph);
   const profileLabel = viewOptions.profile?.label ?? "Standard";
   status.textContent = `${visibleGraph.nodes.length} von ${currentGraph.nodes.length} Nodes sichtbar · ${profileLabel}.${getScaleStatus(currentGraph)}`;
 }
@@ -441,19 +438,6 @@ function updateLegend() {
 
 function getShapeLabel(node) {
   return getNodeVisualStyle(node, currentGraph).shape;
-}
-
-function updateAccessibleNodes(graph = currentGraph) {
-  accessibleNodes.replaceChildren();
-  graph?.nodes.forEach((node) => {
-    const item = document.createElement("li");
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = `${node.label} · ${node.kind}`;
-    button.addEventListener("click", () => showNodeDetails(node));
-    item.append(button);
-    accessibleNodes.append(item);
-  });
 }
 
 function getGraphMeta(graph, sourceName) {

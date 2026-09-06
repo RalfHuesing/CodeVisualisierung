@@ -147,13 +147,11 @@ test("filters the 3d graph without losing the source graph", async ({ page }) =>
 
   await page.locator("#node-type-filter").selectOption("method");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "8");
-  await expect(page.locator("#accessible-nodes li")).toHaveCount(8);
   await expect(page.locator("#selected-node-details")).toBeHidden();
 
   await page.locator("#reset-filters").click();
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "18");
   await page.locator("#toggle-details").click();
-  await expect(page.locator("#accessible-nodes li")).toHaveCount(18);
 });
 
 test("reports an empty but valid graph clearly", async ({ page }) => {

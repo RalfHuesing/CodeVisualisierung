@@ -51,8 +51,7 @@
   margin-top: 0.2rem;
 }
 
-.legend-list,
-.accessible-node-list ul {
+.legend-list {
   display: grid;
   gap: 0.2rem;
   margin: 0.45rem 0 0;
@@ -70,16 +69,6 @@
   width: 0.65rem;
   height: 0.65rem;
   border-radius: 50%;
-}
-
-.accessible-node-list button {
-  min-height: 1.75rem;
-  padding: 0.2rem 0.4rem;
-  border: 0;
-  color: var(--muted-foreground);
-  background: transparent;
-  font-size: 0.8rem;
-  text-align: left;
 }
 
 .details-card {
