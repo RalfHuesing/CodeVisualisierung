@@ -1,0 +1,95 @@
+{
+  "format": {
+    "name": "graph-universe",
+    "version": "1.0"
+  },
+  "nodeTypes": [
+    { "id": "group", "label": "Group", "visualRole": "container", "baseSize": 2.4, "visualToken": "group" },
+    { "id": "item", "label": "Item", "visualRole": "entity", "baseSize": 1.2, "visualToken": "item" },
+    { "id": "detail", "label": "Detail", "visualRole": "detail", "baseSize": 0.8, "visualToken": "item" }
+  ],
+  "linkTypes": [
+    { "id": "contains", "label": "Contains", "role": "containment", "visualToken": "link" },
+    { "id": "relates", "label": "Relates", "role": "relation", "visualToken": "link" },
+    { "id": "summary-relates", "label": "Summary relation", "role": "summary", "visualToken": "link" }
+  ],
+  "metricDefinitions": {
+    "importance": {
+      "label": "Importance",
+      "unit": "score",
+      "valueType": "number"
+    }
+  },
+  "viewProfiles": [
+    {
+      "id": "overview",
+      "label": "Overview",
+      "visibleNodeTypes": ["group", "item"],
+      "visibleLinkTypes": ["contains", "summary-relates"],
+      "nodeMetric": "importance",
+      "layoutProfileId": "spatial-overview"
+    },
+    {
+      "id": "detail",
+      "label": "Detail",
+      "visibleNodeTypes": ["group", "item", "detail"],
+      "visibleLinkTypes": ["contains", "relates", "summary-relates"],
+      "nodeMetric": "importance",
+      "layoutProfileId": "spatial-detail"
+    }
+  ],
+  "layoutProfiles": [
+    {
+      "id": "spatial-overview",
+      "label": "Spatial overview",
+      "groupField": "groupId",
+      "groupDistance": 48,
+      "defaultDistance": 26,
+      "containmentDistances": [
+        { "parentTypeId": "group", "childTypeId": "item", "distance": 20 },
+        { "parentTypeId": "item", "childTypeId": "detail", "distance": 12 }
+      ]
+    },
+    {
+      "id": "spatial-detail",
+      "label": "Spatial detail",
+      "groupField": "groupId",
+      "groupDistance": 64,
+      "defaultDistance": 18,
+      "containmentDistances": [
+        { "parentTypeId": "group", "childTypeId": "item", "distance": 24 },
+        { "parentTypeId": "item", "childTypeId": "detail", "distance": 10 }
+      ]
+    }
+  ],
+  "containmentRules": [
+    { "id": "group-contains-item", "linkTypeId": "contains", "parentTypeId": "group", "childTypeId": "item" },
+    { "id": "item-contains-detail", "linkTypeId": "contains", "parentTypeId": "item", "childTypeId": "detail" }
+  ],
+  "visualTokens": {
+    "group": { "kind": "node", "color": "#f59e0b", "shape": "box" },
+    "item": { "kind": "node", "color": "#38bdf8", "shape": "sphere" },
+    "link": { "kind": "link", "color": "#a78bfa", "lineStyle": "solid" }
+  },
+  "theme": { "id": "default", "fallbackToken": "item", "background": "#0b1120" },
+  "nodes": [
+    { "id": "group-north", "typeId": "group", "label": "North", "groupId": "north", "metrics": { "importance": 1 } },
+    { "id": "group-south", "typeId": "group", "label": "South", "groupId": "south", "metrics": { "importance": 0.9 } },
+    { "id": "item-a", "typeId": "item", "label": "A", "groupId": "north", "metrics": { "importance": 0.8 } },
+    { "id": "item-b", "typeId": "item", "label": "B", "groupId": "north", "metrics": { "importance": 0.6 } },
+    { "id": "item-c", "typeId": "item", "label": "C", "groupId": "south", "metrics": { "importance": 0.7 } },
+    { "id": "item-d", "typeId": "item", "label": "D", "groupId": "south", "metrics": { "importance": 0.5 } },
+    { "id": "detail-a", "typeId": "detail", "label": "A detail", "groupId": "north", "metrics": { "importance": 0.4 } },
+    { "id": "detail-c", "typeId": "detail", "label": "C detail", "groupId": "south", "metrics": { "importance": 0.3 } }
+  ],
+  "links": [
+    { "id": "contains-north-a", "source": "group-north", "target": "item-a", "typeId": "contains", "directed": true },
+    { "id": "contains-north-b", "source": "group-north", "target": "item-b", "typeId": "contains", "directed": true },
+    { "id": "contains-south-c", "source": "group-south", "target": "item-c", "typeId": "contains", "directed": true },
+    { "id": "contains-south-d", "source": "group-south", "target": "item-d", "typeId": "contains", "directed": true },
+    { "id": "contains-a-detail", "source": "item-a", "target": "detail-a", "typeId": "contains", "directed": true },
+    { "id": "contains-c-detail", "source": "item-c", "target": "detail-c", "typeId": "contains", "directed": true },
+    { "id": "relates-a-c", "source": "item-a", "target": "item-c", "typeId": "relates", "directed": false },
+    { "id": "summary-north-south", "source": "group-north", "target": "group-south", "typeId": "summary-relates", "directed": false, "summary": true, "derivedFrom": ["relates-a-c"] }
+  ]
+}

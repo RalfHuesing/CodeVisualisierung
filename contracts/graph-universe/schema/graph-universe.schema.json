@@ -17,6 +17,7 @@
     "facets": { "type": "array", "items": { "$ref": "#/$defs/facet" } },
     "filterSources": { "type": "array", "items": { "$ref": "#/$defs/filterSource" } },
     "viewProfiles": { "type": "array", "items": { "$ref": "#/$defs/viewProfile" } },
+    "layoutProfiles": { "type": "array", "items": { "$ref": "#/$defs/layoutProfile" } },
     "projections": { "type": "array", "items": { "$ref": "#/$defs/projection" } },
     "containmentRules": { "type": "array", "items": { "$ref": "#/$defs/containmentRule" } },
     "hierarchy": { "$ref": "#/$defs/hierarchy" },
@@ -68,6 +69,8 @@
         "label": { "type": "string" },
         "role": { "type": "string" },
         "visualToken": { "type": "string", "minLength": 1 },
+        "visualRole": { "type": "string" },
+        "baseSize": { "type": "number", "exclusiveMinimum": 0 },
         "directed": { "type": "boolean" }
       },
       "additionalProperties": true
@@ -106,7 +109,34 @@
         "visibleNodeTypes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
         "visibleLinkTypes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
         "nodeMetric": { "type": "string" },
-        "linkMetric": { "type": "string" }
+        "linkMetric": { "type": "string" },
+        "layoutProfileId": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "layoutProfile": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string" },
+        "groupField": { "type": "string", "minLength": 1, "default": "groupId" },
+        "groupDistance": { "type": "number", "exclusiveMinimum": 0 },
+        "defaultDistance": { "type": "number", "exclusiveMinimum": 0 },
+        "containmentDistances": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/containmentDistance" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "containmentDistance": {
+      "type": "object",
+      "required": ["parentTypeId", "childTypeId", "distance"],
+      "properties": {
+        "parentTypeId": { "type": "string", "minLength": 1 },
+        "childTypeId": { "type": "string", "minLength": 1 },
+        "distance": { "type": "number", "exclusiveMinimum": 0 }
       },
       "additionalProperties": true
     },

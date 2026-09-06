@@ -75,6 +75,7 @@ export function normalizeGraph(graph) {
     facets: graph.facets ?? [],
     filterSources: graph.filterSources ?? [],
     viewProfiles: graph.viewProfiles ?? [],
+    layoutProfiles: graph.layoutProfiles ?? [],
     projections: graph.projections ?? [],
     containmentRules: graph.containmentRules ?? [],
     hierarchy: graph.hierarchy ?? { containmentLinkTypes: [], acyclic: true },
@@ -177,11 +178,13 @@ function validateNodeTypeReferences(nodes, nodeTypeIds, errors) {
 function validateDefinitionReferences(graph, nodeTypeIds, linkTypeIds, errors) {
   const facetIds = validateDefinitions(graph.facets, "facets", errors);
   const profileIds = validateDefinitions(graph.viewProfiles, "viewProfiles", errors);
+  const layoutProfileIds = validateDefinitions(graph.layoutProfiles, "layoutProfiles", errors);
   const metricIds = graph.metricDefinitions === undefined
     ? null
     : new Set(Object.keys(graph.metricDefinitions));
   validateFacetReferences(graph, facetIds, errors);
-  validateProfileReferences(graph, profileIds, nodeTypeIds, linkTypeIds, metricIds, errors);
+  validateProfileReferences(graph, profileIds, layoutProfileIds, nodeTypeIds, linkTypeIds, metricIds, errors);
+  validateLayoutProfileReferences(graph, nodeTypeIds, errors);
   validateProjectionReferences(graph, profileIds, linkTypeIds, errors);
   validateContainmentReferences(graph, nodeTypeIds, linkTypeIds, errors);
   validateHierarchyReferences(graph, linkTypeIds, errors);
@@ -247,7 +250,7 @@ function validateFacetReferences(graph, facetIds, errors) {
   });
 }
 
-function validateProfileReferences(graph, profileIds, nodeTypeIds, linkTypeIds, metricIds, errors) {
+function validateProfileReferences(graph, profileIds, layoutProfileIds, nodeTypeIds, linkTypeIds, metricIds, errors) {
   if (profileIds === null) {
     return;
   }
@@ -257,6 +260,21 @@ function validateProfileReferences(graph, profileIds, nodeTypeIds, linkTypeIds, 
     validateReferenceList(profile.visibleLinkTypes, linkTypeIds, `/viewProfiles/${index}/visibleLinkTypes`, "link type", errors);
     validateReference(profile.nodeMetric, metricIds, `/viewProfiles/${index}/nodeMetric`, "metric", errors);
     validateReference(profile.linkMetric, metricIds, `/viewProfiles/${index}/linkMetric`, "metric", errors);
+    validateReference(profile.layoutProfileId, layoutProfileIds, `/viewProfiles/${index}/layoutProfileId`, "layout profile", errors);
+  });
+}
+
+function validateLayoutProfileReferences(graph, nodeTypeIds, errors) {
+  if (graph.layoutProfiles === undefined) {
+    return;
+  }
+
+  graph.layoutProfiles.forEach((profile, profileIndex) => {
+    (profile.containmentDistances ?? []).forEach((distance, distanceIndex) => {
+      const basePath = `/layoutProfiles/${profileIndex}/containmentDistances/${distanceIndex}`;
+      validateReference(distance.parentTypeId, nodeTypeIds, `${basePath}/parentTypeId`, "node type", errors);
+      validateReference(distance.childTypeId, nodeTypeIds, `${basePath}/childTypeId`, "node type", errors);
+    });
   });
 }
 

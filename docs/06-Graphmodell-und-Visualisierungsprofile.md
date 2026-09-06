@@ -23,6 +23,8 @@ fachliche Bedeutung wird zusätzlich durch Definitionen im Dokument beschrieben:
   Verwendungsmöglichkeiten.
 - `facets` beschreibt Werte, nach denen der Viewer Filter erzeugen kann.
 - `viewProfiles` beschreibt fachliche Detailstufen und sichtbare Typen.
+- `layoutProfiles` beschreibt deklarative räumliche Abstände und
+  containment-spezifische Regeln.
 - `projections` beschreibt explizite oder ableitbare Beziehungen zwischen
   Detailstufen.
 - `theme` beziehungsweise `visualTokens` beschreibt symbolische Farben,
@@ -52,6 +54,11 @@ erlaubt: Tags, benannte Metriken, Attribute, Gruppen, Quellenangaben und
 optionale Positionen. Eine Hierarchie wird nicht durch verschachtelte JSON-
 Objekte erzwungen. Sie wird über flache Nodes und deklarierte
 Containment-Beziehungen modelliert.
+
+`visualRole` und `baseSize` sind optionale typabhängige Visualisierungsdaten.
+`visualRole` benennt die Rolle eines Typs, `baseSize` seine positive
+Ausgangsgröße. Beides bleibt von Rohmetriken und konkreten Renderer-Effekten
+getrennt.
 
 ## Link-Typen
 
@@ -125,6 +132,30 @@ Ein `viewProfile` kann eine verständliche Startansicht beschreiben:
 Der Viewer darf zusätzliche freie Filter anbieten. Ein Profil legt eine
 Darstellungsentscheidung fest, nicht eine neue Datenquelle und keine neue
 Graphstruktur.
+
+## Spatial-Profile
+
+Ein `layoutProfile` beschreibt räumliche Leitplanken, ohne einen konkreten
+Renderer oder Algorithmus vorzuschreiben:
+
+```json
+{
+  "id": "overview-space",
+  "groupField": "groupId",
+  "groupDistance": 48,
+  "defaultDistance": 26,
+  "containmentDistances": [
+    { "parentTypeId": "group", "childTypeId": "item", "distance": 20 }
+  ]
+}
+```
+
+`groupField` ist ein Punktpfad am Node und fällt ohne Angabe auf `groupId`
+zurück. `groupDistance`, `defaultDistance` und jede
+`containmentDistances.distance` sind positive Zahlen. Ein `viewProfile` kann
+mit `layoutProfileId` genau ein solches Profil referenzieren. Zusätzliche
+optionale Layoutfelder bleiben für spätere fachliche Regeln offen und werden
+vom generischen Vertrag toleriert.
 
 ## Visualisierungstokens
 

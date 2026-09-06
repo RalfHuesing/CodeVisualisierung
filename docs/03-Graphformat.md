@@ -25,6 +25,8 @@ Jedes Graphdokument enthält mindestens:
 `format.version` ist die Version des Datenvertrags, nicht die Version des
 Viewers. `nodeTypes` und `linkTypes` sind, sofern vorhanden, ausschließlich
 Arrays deklarativer Definitionen. Jede Definition trägt ihre ID im Feld `id`.
+Node-Typen können mit `visualRole` und einer positiven `baseSize` eine
+fachliche Darstellungsrolle und eine typabhängige Basisgröße deklarieren.
 
 ## Semantik
 
@@ -36,6 +38,10 @@ Arrays deklarativer Definitionen. Jede Definition trägt ihre ID im Feld `id`.
 - `meta.source` dokumentiert den Erzeuger, ohne ihn zur Voraussetzung des
   Viewers zu machen.
 - `metricDefinitions` erklärt optionale Metriknamen, Einheiten und Typen.
+- `layoutProfiles` beschreibt deklarative räumliche Regeln: `groupField` ist
+  ein Punktpfad am Node und verwendet standardmäßig `groupId`, während
+  `groupDistance`, `defaultDistance` und `containmentDistances` positive
+  Abstände ausdrücken.
 
 ### Nodes
 
@@ -60,7 +66,8 @@ Arrays deklarativer Definitionen. Jede Definition trägt ihre ID im Feld `id`.
 ### Optionale deklarative Bereiche
 
 Das Schema unterstützt zusätzlich `facets`, `filterSources`, `viewProfiles`,
-`projections`, `containmentRules`, `hierarchy`, `visualTokens` und `theme`.
+`layoutProfiles`, `projections`, `containmentRules`, `hierarchy`,
+`visualTokens` und `theme`.
 Diese Bereiche beschreiben Daten und Darstellungsregeln explizit. Der Viewer
 errät keine fachliche Bedeutung aus unbekannten Feldnamen.
 
@@ -74,6 +81,9 @@ errät keine fachliche Bedeutung aus unbekannten Feldnamen.
 6. Definierte Node- und Linktypen sind Arrays mit eindeutigen `id`-Feldern.
 7. Alle numerischen Metriken und Gewichte sind endlich.
 8. Fehlende optionale Werte sind nicht dasselbe wie `0`.
+9. `viewProfiles.layoutProfileId` und die Typ-IDs in
+   `layoutProfiles.containmentDistances` referenzieren definierte IDs.
+10. Alle deklarierten Layoutabstände sind größer als `0`.
 
 ## Bewusste Abgrenzungen
 

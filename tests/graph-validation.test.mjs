@@ -9,6 +9,7 @@ import edgeCasesFixture from "../contracts/graph-universe/fixtures/edge-cases.js
 import familyFixture from "../contracts/graph-universe/fixtures/family.json" with { type: "json" };
 import companyFixture from "../contracts/graph-universe/fixtures/company.json" with { type: "json" };
 import csharpReferenceFixture from "../contracts/graph-universe/fixtures/csharp-reference.json" with { type: "json" };
+import spatialFixture from "../contracts/graph-universe/fixtures/spatial.json" with { type: "json" };
 
 const fixturePath = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -177,6 +178,66 @@ describe("validateGraph", () => {
       message: "must be number"
     });
   });
+
+});
+
+describe("spatial layout definitions", () => {
+  it("accepts the spatial fixture with declarative layout data", () => {
+    expect(validateGraph(spatialFixture)).toEqual({ valid: true, errors: [] });
+    expect(spatialFixture.nodes.map((node) => node.groupId)).toEqual(expect.arrayContaining(["north", "south"]));
+    expect(spatialFixture.links.find((link) => link.summary)).toMatchObject({ summary: true });
+    expect(spatialFixture.nodeTypes).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: "group", visualRole: "container", baseSize: 2.4 }),
+      expect.objectContaining({ id: "item", visualRole: "entity", baseSize: 1.2 })
+    ]));
+    expect(spatialFixture.viewProfiles).toEqual(expect.arrayContaining([
+      expect.objectContaining({ layoutProfileId: "spatial-overview" }),
+      expect.objectContaining({ layoutProfileId: "spatial-detail" })
+    ]));
+    expect(spatialFixture.layoutProfiles[0]).toMatchObject({ groupDistance: 48 });
+    expect(spatialFixture.layoutProfiles[0].containmentDistances).toHaveLength(2);
+  });
+
+  it("rejects unknown layout profile references", () => {
+    const graph = structuredClone(spatialFixture);
+    graph.viewProfiles[0].layoutProfileId = "missing-layout";
+
+    expect(validateGraph(graph).errors).toContainEqual({
+      kind: "semantic",
+      path: "/viewProfiles/0/layoutProfileId",
+      message: "layout profile 'missing-layout' does not reference a defined layout profile."
+    });
+  });
+
+  it("rejects unknown containment distance type references", () => {
+    const graph = structuredClone(spatialFixture);
+    graph.layoutProfiles[0].containmentDistances[0].childTypeId = "missing-type";
+
+    expect(validateGraph(graph).errors).toContainEqual({
+      kind: "semantic",
+      path: "/layoutProfiles/0/containmentDistances/0/childTypeId",
+      message: "node type 'missing-type' does not reference a defined node type."
+    });
+  });
+
+  it("rejects non-positive layout distances", () => {
+    const graph = structuredClone(spatialFixture);
+    graph.layoutProfiles[0].containmentDistances[0].distance = 0;
+
+    expect(validateGraph(graph).errors).toContainEqual({
+      kind: "schema",
+      path: "/layoutProfiles/0/containmentDistances/0/distance",
+      message: "must be > 0"
+    });
+  });
+
+  it("allows unknown optional layout fields", () => {
+    const graph = structuredClone(spatialFixture);
+    graph.layoutProfiles[0].futureLayoutHint = { packing: "radial" };
+    graph.layoutProfiles[0].containmentDistances[0].futureDistanceMode = "soft";
+
+    expect(validateGraph(graph)).toEqual({ valid: true, errors: [] });
+  });
 });
 
 describe("graph parsing", () => {
@@ -273,5 +334,12 @@ describe("graph normalization", () => {
       token: graph.visualTokens.node,
       usedFallback: true
     });
+  });
+
+  it("defaults missing layout profiles to an empty array", () => {
+    const graph = structuredClone(validGraph);
+    delete graph.layoutProfiles;
+
+    expect(normalizeGraph(graph).layoutProfiles).toEqual([]);
   });
 });
