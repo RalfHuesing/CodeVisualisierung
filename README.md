@@ -2,6 +2,20 @@
 
 Quellenneutraler Browser-Viewer für vernetzte Daten: Ein versioniertes Graph-JSON wird lokal im Browser geladen und als interaktives Universum visualisiert.
 
+> **Projekt eingestellt**
+>
+> Die Weiterentwicklung dieses Projekts wird beendet. Die Visualisierung sieht
+> eindrucksvoll aus, liefert für große Codebasen aber keinen ausreichenden
+> praktischen Überblick und hilft insbesondere nicht zuverlässig dabei,
+> Architektur- oder Konzeptdrift zu erkennen. Dichte Graphen mit tausenden
+> Nodes und Kanten sind als Gesamtansicht nicht sinnvoll auswertbar; gezielte
+> MCP-Abfragen, Metriken und Audit-Reports sind für diese Fragen besser
+> geeignet.
+>
+> Der bestehende Stand bleibt als technisches Experiment, Demo und historische
+> Referenz erhalten. Ein Screenshot des letzten visuellen Stands ist unter
+> [docs/screenshot.png](docs/screenshot.png) abgelegt.
+
 Der Name des Projekts kommt aus dem ersten Anwendungsfall. Die Visualisierung soll jedoch nicht auf C# beschränkt bleiben.
 
 ## Aktueller Fokus
