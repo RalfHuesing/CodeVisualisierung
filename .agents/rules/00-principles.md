@@ -33,6 +33,12 @@
 - DRY gilt für gleiche Bedeutung; ähnliche, aber unabhängige Abläufe müssen nicht künstlich vereinheitlicht werden.
 - Dead Code, unreferenzierte Exporte, ungenutzte Styles und auskommentierte Altimplementierungen werden entfernt.
 
+## Greenfield und Versionen
+
+- Das Repository ist Greenfield: keine Migrationen, Kompatibilitätsschichten oder parallelen Alt-/Neu-Versionen bauen.
+- Schemaänderungen bleiben in v1; bei einer Änderung wird der kanonische Vertrag direkt angepasst.
+- Veraltete Fragmente, Übergangscode und nicht mehr benötigte Fixtures werden rigoros entfernt; keine Leichen mitschleppen.
+
 ## Regelqualität
 
 - Regeln bleiben kurz, konkret und prüfbar.
