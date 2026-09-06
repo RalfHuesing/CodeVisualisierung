@@ -19,3 +19,8 @@ werden nicht an den Hetzner-Webspace hochgeladen.
 Der Konzeptvertrag ist freigegeben; die Umsetzung ist noch nicht gestartet.
 Die geschlossenen Richtungsentscheidungen stehen im
 [Entscheidungslog](OPEN-QUESTIONS.md).
+
+## Späterer Aufruf
+
+> Setze `tasks/graph-package-loading` als Orchestrator um und bearbeite den
+> vollständigen Task.
