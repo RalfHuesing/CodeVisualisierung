@@ -6,14 +6,57 @@ namespace CodeVisualisierung.CSharp.Graph;
 public sealed class GraphBuilder
 {
     private readonly Dictionary<string, GraphNode> nodes = new(StringComparer.Ordinal);
-    private readonly Dictionary<string, GraphLink> links = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, LinkEntry> links = new(StringComparer.Ordinal);
 
     public void AddNode(GraphNode node) => nodes.TryAdd(node.Id, node);
 
     public void AddLink(string typeId, string source, string target)
     {
         var id = $"link:{typeId}:{source}:{target}";
-        links.TryAdd(id, new GraphLink { Id = id, Source = source, Target = target, TypeId = typeId });
+        links.TryAdd(id, new LinkEntry(new GraphLink { Id = id, Source = source, Target = target, TypeId = typeId }));
+    }
+
+    public void AddDeclarationLink(string source, string target) => AddLink("declares", source, target);
+
+    public void AddRelationLink(string typeId, string source, string target, int relationshipWeight)
+    {
+        var id = $"link:{typeId}:{source}:{target}";
+        if (!links.TryGetValue(id, out var entry))
+        {
+            entry = new LinkEntry(new GraphLink
+            {
+                Id = id,
+                Source = source,
+                Target = target,
+                TypeId = typeId,
+                Weight = relationshipWeight,
+                Metrics = new Dictionary<string, double>
+                {
+                    ["occurrences"] = 1,
+                    ["relationshipWeight"] = relationshipWeight
+                }
+            });
+            links.Add(id, entry);
+            return;
+        }
+
+        var metrics = new Dictionary<string, double>(entry.Link.Metrics, StringComparer.Ordinal)
+        {
+            ["occurrences"] = entry.Link.Metrics.GetValueOrDefault("occurrences") + 1,
+            ["relationshipWeight"] = entry.Link.Metrics.GetValueOrDefault("relationshipWeight") + relationshipWeight
+        };
+        var updatedLink = new GraphLink
+        {
+            Id = entry.Link.Id,
+            Source = entry.Link.Source,
+            Target = entry.Link.Target,
+            TypeId = entry.Link.TypeId,
+            Directed = entry.Link.Directed,
+            Weight = metrics["relationshipWeight"],
+            Metrics = metrics,
+            Attributes = entry.Link.Attributes
+        };
+        links[id] = entry with { Link = updatedLink };
     }
 
     public GraphDocument Build()
@@ -23,7 +66,7 @@ public sealed class GraphBuilder
             NodeTypes = NodeTypes.ToList(),
             LinkTypes = LinkTypes.ToList(),
             Nodes = nodes.Values.OrderBy(node => node.Id, StringComparer.Ordinal).ToList(),
-            Links = links.Values.OrderBy(link => link.Id, StringComparer.Ordinal).ToList()
+            Links = links.Values.Select(entry => entry.Link).OrderBy(link => link.Id, StringComparer.Ordinal).ToList()
         };
         GraphContractValidator.Validate(graph);
         return graph;
@@ -56,7 +99,21 @@ public sealed class GraphBuilder
     private static IReadOnlyList<GraphDefinition> LinkTypes { get; } =
     [
         new() { Id = "contains", Label = "Contains", Role = "containment" },
+        new() { Id = "declares", Label = "Declares", Role = "containment" },
+        new() { Id = "calls", Label = "Calls", Role = "relation" },
+        new() { Id = "constructs", Label = "Constructs", Role = "relation" },
+        new() { Id = "inherits", Label = "Inherits", Role = "relation" },
+        new() { Id = "implements", Label = "Implements", Role = "relation" },
+        new() { Id = "overrides", Label = "Overrides", Role = "relation" },
+        new() { Id = "reads", Label = "Reads", Role = "relation" },
+        new() { Id = "writes", Label = "Writes", Role = "relation" },
+        new() { Id = "uses-type", Label = "Uses type", Role = "relation" },
+        new() { Id = "returns-type", Label = "Returns type", Role = "relation" },
+        new() { Id = "parameter-type", Label = "Parameter type", Role = "relation" },
         new() { Id = "project-reference", Label = "Project reference", Role = "relation" },
-        new() { Id = "references-assembly", Label = "Assembly reference", Role = "relation" }
+        new() { Id = "references-assembly", Label = "Assembly reference", Role = "relation" },
+        new() { Id = "tests", Label = "Tests", Role = "relation" }
     ];
+
+    private sealed record LinkEntry(GraphLink Link);
 }

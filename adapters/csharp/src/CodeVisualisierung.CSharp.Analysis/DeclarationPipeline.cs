@@ -39,16 +39,7 @@ public static class CSharpSymbolIdentity
         ArgumentException.ThrowIfNullOrWhiteSpace(projectId);
         ArgumentNullException.ThrowIfNull(symbol);
 
-        var signature = GetCanonicalSignature(symbol);
-        if (symbol is ITypeParameterSymbol typeParameter)
-        {
-            var owner = typeParameter.ContainingSymbol is null
-                ? string.Empty
-                : GetCanonicalSignature(typeParameter.ContainingSymbol);
-            signature = $"{owner}::{signature}#{typeParameter.Ordinal}";
-        }
-
-        return $"{nodeTypeId}:{projectId}:{signature}";
+        return $"{nodeTypeId}:{projectId}:{GetCanonicalNodeSignature(symbol)}";
     }
 
     /// <summary>Returns the fully qualified Roslyn display used as a stable signature.</summary>
@@ -60,6 +51,19 @@ public static class CSharpSymbolIdentity
         if (symbol is IMethodSymbol { MethodKind: MethodKind.PropertyGet or MethodKind.PropertySet or MethodKind.EventAdd or MethodKind.EventRemove or MethodKind.EventRaise } accessor)
             return $"{GetCanonicalSignature(accessor.AssociatedSymbol!)}.accessor:{accessor.MethodKind}";
         return symbol.ToDisplayString(CanonicalFormat);
+    }
+
+    /// <summary>Returns the exact signature suffix used by the emitted node ID.</summary>
+    internal static string GetCanonicalNodeSignature(ISymbol symbol)
+    {
+        ArgumentNullException.ThrowIfNull(symbol);
+        if (symbol is not ITypeParameterSymbol typeParameter)
+            return GetCanonicalSignature(symbol);
+
+        var owner = typeParameter.ContainingSymbol is null
+            ? string.Empty
+            : GetCanonicalSignature(typeParameter.ContainingSymbol);
+        return $"{owner}::{GetCanonicalSignature(typeParameter)}#{typeParameter.Ordinal}";
     }
 
     /// <summary>Returns a fully qualified name without a member parameter list.</summary>
@@ -155,6 +159,9 @@ internal sealed class DeclarationAccumulator
 
     public string ProjectId { get; }
 
+    internal IEnumerable<(ISymbol Symbol, string Id, IReadOnlyList<SourcePosition> Positions)> ExportedEntries =>
+        entries.Values.Select(entry => (entry.Symbol, entry.Id, (IReadOnlyList<SourcePosition>)entry.Positions));
+
     public DeclarationAccumulator(string projectId)
     {
         ProjectId = projectId;
@@ -209,7 +216,13 @@ internal sealed class DeclarationAccumulator
     {
         var parentId = GetParentId(entry.Symbol);
         if (parentId is not null)
+        {
             builder.AddLink("contains", parentId, entry.Id);
+            builder.AddDeclarationLink(parentId, entry.Id);
+        }
+
+        foreach (var position in entry.Positions.Distinct())
+            builder.AddDeclarationLink($"file:{ProjectId}:{position.Path}", entry.Id);
     }
 
     private string? GetParentId(ISymbol symbol)

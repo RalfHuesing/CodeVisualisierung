@@ -47,6 +47,9 @@ public sealed class GraphLink
     public required string Target { get; init; }
     public required string TypeId { get; init; }
     public bool Directed { get; init; } = true;
+    public double? Weight { get; init; }
+    public Dictionary<string, double> Metrics { get; init; } = [];
+    public Dictionary<string, object?> Attributes { get; init; } = [];
 }
 
 /// <summary>Deterministic JSON serialization for graph documents.</summary>

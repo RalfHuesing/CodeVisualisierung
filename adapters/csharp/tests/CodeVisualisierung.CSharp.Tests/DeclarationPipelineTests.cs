@@ -172,7 +172,8 @@ public sealed class DeclarationPipelineTests
         Assert.All(overloads, node => Assert.Contains("Convert(", (string)node.Attributes["signature"]!));
         var generic = Assert.Single(result.Graph.Nodes, node => node.TypeId == "method" && node.Label == "Echo");
         Assert.Contains("Echo<T>", (string)generic.Attributes["signature"]!);
-        var typeParameter = Assert.Single(result.Graph.Nodes, node => node.TypeId == "type-parameter" && node.Label == "T");
+        var typeParameter = Assert.Single(result.Graph.Nodes, node => node.TypeId == "type-parameter"
+            && node.Id.Contains("Echo<T>(T)::T#0", StringComparison.Ordinal));
         Assert.Contains("Echo<T>(T)::T#0", typeParameter.Id);
     }
 

@@ -38,12 +38,14 @@ Delegated roles:
 Die vorbereitende C#-Grundlage ist vorhanden: Solution, CLI-Projekt,
 Testprojekt, gemeinsame .NET-/Paketvorgaben, AiNetLinter-Profil und die
 repo-lokale Temp-Testinfrastruktur. Die fachliche Vertragsklärung in Slice 0
-ist abgeschlossen; Slice 3 ist umgesetzt.
+ist abgeschlossen. Slice 4 ist im Arbeitsbaum implementiert, befindet sich
+aber noch im zweiten und letzten Korrekturzyklus und bleibt bis zum Orchestrator-Commit
+offen.
 
 Workspace-Inventargraph, Graph-/Contract-Schichten und vertragskonforme
 JSON-Ausgabe sind in Slice 2 umgesetzt. Slice 3 ergänzt die Roslyn-
-Deklarationsauswertung; semantische Beziehungen und Metriken bleiben für die
-abhängigen Slices offen.
+Deklarationsauswertung und Slice 4 die semantischen Beziehungen; Metriken und
+Projektionen bleiben für die abhängigen Slices offen.
 
 ## Externer Vorgänger: Viewer-Layoutvertrag
 
@@ -165,21 +167,22 @@ Checks: `DeclarationPipelineTests` mit ID-/Mapping-Prüfung,
 
 Abhängigkeit: Slice 2.
 
-## [ ] Slice 4 – Semantische Beziehungen
+## [X] Slice 4 – Semantische Beziehungen
 
 Ziel: Beziehungen aus Syntax und Semantic Model auflösen und korrekt
 referenzieren.
 
 Akzeptanzkriterien:
 
-- [ ] `calls`, `constructs`, `inherits`, `implements`, `overrides`, `reads`,
+- [X] `calls`, `constructs`, `inherits`, `implements`, `overrides`, `reads`,
   `writes`, Typverwendungen und Projekt-/Assemblyreferenzen werden gemäß der
   beschlossenen Zielmenge geliefert.
-- [ ] Mehrere Aufrufe derselben Beziehung werden dedupliziert oder über eine
-  benannte Metrik aggregiert; die Semantik ist dokumentiert.
-- [ ] Nicht auflösbare oder compilerbedingt unvollständige Symbole werden nicht
-  in ungültige Links umgewandelt.
-- [ ] Jedes Linkziel existiert und die Richtung ist fachlich korrekt.
+- [X] Mehrere Aufrufe derselben Beziehung werden dedupliziert und über die
+  benannten Linkmetriken `occurrences` und `relationshipWeight` aggregiert;
+  die Semantik ist dokumentiert.
+- [X] Nicht auflösbare oder compilerbedingt unvollständige Symbole werden nicht
+  in ungültige Links umgewandelt und in der Summary gezählt.
+- [X] Jedes Linkziel existiert und die Richtung ist fachlich korrekt.
 
 Erlaubte Pfade: `adapters/csharp/**`, `contracts/graph-universe/**` nur für
 Fixtures, `tasks/c-sharp-adapter/**`.

@@ -65,13 +65,27 @@ public sealed class WorkspaceAnalysis
         var builder = new GraphBuilder();
         builder.AddNode(new GraphNode { Id = "solution:root", TypeId = "solution", Label = Path.GetFileName(fullInputPath) });
         var projects = GetProjects(solution);
-        var projectIds = projects.ToDictionary(project => project.Id, project => CreateProjectId(project, rootPath));
+        var projectIndex = CreateProjectIndex(projects, rootPath);
         var counters = new AnalysisCounters();
+        var analyzedProjects = new List<AnalyzedProject>();
         foreach (var project in projects)
         {
-            var context = new ProjectAnalysisContext(projects, projectIds, rootPath, builder, counters, diagnostics);
-            await AnalyzeProjectAsync(project, context, cancellationToken);
+            var context = new ProjectAnalysisContext(projectIndex, rootPath, builder, counters, diagnostics);
+            var analyzedProject = await AnalyzeProjectAsync(project, context, cancellationToken);
+            if (analyzedProject is not null)
+                analyzedProjects.Add(analyzedProject);
         }
+
+        var exportedNodes = new ExportedNodeIndex();
+        foreach (var analyzedProject in analyzedProjects)
+        {
+            analyzedProject.Declarations.Emit(builder);
+            foreach (var entry in analyzedProject.Declarations.ExportedEntries)
+                exportedNodes.Add(analyzedProject.ProjectId, entry.Symbol, entry.Id);
+        }
+
+        foreach (var analyzedProject in analyzedProjects)
+            EmitRelations(analyzedProject, exportedNodes, builder, counters);
 
         var graph = builder.Build();
         return new AnalysisResult(graph, counters.CreateSummary(inputKind, projects.Length, graph, diagnostics));
@@ -105,30 +119,30 @@ public sealed class WorkspaceAnalysis
     private static Project[] GetProjects(Solution solution) => solution.Projects
         .OrderBy(project => project.FilePath ?? project.Name, StringComparer.Ordinal).ToArray();
 
-    private static async Task AnalyzeProjectAsync(Project project, ProjectAnalysisContext context, CancellationToken cancellationToken)
+    private static async Task<AnalyzedProject?> AnalyzeProjectAsync(Project project, ProjectAnalysisContext context, CancellationToken cancellationToken)
     {
         if (project.FilePath is null)
         {
             context.Counters.ProjectFailed();
-            return;
+            return null;
         }
 
-        var projectId = context.ProjectIds[project.Id];
-        var assemblyName = project.AssemblyName ?? project.Name;
-        var assemblyId = $"assembly:{projectId}:{assemblyName}";
-        var moduleId = $"module:{projectId}:{assemblyName}";
+        var projectInfo = context.ProjectIndex[project.Id];
+        var projectId = projectInfo.ProjectId;
+        var assemblyId = projectInfo.AssemblyId;
+        var moduleId = projectInfo.ModuleId;
         var declarations = new DeclarationAccumulator(projectId);
+        var relations = new List<RelationCandidate>();
         AddProjectNodes(project, projectId, assemblyId, moduleId, context.RootPath, context.Builder);
-        AddProjectReferences(project, context.Projects, context.ProjectIds, projectId, assemblyId, context.Builder);
+        AddProjectReferences(project, context.ProjectIndex, projectId, assemblyId, context.Builder);
         foreach (var document in project.Documents.OrderBy(document => document.FilePath, StringComparer.Ordinal))
         {
-            var documentContext = new DocumentAnalysisContext(project, projectId, moduleId, context, declarations);
+            var documentContext = new DocumentAnalysisContext(project, projectId, moduleId, context, declarations, relations);
             await AnalyzeDocumentAsync(document, documentContext, cancellationToken);
         }
 
-        declarations.Emit(context.Builder);
-
         context.Counters.ProjectAnalyzed();
+        return new AnalyzedProject(project, projectId, declarations, relations);
     }
 
     private static void AddProjectNodes(Project project, string projectId, string assemblyId, string moduleId, string rootPath, GraphBuilder builder)
@@ -143,22 +157,42 @@ public sealed class WorkspaceAnalysis
         builder.AddLink("contains", "solution:root", projectId);
         builder.AddLink("contains", projectId, assemblyId);
         builder.AddLink("contains", assemblyId, moduleId);
+        builder.AddDeclarationLink("solution:root", projectId);
+        builder.AddDeclarationLink(projectId, assemblyId);
+        builder.AddDeclarationLink(assemblyId, moduleId);
     }
 
-    private static void AddProjectReferences(Project project, Project[] projects, IReadOnlyDictionary<ProjectId, string> projectIds, string projectId, string assemblyId, GraphBuilder builder)
+    private static void AddProjectReferences(
+        Project project,
+        IReadOnlyDictionary<ProjectId, ProjectReferenceIndexEntry> projectIndex,
+        string projectId,
+        string assemblyId,
+        GraphBuilder builder)
     {
-        foreach (var reference in project.ProjectReferences)
+        var referencedProjectIds = project.ProjectReferences
+            .Select(reference => reference.ProjectId)
+            .ToHashSet();
+        foreach (var referencedProjectId in referencedProjectIds)
         {
-            if (!projectIds.TryGetValue(reference.ProjectId, out var targetProjectId))
+            if (!projectIndex.TryGetValue(referencedProjectId, out var targetProject))
             {
                 continue;
             }
 
-            var targetProject = projects.First(candidate => candidate.Id == reference.ProjectId);
-            var targetAssembly = targetProject.AssemblyName ?? targetProject.Name;
-            builder.AddLink("project-reference", projectId, targetProjectId);
-            builder.AddLink("references-assembly", assemblyId, $"assembly:{targetProjectId}:{targetAssembly}");
+            builder.AddLink("project-reference", projectId, targetProject.ProjectId);
+            builder.AddLink("references-assembly", assemblyId, targetProject.AssemblyId);
         }
+    }
+
+    private static IReadOnlyDictionary<ProjectId, ProjectReferenceIndexEntry> CreateProjectIndex(Project[] projects, string rootPath) =>
+        projects.ToDictionary(project => project.Id, project => CreateProjectIndexEntry(project, rootPath));
+
+    private static ProjectReferenceIndexEntry CreateProjectIndexEntry(Project project, string rootPath)
+    {
+        var projectId = CreateProjectId(project, rootPath);
+        var assemblyName = project.AssemblyName ?? project.Name;
+        var assemblyId = $"assembly:{projectId}:{assemblyName}";
+        return new ProjectReferenceIndexEntry(project, projectId, assemblyId, $"module:{projectId}:{assemblyName}");
     }
 
     private static async Task AnalyzeDocumentAsync(Document document, DocumentAnalysisContext context, CancellationToken cancellationToken)
@@ -177,6 +211,7 @@ public sealed class WorkspaceAnalysis
             Attributes = new Dictionary<string, object?> { ["path"] = relativePath }
         });
         context.Analysis.Builder.AddLink("contains", context.ModuleId, fileId);
+        context.Analysis.Builder.AddDeclarationLink(context.ModuleId, fileId);
         try
         {
             var root = await document.GetSyntaxRootAsync(cancellationToken)
@@ -190,6 +225,8 @@ public sealed class WorkspaceAnalysis
                 context.Analysis.Builder.AddNode(new GraphNode { Id = namespaceId, TypeId = "namespace", Label = namespaceName, GroupId = context.ProjectId });
                 context.Analysis.Builder.AddLink("contains", namespaceId, fileId);
                 context.Analysis.Builder.AddLink("contains", GetAssemblyId(context.Project, context.ProjectId), namespaceId);
+                context.Analysis.Builder.AddDeclarationLink(fileId, namespaceId);
+                context.Analysis.Builder.AddDeclarationLink(GetAssemblyId(context.Project, context.ProjectId), namespaceId);
             }
 
             var declarations = DeclarationCollector.Collect(
@@ -200,6 +237,18 @@ public sealed class WorkspaceAnalysis
                 cancellationToken);
             foreach (var declaration in declarations)
                 context.Declarations.Add(declaration);
+            foreach (var relation in SemanticRelationCollector.Collect(
+                         root,
+                         semanticModel,
+                         context.ProjectId,
+                         cancellationToken))
+                context.Relations.Add(relation);
+            foreach (var relation in SemanticRelationCollector.CollectDeclarationRelations(
+                         root,
+                         semanticModel,
+                         context.ProjectId,
+                         cancellationToken))
+                context.Relations.Add(relation);
 
             context.Analysis.Counters.DocumentAnalyzed();
         }
@@ -226,6 +275,55 @@ public sealed class WorkspaceAnalysis
     }
 
     private static string GetAssemblyId(Project project, string projectId) => $"assembly:{projectId}:{project.AssemblyName ?? project.Name}";
+
+    private static void EmitRelations(
+        AnalyzedProject analyzedProject,
+        ExportedNodeIndex exportedNodes,
+        GraphBuilder builder,
+        AnalysisCounters counters)
+    {
+        foreach (var relation in analyzedProject.Relations)
+        {
+            if (!TryResolveReference(relation.Source, exportedNodes, counters, out var sourceId, out _)
+                || !TryResolveReference(relation.Target, exportedNodes, counters, out var targetId, out var targetProjectId))
+                continue;
+
+            builder.AddRelationLink(relation.TypeId, sourceId, targetId, relation.RelationshipWeight);
+            if (analyzedProject.IsTestProject && relation.Source?.IsTestMethod == true
+                && targetProjectId != analyzedProject.ProjectId && relation.TypeId != "tests")
+                builder.AddRelationLink("tests", sourceId, targetId, 1);
+        }
+    }
+
+    private static bool TryResolveReference(
+        SymbolReference? reference,
+        ExportedNodeIndex exportedNodes,
+        AnalysisCounters counters,
+        out string nodeId,
+        out string projectId)
+    {
+        nodeId = string.Empty;
+        projectId = string.Empty;
+        if (reference is null)
+        {
+            counters.UnresolvedRelation();
+            return false;
+        }
+
+        if (reference.IsGenerated || reference.IsExternal || string.IsNullOrEmpty(reference.NodeTypeId))
+        {
+            counters.ExternalRelationDropped();
+            return false;
+        }
+
+        if (!exportedNodes.TryResolve(reference, out nodeId, out projectId))
+        {
+            counters.UnresolvedRelation();
+            return false;
+        }
+
+        return true;
+    }
 
     private static string CreateProjectId(Project project, string rootPath) => $"project:{RelativePath(rootPath, project.FilePath!)}";
 
@@ -269,23 +367,37 @@ public sealed class WorkspaceAnalysis
     }
 
     private sealed record ProjectAnalysisContext(
-        Project[] Projects,
-        IReadOnlyDictionary<ProjectId, string> ProjectIds,
+        IReadOnlyDictionary<ProjectId, ProjectReferenceIndexEntry> ProjectIndex,
         string RootPath,
         GraphBuilder Builder,
         AnalysisCounters Counters,
         List<string> Diagnostics);
+
+    private sealed record ProjectReferenceIndexEntry(Project Project, string ProjectId, string AssemblyId, string ModuleId);
+
+    private sealed record AnalyzedProject(
+        Project Project,
+        string ProjectId,
+        DeclarationAccumulator Declarations,
+        IReadOnlyList<RelationCandidate> Relations)
+    {
+        public bool IsTestProject => Project.Name.EndsWith("Tests", StringComparison.OrdinalIgnoreCase)
+            || Project.Name.EndsWith(".Tests", StringComparison.OrdinalIgnoreCase)
+            || Path.GetFileName(Path.GetDirectoryName(Project.FilePath) ?? string.Empty)
+                .EndsWith("Tests", StringComparison.OrdinalIgnoreCase);
+    }
 
     private sealed record DocumentAnalysisContext(
         Project Project,
         string ProjectId,
         string ModuleId,
         ProjectAnalysisContext Analysis,
-        DeclarationAccumulator Declarations);
+        DeclarationAccumulator Declarations,
+        ICollection<RelationCandidate> Relations);
 
     private sealed class AnalysisCounters
     {
-        private readonly int[] values = new int[5];
+        private readonly int[] values = new int[7];
 
         public int ProjectsAnalyzed => values[0];
         public int ProjectsFailed => values[1];
@@ -299,9 +411,12 @@ public sealed class WorkspaceAnalysis
         public void DocumentSkipped() => values[3]++;
         public void DocumentFailed() => values[4]++;
 
+        public void ExternalRelationDropped() => values[5]++;
+        public void UnresolvedRelation() => values[6]++;
+
         public AnalysisSummary CreateSummary(string inputKind, int projectsLoaded, GraphDocument graph, List<string> diagnostics) => new(
             inputKind, projectsLoaded, ProjectsAnalyzed, 0, ProjectsFailed, DocumentsAnalyzed, DocumentsSkipped,
-            DocumentsFailed, graph.Nodes.Count, graph.Links.Count, 0, 0, diagnostics.Count, 0,
+            DocumentsFailed, graph.Nodes.Count, graph.Links.Count, values[5], values[6], diagnostics.Count, 0,
             diagnostics.Count == 0 && ProjectsFailed == 0 && DocumentsFailed == 0 ? "complete" : "partial");
     }
 }

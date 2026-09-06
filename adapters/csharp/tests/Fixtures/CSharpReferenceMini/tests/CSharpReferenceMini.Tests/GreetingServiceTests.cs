@@ -11,5 +11,12 @@ public sealed class GreetingServiceTests
         var service = new GreetingService(new Greeter());
 
         Assert.Equal("Hello, Roslyn!", service.CreateGreeting("Roslyn"));
+        Assert.Equal("Hello, helper!", CreateGreetingThroughHelper());
+    }
+
+    private static string CreateGreetingThroughHelper()
+    {
+        var service = new GreetingService(new Greeter());
+        return service.CreateGreeting("helper");
     }
 }

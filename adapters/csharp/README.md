@@ -4,8 +4,9 @@ Die kompilierbare .NET-10-CLI liegt in
 [CodeVisualisierung.CSharp.slnx](CodeVisualisierung.CSharp.slnx). Sie enthält
 ein CLI-Projekt und ein xUnit-Testprojekt. Slice 1 definiert die echte
 Prozessgrenze; Slice 2 lädt reale Workspaces; Slice 3 ergänzt die semantische
-Deklarationsauswertung. Beziehungs-, Metrik- und Projektionsschichten folgen
-in den abhängigen Slices.
+Deklarationsauswertung; Slice 4 ergänzt semantisch aufgelöste Beziehungen.
+Slice 4 befindet sich im zweiten und letzten Korrekturzyklus; Metrik- und
+Projektionsschichten folgen in den abhängigen Slices.
 
 ## CLI-Prozessvertrag
 
@@ -24,13 +25,15 @@ ein fehlendes Ausgabeverzeichnis oder anderer Ausgabe-/Dateisystemfehler mit
 Ausgabe reserviert. Diagnosen stehen auf Deutsch in `stderr`, Graphdaten werden
 niemals auf `stdout` geschrieben.
 
-Die Slice-3-CLI lädt die Eingabe über `MSBuildWorkspace`, verarbeitet eigene
+Die Slice-4-CLI lädt die Eingabe über `MSBuildWorkspace`, verarbeitet eigene
 `.cs`-Dokumente mit einem Roslyn-`SemanticModel` pro Dokument und schreibt
 einen deterministisch sortierten Deklarationsgraphen. Neben dem Slice-2-
 Inventar werden Klassen, Interfaces, Records, Structs, Enums, Delegates,
 Methoden, Konstruktoren einschließlich Primary Constructors, Properties,
 Felder, Events, Operatoren, lokale Funktionen und Typparameter emittiert.
 Parameter und lokale Variablen bleiben bewusst Nicht-Nodes.
+Typparameter verwenden für Node-ID, Index und Referenz dieselbe vollständige
+Owner-/Ordinal-Identität.
 
 Symbol-Nodes verwenden IDs der Form `<type>:<project-id>:<canonical-signature>`.
 Die Signatur kommt aus `SymbolDisplayFormat.FullyQualifiedFormat` mit
@@ -47,6 +50,27 @@ Quelldokumenten werden betrachtet. Framework-/externe Symbole, `obj`/`bin`,
 werden weder als Nodes noch als Linkziele erzeugt. Symbole mit
 `System.CodeDom.Compiler.GeneratedCodeAttribute` werden einschließlich ihrer
 untergeordneten Symbole ebenfalls übersprungen.
+
+Die v1-Beziehungen werden aus Syntax und `SemanticModel` aufgelöst. `declares`
+zeigt vom jeweiligen deklarierenden Container auf den eigenen deklarierten
+Node. `calls`,
+`constructs`, `reads`, `writes`, `uses-type`, `returns-type`,
+`parameter-type`, `inherits`, `implements` und `overrides` zeigen immer von
+einem eigenen emittierten Node auf einen eigenen emittierten Node.
+`constructs` zielt auf den konstruierten Typ und bleibt dadurch auch bei
+impliziten Konstruktoren aussagekräftig. Wiederholte gleiche Beziehungen
+werden je Linktyp und Endpunkten mit `occurrences` und
+`relationshipWeight` aggregiert. Nur erkannte Testmethoden erhalten zusätzlich
+`tests`-Links zu verwendeten eigenen Zielen aus anderen Projekten; Helper-
+Methoden und Typen erzeugen keine solchen Links. `out` erzeugt nur `writes`,
+`ref` `reads` und `writes`, `in` nur `reads`. Externe,
+generierte und unauflösbare Ziele erzeugen keine Links; sie werden in der
+CLI-Summary gezählt.
+Die aktuelle Workspace-Policy analysiert alle geladenen Projekte; deshalb ist
+`projects.skipped` nur bei einer später explizit eingeführten Skip-Policy
+belegt. Workspace-Diagnosen werden derzeit als Meldungstexte ohne sichere
+Severity-Klassifikation gesammelt; `diagnostics.errors` wird nicht aus
+unbekannten Meldungen fingiert und bleibt im sauberen Fixture null.
 
 Gemeinsame MSBuild-Einstellungen für beide Projekte liegen in
 [Directory.Build.props](Directory.Build.props). Zentrale NuGet-Versionen liegen

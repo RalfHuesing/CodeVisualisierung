@@ -24,8 +24,11 @@ Die fachliche Wahrheit für das Ausgabeformat bleibt in
 konkreten C#-Auftrag; sie ersetzen den allgemeinen Graphvertrag nicht.
 
 Der v1-Fachvertrag ist entschieden. Slice 2 liefert den Workspace-
-Inventargraphen; Slice 3 ergänzt die semantische Deklarationspipeline für
-Typen und Member. Als Nächstes folgt Slice 4 für semantische Beziehungen.
+Inventargraphen, Slice 3 die semantische Deklarationspipeline für Typen und
+Member und Slice 4 die aufgelösten Beziehungen mit Zählern und
+Determinismusregeln. Slice 4 befindet sich im zweiten und letzten
+Korrekturzyklus; der Abschlussstatus wird erst mit dem Orchestrator-Commit
+gesetzt. Danach folgen Metriken und Projektionen.
 
 ## Späterer Aufruf
 

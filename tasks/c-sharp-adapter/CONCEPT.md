@@ -30,11 +30,14 @@ Der aktuelle Implementierungsstand unter `adapters/csharp/` umfasst:
   Overloads, Generics und verschachtelte lokale Funktionen,
 - relative Quellpositionen, Accessibility-, Qualified-Name- und Container-
   Details sowie eine vollständige Generated-Code-Ausschluss-Policy,
-- eine verwaltete, repo-lokale Temp-Infrastruktur für spätere Test-Solutions.
+- eine verwaltete, repo-lokale Temp-Infrastruktur für Test-Solutions,
+- eine dokumentweise SemanticModel-Pipeline für die v1-Beziehungen mit
+  deterministischer Auflösung, Filterung und Aggregation.
 
-Die Slices 1 bis 3 sind damit umgesetzt. Semantische Beziehungen, Metriken
-und Projektionen folgen in den abhängigen Slices; die folgenden Abschnitte
-beschreiben dafür weiterhin den verbindlichen Zielvertrag.
+Die Slices 1 bis 3 sind umgesetzt. Slice 4 ist im gemeinsamen Arbeitsbaum
+implementiert und wird im zweiten und letzten Korrekturzyklus nachgeschärft;
+sein Abschlussstatus wird erst mit dem Orchestrator-Commit gesetzt. Metriken
+und Projektionen folgen in den abhängigen Slices.
 
 Der Zielvertrag ist auf Solutions bis mindestens 180.000 Quellcodezeilen
 ausgelegt. Vollständige Analyse bedeutet dabei vollständige fachlich relevante
@@ -233,8 +236,10 @@ Slice 1 implementiert die Argument- und Prozessgrenze. Slice 2 lädt Workspaces
 und erzeugt Contract-konforme Solution-, Projekt-, Assembly-, Modul-,
 Namespace- und Datei-Nodes mit Containment und eigenen Referenzen. Slice 3
 ergänzt die semantischen Deklarations-Nodes mit stabilen IDs, Details,
-Partial-Type-Zusammenführung und Generated-Code-Policy. Semantische
-Beziehungen, Metriken und Projektionen folgen in abhängigen Slices.
+Partial-Type-Zusammenführung und Generated-Code-Policy. Slice 4 ergänzt die
+semantischen Beziehungen; die laufende Korrektur betrifft nur die fachliche
+Nachschärfung vor dem Orchestrator-Commit. Metriken und Projektionen folgen in
+abhängigen Slices.
 
 ## Fachliches Datenmodell
 
@@ -289,10 +294,52 @@ ausdrücklich geladene Projekte ausgegeben. Beziehungen zu externen Assemblies
 und `generated-from`-Beziehungen zu ausgeschlossenen Artefakten werden nicht
 emittiert.
 
+Slice 4 erfasst Beziehungen dokumentweise aus Syntax und SemanticModel. Ein
+`constructs`-Link zeigt vom einschließenden eigenen Member auf den aufgelösten
+eigenen Typ; dadurch werden auch implizite Konstruktoren abgedeckt, obwohl sie
+keinen eigenen Node erhalten. `calls` zeigt auf eigene Methoden,
+Konstruktorinitialisierer und Operatoren. Feld-, Property- und Eventzugriffe
+werden als `reads` beziehungsweise `writes` klassifiziert; zusammengesetzte
+Zuweisungen und Inkrement-/Dekrementzugriffe erzeugen beide Links. Bei
+Argumenten erzeugt `out` ausschließlich `writes`, `ref` beide Linktypen und
+`in` ausschließlich `reads`.
+
+Return- und Parametertypen erzeugen `returns-type` und `parameter-type`,
+weitere semantische Typstellen je tatsächlicher semantischer Typverwendung
+`uses-type`. Direkte Basistypen und Interfaces
+erzeugen `inherits` beziehungsweise `implements`, überschreibende Methoden,
+Properties und Events (einschließlich field-like Events über
+`IEventSymbol.OverriddenEvent`) `overrides`. Deklarative `declares`-Links
+zeigen vom Solution-/Projekt-/Assembly-/Modul-/Datei-/Namespace-/Typ-/Member-
+Container auf seine deklarierten eigenen Nodes. Nur eine erkannte Testmethode
+erzeugt zusätzlich einen `tests`-Link zu einem eigenen,
+projektübergreifend verwendeten Ziel; Testprojekt-Erkennung und
+Testmethoden-Erkennung bleiben getrennt. Links
+werden je Typ und Endpunkten zu einem Link mit `metrics.occurrences` und
+`metrics.relationshipWeight` aggregiert. Nicht auflösbare, externe oder
+generierte Symbole werden verworfen und in `relations.unresolved` bzw.
+`relations.externalDropped` gezählt.
+
+`relations.unresolved` zählt im aktuellen Export einen verworfenen
+Relation-Candidate, wenn dessen zuerst geprüfter Endpunkt nicht auf einen
+eigenen Node aufgelöst werden kann; `relations.externalDropped` zählt analog
+den ersten als extern, generiert oder nicht unterstützten erkannten Endpunkt.
+Die Zähler sind Candidate-Diagnostik und werden nicht nach der späteren
+Link-Deduplizierung reduziert. `projects.skipped` bleibt in der aktuellen
+Workspace-Policy null, weil alle von Roslyn gelieferten Projekte entweder
+analysiert oder als fehlgeschlagen behandelt werden. `diagnostics.errors`
+bleibt ebenfalls null, weil `WorkspaceFailed` derzeit nur Meldungstexte ohne
+verlässliche Severity-Klassifikation sammelt; unbekannte Diagnosen werden
+nicht künstlich als Fehler gezählt. Die saubere Fixture erwartet daher drei
+geladene und analysierte Projekte, null übersprungene/fehlgeschlagene Projekte
+und null klassifizierte Warnungen/Fehler.
+
 ### Identität und Determinismus
 
 - Symbol-IDs beruhen auf einer kanonischen, voll qualifizierten Signatur und
   unterscheiden Overloads, Generics, Teiltypen und gleichnamige Member.
+- Typparameter verwenden für Node-ID, Indexschlüssel und semantische
+  Referenzen dieselbe vollständige Identität aus Owner-Signatur und Ordinal.
 - IDs enthalten keine maschinenabhängigen absoluten Pfade.
 - Datei-, Projekt- und Solution-Identitäten verwenden eine explizit
   dokumentierte, normalisierte Darstellung relativ zur Solution oder eine
@@ -561,8 +608,8 @@ sequenziellen Referenzpfad und einer Messung der Deterministik zulässig.
 
 ## Tests und Qualität
 
-Die Slices 1 bis 3 weisen Prozessgrenze, Workspace-Inventar und semantische
-Deklarations-Nodes nach. Der vollständige Adapter ist erst fertig, wenn
+Die Slices 1 bis 4 weisen Prozessgrenze, Workspace-Inventar, semantische
+Deklarations-Nodes und Beziehungen nach. Der vollständige Adapter ist erst fertig, wenn
 mindestens folgende Verhalten nachgewiesen sind:
 
 - CLI-Hilfe, erfolgreiche Ausgabe und alle wesentlichen Fehlerfälle,
