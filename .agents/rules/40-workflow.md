@@ -13,7 +13,10 @@
 - Keine unaufgeforderten Großumbauten.
 - Bei Abhängigkeiten `package.json` und `package-lock.json` gemeinsam aktualisieren.
 - Build- und Testartefakte bleiben lokal und werden ignoriert.
-- Dokumentation aktualisieren, wenn Verhalten, Vertrag oder Struktur geändert werden.
+- Betroffene Dokumentation, READMEs, Verträge, Fixtures und Roadmap-Einträge
+  im selben Slice mit aktualisieren, sobald sich Verhalten, Vertrag, Struktur,
+  CLI oder Arbeitsablauf ändert. Keine bewusst veraltete Begleitdokumentation
+  zurücklassen.
 
 ## Vor Commit oder Übergabe
 
