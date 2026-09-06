@@ -38,12 +38,12 @@ Delegated roles:
 Die vorbereitende C#-Grundlage ist vorhanden: Solution, CLI-Projekt,
 Testprojekt, gemeinsame .NET-/Paketvorgaben, AiNetLinter-Profil und die
 repo-lokale Temp-Testinfrastruktur. Die fachliche Vertragsklärung in Slice 0
-ist abgeschlossen; der Orchestrator beginnt mit Slice 1.
+ist abgeschlossen; Slice 3 ist umgesetzt.
 
-Weiterhin fehlen der Workspace-Inventargraph, die Graph-/Contract-Schichten,
-die Roslyn-Auswertung und die vertragskonforme JSON-Ausgabe. Slice 1 bleibt
-offen; die vorhandene Grundlage ist deren Ausgangspunkt, nicht deren
-vollständige Erfüllung.
+Workspace-Inventargraph, Graph-/Contract-Schichten und vertragskonforme
+JSON-Ausgabe sind in Slice 2 umgesetzt. Slice 3 ergänzt die Roslyn-
+Deklarationsauswertung; semantische Beziehungen und Metriken bleiben für die
+abhängigen Slices offen.
 
 ## Externer Vorgänger: Viewer-Layoutvertrag
 
@@ -92,7 +92,7 @@ Checks: Dokumentenreview, `git diff --check`.
 Ergebnis: Der v1-Vertrag ist eingefroren. Eine neue Richtungsentscheidung
 erfordert eine dokumentierte Scopeänderung.
 
-## [ ] Slice 1 – .NET-Solution und CLI-Grenze
+## [X] Slice 1 – .NET-Solution und CLI-Grenze
 
 Ziel: Eine kleine, kompilierbare .NET-10-CLI mit verständlichem Prozessvertrag.
 
@@ -101,11 +101,11 @@ Erlaubte Pfade: `adapters/csharp/**`, notwendige Root-`.gitignore`-Ergänzung,
 
 Akzeptanzkriterien:
 
-- [ ] Die C#-Solution und das Testprojekt bauen mit dem vereinbarten SDK.
-- [ ] `--help`, `--version`, ungültige Argumente und fehlende Eingaben liefern
+- [X] Die C#-Solution und das Testprojekt bauen mit dem vereinbarten SDK.
+- [X] `--help`, `--version`, ungültige Argumente und fehlende Eingaben liefern
   stabile, dokumentierte Ergebnisse.
-- [ ] Analyse, Graph und Contract sind nicht in eine God-Klasse gelegt.
-- [ ] Der CLI-Test prüft den tatsächlichen Prozessvertrag, nicht nur eine interne
+- [X] Analyse, Graph und Contract sind nicht in eine God-Klasse gelegt.
+- [X] Der CLI-Test prüft den tatsächlichen Prozessvertrag, nicht nur eine interne
   Methode.
 
 Checks: `dotnet build`, passende xUnit-/CLI-Tests, `dotnet test`.
@@ -123,16 +123,16 @@ neue C#-Fixtures, `tasks/c-sharp-adapter/**`.
 
 Akzeptanzkriterien:
 
-- [ ] Eine Test-Solution mit mindestens zwei Projekten wird ohne absolute
+- [X] Eine Test-Solution mit mindestens zwei Projekten wird ohne absolute
   Maschinenpfade in Identitäten analysiert.
-- [ ] Die Ausgabe ist gegen exakt
+- [X] Die Ausgabe ist gegen exakt
   `contracts/graph-universe/schema/graph-universe.schema.json` validiert.
-- [ ] Nodes und Links sind dedupliziert und stabil sortiert.
-- [ ] Fehlende Projektdateien, Workspace-Fehler und relevante Diagnosen werden
+- [X] Nodes und Links sind dedupliziert und stabil sortiert.
+- [X] Fehlende Projektdateien, Workspace-Fehler und relevante Diagnosen werden
   gemäß der festgelegten Policy verständlich behandelt.
-- [ ] Eine gültige Eingabe erzeugt auch bei partiellen Roslyn-Problemen ein
+- [X] Eine gültige Eingabe erzeugt auch bei partiellen Roslyn-Problemen ein
   valides JSON und eine Konsolensummary mit Zählungen.
-- [ ] CLI-README, Contract-README und die betroffenen Graph-/C#-Dokumente
+- [X] CLI-README, Contract-README und die betroffenen Graph-/C#-Dokumente
   beschreiben den tatsächlich implementierten Stand.
 
 Checks: Unit-Tests für Identitäten/Sortierung, Workspace-Integrationstest,
@@ -140,7 +140,7 @@ Schema-Validierung, `dotnet test`.
 
 Abhängigkeit: Slice 1.
 
-## [ ] Slice 3 – Typen und Member
+## [X] Slice 3 – Typen und Member
 
 Ziel: Roslyn-Symbole für Typen und Member vollständig und unterscheidbar in
 den Graph überführen.
@@ -150,18 +150,18 @@ Erlaubte Pfade: `adapters/csharp/**`, C#-Testfixtures und gegebenenfalls
 
 Akzeptanzkriterien:
 
-- [ ] Klassen, Interfaces, Records, Structs, Enums, Delegates, Methoden,
+- [X] Klassen, Interfaces, Records, Structs, Enums, Delegates, Methoden,
   Konstruktoren, Properties, Felder, Events, Operatoren, lokale Funktionen
   und relevante Typparameter werden nach der beschlossenen Policy erkannt.
-- [ ] Overloads, Generics, Teiltypen und gleichnamige Symbole erhalten eindeutige
+- [X] Overloads, Generics, Teiltypen und gleichnamige Symbole erhalten eindeutige
   kanonische IDs.
-- [ ] Sichtbarkeit, Quellposition, qualifizierter Name und Container stehen als
+- [X] Sichtbarkeit, Quellposition, qualifizierter Name und Container stehen als
   vertragskonforme Detaildaten zur Verfügung.
-- [ ] Externe, Framework- und generierte Symbole werden ausgeschlossen und
+- [X] Externe, Framework- und generierte Symbole werden ausgeschlossen und
   nicht als Linkziele erzeugt.
 
-Checks: reine ID-/Mapping-Unit-Tests, Referenz-Solution-Integrationstest,
-Schema-Validierung, `dotnet test`.
+Checks: `DeclarationPipelineTests` mit ID-/Mapping-Prüfung,
+`CSharpReferenceMini`-Integrationstest, Schema-Validierung und `dotnet test`.
 
 Abhängigkeit: Slice 2.
 

@@ -12,7 +12,7 @@ Browserzustände oder konkrete visuelle Effekte.
 
 ## Aktueller Umsetzungsstand
 
-Die Grundlagen unter `adapters/csharp/` sind bereits angelegt:
+Der aktuelle Implementierungsstand unter `adapters/csharp/` umfasst:
 
 - eine .NET-10-Solution mit einem CLI-Projekt und einem xUnit-Testprojekt,
 - zentrale MSBuild-Vorgaben für Nullable, deterministische Builds und
@@ -23,13 +23,18 @@ Die Grundlagen unter `adapters/csharp/` sind bereits angelegt:
   Version, Argument-, Eingabe-, Analyse- und Ausgabefehler,
 - eine Workspace-/Inventarpipeline für Solutions und Projekte mit Contract-,
   Graph- und Analysis-Schicht,
+- eine dokumentweise Roslyn-SemanticModel-Pipeline für Klassen, Interfaces,
+  Records, Structs, Enums, Delegates, Methoden, Konstruktoren, Properties,
+  Felder, Events, Operatoren, lokale Funktionen und Typparameter,
+- projektweite Partial-Type-Deduplizierung sowie kanonische Signaturen für
+  Overloads, Generics und verschachtelte lokale Funktionen,
+- relative Quellpositionen, Accessibility-, Qualified-Name- und Container-
+  Details sowie eine vollständige Generated-Code-Ausschluss-Policy,
 - eine verwaltete, repo-lokale Temp-Infrastruktur für spätere Test-Solutions.
 
-Diese Grundlage ist noch kein Adapterverhalten: Es gibt noch keine
-Roslyn-Analyse, keine Graph-/Contract-Projekte, keine Graphausgabe und keine
-fachlichen CLI-Fehlerfälle. Die folgenden Abschnitte beschreiben deshalb den
-verbindlichen Zielvertrag und die späteren Umsetzungsslices, nicht bereits
-vorhandene Funktionalität.
+Die Slices 1 bis 3 sind damit umgesetzt. Semantische Beziehungen, Metriken
+und Projektionen folgen in den abhängigen Slices; die folgenden Abschnitte
+beschreiben dafür weiterhin den verbindlichen Zielvertrag.
 
 Der Zielvertrag ist auf Solutions bis mindestens 180.000 Quellcodezeilen
 ausgelegt. Vollständige Analyse bedeutet dabei vollständige fachlich relevante
@@ -148,6 +153,15 @@ verwenden; sie gehören aber nicht zum Analyseumfang und werden nicht rekursiv
 geladen oder visualisiert. Exportiert werden nur Symbole und Beziehungen, deren
 Ursprung in den ausdrücklich geladenen eigenen Projekten liegt.
 
+Als generiert gelten im aktuellen Adapter außerdem Dokumente unter `obj` oder
+`bin`, Dateien mit den Endungen `.g.cs`, `.designer.cs` oder `.generated.cs`,
+`AssemblyInfo.cs`, `*.AssemblyAttributes.cs` sowie Symbole mit
+`System.CodeDom.Compiler.GeneratedCodeAttribute`. Der Filter gilt vor der
+Deklarationserfassung; untergeordnete Symbole eines markierten Symbols werden
+ebenfalls ausgeschlossen. Containment wird nur zu tatsächlich exportierten
+Eltern erzeugt; Accessors und andere nicht exportierte Roslyn-Symbole bleiben
+auch als lokale Funktionskontexte ohne Dangling-Link unsichtbar.
+
 Die im Archivdokument `docs/99-Grob-Konzept-Idee-Archiv.md` beschriebenen
 Kestrel-, SignalR-, Git- und Live-Agenten-Ideen bleiben spätere, getrennte
 Aufträge.
@@ -216,10 +230,11 @@ output.bytes=...
 ```
 
 Slice 1 implementiert die Argument- und Prozessgrenze. Slice 2 lädt Workspaces
-und erzeugt die ersten Contract-konformen Solution-, Projekt-, Assembly-,
-Modul-, Namespace- und Datei-Nodes mit Containment und eigenen Referenzen.
-Semantische Symbol-, Beziehungs-, Metrik- und Projektionserfassung folgen in
-abhängigen Slices.
+und erzeugt Contract-konforme Solution-, Projekt-, Assembly-, Modul-,
+Namespace- und Datei-Nodes mit Containment und eigenen Referenzen. Slice 3
+ergänzt die semantischen Deklarations-Nodes mit stabilen IDs, Details,
+Partial-Type-Zusammenführung und Generated-Code-Policy. Semantische
+Beziehungen, Metriken und Projektionen folgen in abhängigen Slices.
 
 ## Fachliches Datenmodell
 
@@ -512,10 +527,10 @@ Cli → Analysis → Graph → Contract
 Tests → alle benötigten Produktionsprojekte
 ```
 
-Die aktuelle Grundlage besteht bewusst nur aus CLI und Testprojekt. Weitere
-Projekte werden erst angelegt, wenn die jeweilige Verantwortung tatsächlich
-benötigt wird; keine Schicht wird als Platzhalter für eine mögliche Zukunft
-angelegt. Pro Quellverzeichnis gelten die zentrale Dateigrenze aus
+Die aktuelle Lösung trennt CLI, Analysis, Graph, Contract und Tests nach
+konkreter Verantwortung. Weitere Projekte werden erst angelegt, wenn die
+jeweilige Verantwortung tatsächlich benötigt wird; keine Schicht wird als
+Platzhalter für eine mögliche Zukunft angelegt. Pro Quellverzeichnis gelten die zentrale Dateigrenze aus
 `scripts/quality-config.mjs` und die allgemeinen Regeln aus `.agents/rules/`;
 große Klassen und Methoden werden nach Verantwortung geteilt.
 
@@ -546,9 +561,9 @@ sequenziellen Referenzpfad und einer Messung der Deterministik zulässig.
 
 ## Tests und Qualität
 
-Die vorhandene Grundlage weist derzeit nur Solution-Struktur, Temp-Verzeichnis-
-Lebenszyklus und Linter-Kompatibilität nach. Der vollständige Adapter ist erst
-fertig, wenn mindestens folgende Verhalten nachgewiesen sind:
+Die Slices 1 bis 3 weisen Prozessgrenze, Workspace-Inventar und semantische
+Deklarations-Nodes nach. Der vollständige Adapter ist erst fertig, wenn
+mindestens folgende Verhalten nachgewiesen sind:
 
 - CLI-Hilfe, erfolgreiche Ausgabe und alle wesentlichen Fehlerfälle,
 - ungültige oder nicht vorhandene Solutionpfade,

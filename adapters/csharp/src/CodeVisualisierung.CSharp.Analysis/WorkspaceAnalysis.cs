@@ -117,13 +117,16 @@ public sealed class WorkspaceAnalysis
         var assemblyName = project.AssemblyName ?? project.Name;
         var assemblyId = $"assembly:{projectId}:{assemblyName}";
         var moduleId = $"module:{projectId}:{assemblyName}";
+        var declarations = new DeclarationAccumulator(projectId);
         AddProjectNodes(project, projectId, assemblyId, moduleId, context.RootPath, context.Builder);
         AddProjectReferences(project, context.Projects, context.ProjectIds, projectId, assemblyId, context.Builder);
         foreach (var document in project.Documents.OrderBy(document => document.FilePath, StringComparer.Ordinal))
         {
-            var documentContext = new DocumentAnalysisContext(project, projectId, moduleId, context);
+            var documentContext = new DocumentAnalysisContext(project, projectId, moduleId, context, declarations);
             await AnalyzeDocumentAsync(document, documentContext, cancellationToken);
         }
+
+        declarations.Emit(context.Builder);
 
         context.Counters.ProjectAnalyzed();
     }
@@ -176,7 +179,11 @@ public sealed class WorkspaceAnalysis
         context.Analysis.Builder.AddLink("contains", context.ModuleId, fileId);
         try
         {
-            var namespaces = await GetNamespacesAsync(document, cancellationToken);
+            var root = await document.GetSyntaxRootAsync(cancellationToken)
+                ?? throw new InvalidOperationException($"Dokument '{document.Name}' besitzt keinen Syntaxbaum.");
+            var semanticModel = await document.GetSemanticModelAsync(cancellationToken)
+                ?? throw new InvalidOperationException($"Dokument '{document.Name}' besitzt kein SemanticModel.");
+            var namespaces = GetNamespaces(root, semanticModel, cancellationToken);
             foreach (var namespaceName in namespaces)
             {
                 var namespaceId = $"namespace:{context.ProjectId}:{namespaceName}";
@@ -184,6 +191,15 @@ public sealed class WorkspaceAnalysis
                 context.Analysis.Builder.AddLink("contains", namespaceId, fileId);
                 context.Analysis.Builder.AddLink("contains", GetAssemblyId(context.Project, context.ProjectId), namespaceId);
             }
+
+            var declarations = DeclarationCollector.Collect(
+                root,
+                semanticModel,
+                context.Analysis.RootPath,
+                context.ProjectId,
+                cancellationToken);
+            foreach (var declaration in declarations)
+                context.Declarations.Add(declaration);
 
             context.Analysis.Counters.DocumentAnalyzed();
         }
@@ -194,12 +210,19 @@ public sealed class WorkspaceAnalysis
         }
     }
 
-    private static async Task<string[]> GetNamespacesAsync(Document document, CancellationToken cancellationToken)
+    private static string[] GetNamespaces(SyntaxNode root, SemanticModel semanticModel, CancellationToken cancellationToken)
     {
-        var root = await document.GetSyntaxRootAsync(cancellationToken);
-        var namespaces = root?.DescendantNodesAndSelf().OfType<BaseNamespaceDeclarationSyntax>()
-            .Select(node => node.Name.ToString()).Distinct(StringComparer.Ordinal).ToArray() ?? [];
+        var namespaceDeclarations = root.DescendantNodesAndSelf().OfType<BaseNamespaceDeclarationSyntax>();
+        var declaredNamespaces = namespaceDeclarations.Select(node => semanticModel.GetDeclaredSymbol(node, cancellationToken));
+        var namespaceNames = declaredNamespaces.OfType<INamespaceSymbol>().Select(GetNamespaceName);
+        var namespaces = namespaceNames.Distinct(StringComparer.Ordinal).ToArray();
         return namespaces.Length == 0 ? ["global"] : namespaces.Order(StringComparer.Ordinal).ToArray();
+    }
+
+    private static string GetNamespaceName(INamespaceSymbol symbol)
+    {
+        var name = symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+        return name.StartsWith("global::", StringComparison.Ordinal) ? name[8..] : name;
     }
 
     private static string GetAssemblyId(Project project, string projectId) => $"assembly:{projectId}:{project.AssemblyName ?? project.Name}";
@@ -221,8 +244,15 @@ public sealed class WorkspaceAnalysis
 
         var relativePath = Path.GetRelativePath(projectDirectory, fullDocumentPath);
         return !relativePath.Split(Path.DirectorySeparatorChar).Any(segment => segment.Equals("obj", StringComparison.OrdinalIgnoreCase) || segment.Equals("bin", StringComparison.OrdinalIgnoreCase))
-            && !Path.GetFileName(fullDocumentPath).EndsWith(".g.cs", StringComparison.OrdinalIgnoreCase);
+            && !IsGeneratedFileName(Path.GetFileName(fullDocumentPath));
     }
+
+    private static bool IsGeneratedFileName(string fileName) =>
+        fileName.Equals("AssemblyInfo.cs", StringComparison.OrdinalIgnoreCase)
+        || fileName.EndsWith(".AssemblyAttributes.cs", StringComparison.OrdinalIgnoreCase)
+        || fileName.EndsWith(".g.cs", StringComparison.OrdinalIgnoreCase)
+        || fileName.EndsWith(".designer.cs", StringComparison.OrdinalIgnoreCase)
+        || fileName.EndsWith(".generated.cs", StringComparison.OrdinalIgnoreCase);
 
     private static bool IsMissingInputDiagnostic(string diagnostic) =>
         diagnostic.Contains("not found", StringComparison.OrdinalIgnoreCase)
@@ -250,7 +280,8 @@ public sealed class WorkspaceAnalysis
         Project Project,
         string ProjectId,
         string ModuleId,
-        ProjectAnalysisContext Analysis);
+        ProjectAnalysisContext Analysis,
+        DeclarationAccumulator Declarations);
 
     private sealed class AnalysisCounters
     {

@@ -36,7 +36,21 @@ public sealed class GraphBuilder
         new() { Id = "assembly", Label = "Assembly", Role = "container" },
         new() { Id = "module", Label = "Module", Role = "container" },
         new() { Id = "namespace", Label = "Namespace", Role = "container" },
-        new() { Id = "file", Label = "File", Role = "container" }
+        new() { Id = "file", Label = "File", Role = "container" },
+        new() { Id = "class", Label = "Class", Role = "container" },
+        new() { Id = "interface", Label = "Interface", Role = "container" },
+        new() { Id = "record", Label = "Record", Role = "container" },
+        new() { Id = "struct", Label = "Struct", Role = "container" },
+        new() { Id = "enum", Label = "Enum", Role = "container" },
+        new() { Id = "delegate", Label = "Delegate", Role = "container" },
+        new() { Id = "method", Label = "Method", Role = "member" },
+        new() { Id = "constructor", Label = "Constructor", Role = "member" },
+        new() { Id = "property", Label = "Property", Role = "member" },
+        new() { Id = "field", Label = "Field", Role = "member" },
+        new() { Id = "event", Label = "Event", Role = "member" },
+        new() { Id = "operator", Label = "Operator", Role = "member" },
+        new() { Id = "local-function", Label = "Local function", Role = "member" },
+        new() { Id = "type-parameter", Label = "Type parameter", Role = "member" }
     ];
 
     private static IReadOnlyList<GraphDefinition> LinkTypes { get; } =

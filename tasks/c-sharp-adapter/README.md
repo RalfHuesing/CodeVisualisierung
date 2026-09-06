@@ -23,8 +23,9 @@ Die fachliche Wahrheit für das Ausgabeformat bleibt in
 `docs/`. Diese Task-Dateien ergänzen die vorhandenen Dokumente um den
 konkreten C#-Auftrag; sie ersetzen den allgemeinen Graphvertrag nicht.
 
-Der v1-Fachvertrag ist entschieden. Die vorhandene C#-Grundlage ist noch kein
-Adapter; der nächste Umsetzungsschritt ist Slice 1 der [Roadmap](ROADMAP.md).
+Der v1-Fachvertrag ist entschieden. Slice 2 liefert den Workspace-
+Inventargraphen; Slice 3 ergänzt die semantische Deklarationspipeline für
+Typen und Member. Als Nächstes folgt Slice 4 für semantische Beziehungen.
 
 ## Späterer Aufruf
 

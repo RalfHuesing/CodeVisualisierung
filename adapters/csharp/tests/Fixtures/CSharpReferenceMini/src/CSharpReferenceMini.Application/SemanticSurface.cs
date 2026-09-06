@@ -24,7 +24,15 @@ public static class OverloadAndGeneric
     public static T Echo<T>(T value) => value;
 }
 
-public readonly record struct ValueToken(int Value);
+public readonly record struct ValueToken(int Value)
+{
+    public static ValueToken operator +(ValueToken left, ValueToken right) => new(left.Value + right.Value);
+}
+
+public struct MutableCounter
+{
+    public int Value;
+}
 
 public enum ProcessingState
 {
@@ -36,6 +44,8 @@ public delegate string StringTransformer(string value);
 
 public static class SemanticUseSite
 {
+    public static event Action? Executed;
+
     public static string Execute()
     {
         var processor = new DerivedProcessor();
@@ -44,6 +54,10 @@ public static class SemanticUseSite
         var coordinator = new PartialCoordinator();
         coordinator.Value = converted;
         StringTransformer transformer = value => processor.Process(value);
-        return transformer(coordinator.Describe());
+        Executed?.Invoke();
+
+        static string Format(string value) => value.Trim();
+
+        return transformer(Format(coordinator.Describe()));
     }
 }

@@ -3,8 +3,8 @@
 Die kompilierbare .NET-10-CLI liegt in
 [CodeVisualisierung.CSharp.slnx](CodeVisualisierung.CSharp.slnx). Sie enthält
 ein CLI-Projekt und ein xUnit-Testprojekt. Slice 1 definiert die echte
-Prozessgrenze; Slice 2 lädt reale Workspaces und erzeugt den validierten
-Inventargraphen. Symbol-, Beziehungs-, Metrik- und Projektionsschichten folgen
+Prozessgrenze; Slice 2 lädt reale Workspaces; Slice 3 ergänzt die semantische
+Deklarationsauswertung. Beziehungs-, Metrik- und Projektionsschichten folgen
 in den abhängigen Slices.
 
 ## CLI-Prozessvertrag
@@ -24,10 +24,29 @@ ein fehlendes Ausgabeverzeichnis oder anderer Ausgabe-/Dateisystemfehler mit
 Ausgabe reserviert. Diagnosen stehen auf Deutsch in `stderr`, Graphdaten werden
 niemals auf `stdout` geschrieben.
 
-Die Slice-2-CLI lädt die Eingabe über `MSBuildWorkspace`, verarbeitet eigene
-`.cs`-Dokumente und schreibt einen deterministisch sortierten Inventargraphen.
-Generierte Dateien unter `obj`/`bin`, `.g.cs`-Dateien und verlinkte Dateien
-außerhalb des Projektordners werden übersprungen und in der Summary gezählt.
+Die Slice-3-CLI lädt die Eingabe über `MSBuildWorkspace`, verarbeitet eigene
+`.cs`-Dokumente mit einem Roslyn-`SemanticModel` pro Dokument und schreibt
+einen deterministisch sortierten Deklarationsgraphen. Neben dem Slice-2-
+Inventar werden Klassen, Interfaces, Records, Structs, Enums, Delegates,
+Methoden, Konstruktoren einschließlich Primary Constructors, Properties,
+Felder, Events, Operatoren, lokale Funktionen und Typparameter emittiert.
+Parameter und lokale Variablen bleiben bewusst Nicht-Nodes.
+
+Symbol-Nodes verwenden IDs der Form `<type>:<project-id>:<canonical-signature>`.
+Die Signatur kommt aus `SymbolDisplayFormat.FullyQualifiedFormat` mit
+Containing Type, Generic-Arity und Parametertypen. Attribute enthalten
+`qualifiedName`, `signature`, `accessibility`, `containerId`, `source`,
+`sourcePositions` und `declarationFiles`; Pfade sind relativ und verwenden `/`.
+Partial Types werden je Projekt über ihre Symbol-ID zusammengeführt und
+führen `partialDeclarationCount` sowie alle Deklarationsstellen.
+
+Die Scope-Policy bleibt strikt: Nur Symbole aus eigenen, nicht generierten
+Quelldokumenten werden betrachtet. Framework-/externe Symbole, `obj`/`bin`,
+`*.g.cs`, `*.designer.cs`, `*.generated.cs`, `AssemblyInfo.cs`,
+`*.AssemblyAttributes.cs` und verlinkte Dateien außerhalb des Projektordners
+werden weder als Nodes noch als Linkziele erzeugt. Symbole mit
+`System.CodeDom.Compiler.GeneratedCodeAttribute` werden einschließlich ihrer
+untergeordneten Symbole ebenfalls übersprungen.
 
 Gemeinsame MSBuild-Einstellungen für beide Projekte liegen in
 [Directory.Build.props](Directory.Build.props). Zentrale NuGet-Versionen liegen
