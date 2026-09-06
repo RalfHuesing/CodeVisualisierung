@@ -28,8 +28,8 @@ anderem:
   Typverwendung und Projekt-/Assemblyreferenzen,
 - benannte Metriken und Quellpositionen, soweit sie zuverlässig ermittelbar
   sind,
-- externe Symbole als sichtbare, entsprechend markierte Nodes statt als
-  verlorene Linkziele,
+- ausschließlich eigene Quell-Symbole als Nodes und Links; Framework- und
+  sonstige externe Abhängigkeiten werden aus dem Graphen ausgeschlossen,
 - explizite Summary-Links für höhere Detailstufen,
 - Definitionen und Profile, die der Viewer aus dem Graph-JSON lesen kann.
 
@@ -86,6 +86,13 @@ Fixture, Viewer-Tests und Adapter-Tests behandelt.
 - eine feste Performancezusage für beliebige große Solutions, bevor Messungen
   mit realistischen Fixtures vorliegen.
 
+Externe Abhängigkeiten, Framework-Assemblies (`System.*` und vergleichbare
+Referenzen) und generierte Artefakte werden im ersten Task nicht als Nodes oder
+Links exportiert. Roslyn darf deren Metadaten zum Auflösen einer Kompilation
+verwenden; sie gehören aber nicht zum Analyseumfang und werden nicht rekursiv
+geladen oder visualisiert. Exportiert werden nur Symbole und Beziehungen, deren
+Ursprung in den ausdrücklich geladenen eigenen Projekten liegt.
+
 Die im Archivdokument `docs/99-Grob-Konzept-Idee-Archiv.md` beschriebenen
 Kestrel-, SignalR-, Git- und Live-Agenten-Ideen bleiben spätere, getrennte
 Aufträge.
@@ -101,11 +108,21 @@ codegraph-csharp <solution.slnx> --output <graph.json>
 Geplante Grundregeln:
 
 - Der Positionsparameter ist die Eingabe-Solution.
+- `.slnx`, `.sln` und `.csproj` werden unterstützt. Bei einer Solution werden
+  alle enthaltenen Projekte gemeinsam geladen; bei einem `.csproj` bildet das
+  einzelne Projekt den vollständigen Analyseumfang.
+- Die gesamte Eingabe wird für die Analyse in den Speicher geladen. Es gibt
+  keinen dynamischen Nachlade- oder Streamingpfad.
 - `--output` ist der Zielpfad und wird nicht stillschweigend durch einen
   Standardpfad ersetzt.
 - `--help` und `--version` beenden erfolgreich, ohne Analyse zu starten.
 - Fehler gehen verständlich nach `stderr`; strukturierte Graphdaten gehen
   ausschließlich in die Ausgabedatei.
+- Roslyn-, Workspace- und Compilerdiagnosen werden auf der Konsole gemeldet,
+  nicht in den Graph verschoben. Die Analyse versucht mit dem verwertbaren
+  Teil weiterzuarbeiten und schreibt am Ende ein valides, gegebenenfalls
+  partielles Dokument. Die Zusammenfassung nennt erledigte, übersprungene und
+  fehlgeschlagene Analyseschritte jeweils mit Anzahl.
 - Ein erfolgreicher Lauf endet mit Exit-Code `0`.
 - Ungültige Argumente, nicht lesbare Eingaben, Analysefehler und
   Ausgabefehler erhalten unterscheidbare, dokumentierte Exit-Code-Bereiche.
@@ -115,8 +132,9 @@ Geplante Grundregeln:
 - Flüchtige Werte wie die aktuelle Uhrzeit oder absolute lokale Pfade dürfen
   die standardmäßige Vergleichbarkeit der Ausgabe nicht unnötig zerstören.
 
-Die konkreten Optionen für Konfiguration, externe Symbole, generierte Dateien,
-Metrikumfang und tolerierbare Compilerdiagnosen sind offene Entscheidungen.
+Optionen für Konfiguration, Metrikumfang und die genaue Darstellung der
+Konsolenzusammenfassung werden noch konkretisiert. Externe und generierte
+Artefakte sind dagegen grundsätzlich außerhalb des Graphen.
 
 ## Fachliches Datenmodell
 
@@ -128,8 +146,13 @@ Die fachliche Zielmenge stammt aus `docs/07-CSharp-Referenzgraph.md`:
 solution, project, assembly, module, namespace, file,
 class, interface, record, struct, enum, delegate,
 method, constructor, property, field, event, operator,
-local-function, type-parameter, external-type, external-assembly
+local-function, type-parameter
 ```
+
+Die letzten beiden im allgemeinen Referenzdokument genannten Typen
+`external-type` und `external-assembly` sind für den Adapter bewusst keine
+auszugebenden Nodes. Die Scope-Policy dieses Konzepts hat Vorrang: Der Graph
+beschreibt den eigenen Sourcecode, nicht das Framework oder fremde Packages.
 
 Die Ausgabe verwendet die im aktuellen Vertrag gültige Form, insbesondere
 `typeId` für deklarierte Node-Typen. `kind` darf nicht als parallele, anders
@@ -152,6 +175,11 @@ Aggregation werden explizit im Graph dokumentiert. Höhere Summary-Links sind
 auf zugrunde liegende Beziehungen zurückführbar, wenn Details oder Metriken
 das benötigen.
 
+`references-assembly` und `project-reference` werden nur für eigene,
+ausdrücklich geladene Projekte ausgegeben. Beziehungen zu externen Assemblies
+und `generated-from`-Beziehungen zu ausgeschlossenen Artefakten werden nicht
+emittiert.
+
 ### Identität und Determinismus
 
 - Symbol-IDs beruhen auf einer kanonischen, voll qualifizierten Signatur und
@@ -164,6 +192,16 @@ das benötigen.
   sortiert.
 - Quellpositionen und lokale Pfade sind Diagnose-/Detaildaten, nicht die
   Identität eines Symbols.
+- Das sichtbare `label` bleibt kurz und menschenlesbar, zum Beispiel
+  `OrderService` oder `ProcessPayment()`. Detaildaten enthalten den
+  vollqualifizierten Namen, die kanonische Signatur und eine auffindbare
+  Quellposition mit solution-relativem Dokumentpfad, Zeile und Spalte. Diese
+  Angaben helfen, das Element im Code wiederzufinden, ohne die Node optisch
+  mit langen Pfaden zu überladen.
+- Ein Partial Type erhält genau einen fachlichen Typ-Node. Mehrere
+  Deklarationsdateien und Quellpositionen werden als Detaildaten bzw. mehrere
+  zulässige Containment-Belege erhalten, nicht als künstlich verschiedene
+  Klassen.
 - Die Standardausgabe ist byteweise reproduzierbar, soweit die Quelldaten und
   verwendeten Projektauflösungen gleich sind. Flüchtige Metadaten werden nur
   auf explizite Anforderung aufgenommen.
@@ -171,6 +209,71 @@ das benötigen.
 Die genaue kanonische Signatur und die Behandlung von Solution-/Projekt-
 Identitäten werden vor dem ersten Implementierungsslice als Entscheidung
 festgeschrieben.
+
+## Räumliche Semantik
+
+Die C#-Struktur soll in einer geeigneten Ansicht eine verständliche räumliche
+Nähe ergeben:
+
+```text
+Galaxie / Namespace
+└── Sonne / Namespace-Zentrum
+    └── Planet / Klasse oder anderer Typ
+        └── Mond / Methode, Property, Feld oder anderer Member
+```
+
+Die Begriffe sind eine Visualisierungsanalogie, keine zusätzlichen C#-Felder.
+Fachlich entstehen die Abstände aus:
+
+- expliziten `contains`-Links und einer deklarierten Containment-Hierarchie,
+- View-Profilen für Namespace-, Typ- und Member-Detailstufen,
+- generischen Layoutregeln, die Entfernung zwischen Container und Kind sowie
+  zwischen verschiedenen Gruppen/Namespaces beschreiben,
+- expliziten Summary-Links, wenn eine Detailstufe untergeordnete Nodes
+  ausblendet.
+
+Der Namespace ist damit das Zentrum seines Bereichs. Ein Typ liegt näher an
+seinem Namespace als ein Typ aus einem anderen Namespace; ein Member liegt
+näher an seinem deklarierenden Typ als an fremden Typen. Referenzen zwischen
+Klassen bilden Verbindungen zwischen Sonnensystemen, Referenzen zwischen
+Namespaces Verbindungen zwischen Galaxien. Der Adapter liefert dafür die
+Containment- und Beziehungsdaten sowie die generischen Layoutdeklarationen;
+der Viewer berechnet daraus die konkrete 3D-Position. Dafür muss der
+allgemeine Graphvertrag vor der Adapterimplementierung um eine
+quellenneutrale, deklarative Layoutbeschreibung ergänzt und gemeinsam mit dem
+Viewer geprüft werden.
+
+## Metriken und visuelle Größe
+
+`loc` und zyklomatische Komplexität bleiben nützliche Detailinformationen,
+sind aber keine primären Größenmetriken. Die bestehenden Lintergrenzen machen
+beide Werte in diesem Projekt absichtlich wenig unterscheidend. Eine Methode
+oder Klasse soll daher nicht allein wegen mehr Zeilen oder etwas höherer
+Komplexität größer erscheinen.
+
+Der erste fachliche Kandidat für Bedeutung und Größe ist strukturelle
+Relevanz aus dem eigenen Graphen:
+
+- `fanIn` und `fanOut` zählen direkte eingehende und ausgehende Beziehungen,
+- `weightedFanIn` und `weightedFanOut` berücksichtigen Beziehungstyp und
+  aggregierte Aufruf-/Referenzhäufigkeit,
+- `pageRank` oder ein vergleichbarer Einflusswert bewertet Nodes, die von
+  vielen wichtigen eigenen Nodes erreicht werden,
+- `betweenness` kann Brücken zwischen ansonsten getrennten Bereichen
+  sichtbar machen,
+- `importance` ist ein benannter, dokumentierter abgeleiteter Wert, den ein
+  View-Profil auf die visuelle Größe abbilden darf.
+
+Diese Werte müssen getrennt nach fachlicher Ebene sinnvoll aggregiert werden:
+Die Relevanz einer Klasse entsteht aus ihren Memberbeziehungen und direkten
+Typbeziehungen; die Relevanz eines Namespace entsteht aus den enthaltenen
+Typen und den Summary-Links. Eine Methode wird nicht automatisch nur deshalb
+groß, weil ihre Klasse wichtig ist. Der Adapter liefert Roh- und abgeleitete
+Metriken mit Definitionen, der Viewer entscheidet über die Darstellung.
+
+Die konkrete Formel, Normalisierung und Behandlung von Zyklen werden als
+eigene Entscheidung mit kleinen Referenzgraphen getestet. Ein einzelner
+unbenannter `weight`-Wert ist dafür nicht ausreichend.
 
 ## Technische Zielarchitektur
 
@@ -226,8 +329,8 @@ Integration. Die Pipeline bleibt nachvollziehbar:
 5. Containment- und Referenzbeziehungen ergänzen.
 6. Aufruf- und Memberzugriffsbeziehungen aus Syntax plus Semantic Model
    auflösen.
-7. Externe oder nicht auflösbare Symbole entsprechend der festgelegten
-   Policy markieren, nicht stillschweigend verwerfen.
+7. Externe, Framework- oder nicht auflösbare Symbole entsprechend der
+   Scope-Policy aus dem Graphen fernhalten und in der Konsolensummary zählen.
 8. Metriken und Summary-Links berechnen.
 9. Graphvertrag validieren und atomar schreiben.
 
@@ -247,7 +350,9 @@ sind:
 - Namespaces, Teiltypen, Überladungen, Generics, Vererbung, Interfaces und
   Overrides,
 - Aufrufe sowie Lese-/Schreibzugriffe mit vorhandenen Linkzielen,
-- externe und generierte Artefakte gemäß der festgelegten Policy,
+- der Ausschluss externer, Framework- und generierter Artefakte,
+- Konsolensummary mit Erfolgs-, Warn- und Übersprungen-Zählungen,
+- deklarierte Containment-Hierarchie und räumliche Layoutregeln,
 - stabile IDs, Deduplizierung, Sortierung und reproduzierbare Ausgabe,
 - Metrikgrenzen und fehlende optionale Werte,
 - Ausgabevalidierung gegen die exakte Viewer-Schema-Datei,

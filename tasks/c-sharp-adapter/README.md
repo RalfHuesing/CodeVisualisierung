@@ -24,6 +24,7 @@ aussehen:
 codegraph-csharp path\to\application.slnx --output path\to\graph.json
 ```
 
-Der endgültige Produktname, die genaue Optionensyntax und die unterstützten
-Eingabeformate sind in [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md) markiert und
-werden vor der Implementierung entschieden.
+Der Produktname und die Grundsyntax sind entschieden. Als Eingabe werden
+`.slnx`, `.sln` und `.csproj` unterstützt. Detailentscheidungen zu
+Fehlercodes, Summary und Layoutvertrag stehen weiterhin in
+[OPEN-QUESTIONS.md](OPEN-QUESTIONS.md).

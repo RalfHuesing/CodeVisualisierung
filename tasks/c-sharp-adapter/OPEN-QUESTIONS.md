@@ -1,106 +1,88 @@
 # Offene Entscheidungen: C#-Adapter
 
-Diese Fragen sollen vor Slice 1 beantwortet werden. Vorschläge sind als solche
-markiert und können im Chat geändert werden. Nach einer Entscheidung wird die
-Antwort in `CONCEPT.md` übernommen; diese Datei bleibt als Entscheidungslog
-erhalten.
+Die Antworten aus dem Konzeptgespräch sind als `[X]` festgehalten. Offene
+Punkte bleiben `[ ]` und werden vor dem jeweils betroffenen Slice entschieden.
+Nach einer Entscheidung wird `CONCEPT.md` aktualisiert; diese Datei bleibt
+als Entscheidungslog erhalten.
 
-## 1. Name und CLI-Syntax
+## Bereits entschieden
 
-Vorschlag:
+- [X] Produktname und Grundsyntax: `codegraph-csharp <input> --output
+  <graph.json>` ohne zusätzliches `analyze`-Verb.
+- [X] Eingaben: `.slnx`, `.sln` und `.csproj`. Eine Solution wird vollständig
+  geladen; ein `.csproj` ist ein vollständiger Einzelprojekt-Graph.
+- [X] Speicher-/Lademodell: Die komplette Eingabe wird in den Speicher
+  geladen. Kein dynamisches Nachladen und kein Streaming.
+- [X] Roslyn-/Compilerprobleme: auf der CLI-Konsole melden, nicht in den
+  Graph schreiben, Analyse best effort fortsetzen und am Ende ein valides,
+  gegebenenfalls partielles JSON mit Summary und Zählungen erzeugen.
+- [X] Analysegrenze: Nur Symbole aus den eigenen, explizit geladenen
+  Quellprojekten. Externe Abhängigkeiten, `System.*`, Framework-Assemblies und
+  generierte Artefakte werden nicht exportiert.
+- [X] Vollständigkeit: Das erste fertige Release deckt die vollständige
+  fachliche Zielmenge des eigenen Sourcecodes aus
+  `docs/07-CSharp-Referenzgraph.md` ab; externe/generierte Artefakte bleiben
+  gemäß Scope-Policy ausgeschlossen. Ein kleiner MVP ist nur ein
+  Zwischen-Slice.
+- [X] Darstellung: Kurze Labels für Nodes; qualifizierter Name, Signatur,
+  Projekt und solution-relative Quellposition mit Zeile/Spalte als sinnvolle
+  Detaildaten zum Wiederfinden im Code. Keine absoluten Pfade in IDs oder
+  sichtbaren Labels.
+- [X] Metrikrichtung: LOC und Komplexität sind Detailwerte, keine primäre
+  Größenmetrik. Relevanz soll aus eigenen Beziehungen, gewichteten Graden und
+  einem zu prüfenden Einflusswert wie PageRank entstehen.
+- [X] Teststruktur: zunächst ein Testprojekt mit fachlich getrennten
+  Testordnern; eine Aufteilung in mehrere Projekte bleibt nur bei konkretem
+  Bedarf erlaubt.
 
-```text
-codegraph-csharp <solution.slnx> --output <graph.json>
-```
+## Noch zu entscheiden
 
-Frage: Ist `codegraph-csharp` als ausführbarer Produktname in Ordnung? Soll es
-zusätzlich ein Verb wie `analyze` geben, oder bleibt die CLI bewusst bei einem
-einzigen Analysebefehl?
+### 1. Workspace und Restore
 
-## 2. Eingabeumfang
+- [X] Die CLI baut die analysierte Solution nicht und führt ihre Tests nicht
+  aus.
+- [ ] Zu klären: Ist ein fehlendes Restore/SDK ein harter Prozessfehler, oder
+  wird ein partieller Graph geschrieben, sofern noch verwertbare Projekte und
+  Dokumente geladen werden konnten?
 
-Vorschlag: `.slnx` ist der primäre und zuerst unterstützte Eingang. `.sln` und
-einzelne `.csproj` werden nicht stillschweigend versprochen und kommen erst in
-einem separaten Scope, falls sie benötigt werden.
+### 2. Generische Layoutbeschreibung
 
-Frage: Soll der erste Adapter ausschließlich `.slnx` akzeptieren oder direkt
-auch `.sln` und `.csproj` laden?
+- [ ] Der gemeinsame Graphvertrag braucht eine quellenneutrale deklarative
+  Beschreibung für Containment-basierte Nähe. Sie muss mindestens ausdrücken:
+  Namespace-Zentrum, Typ-Orbit, Member-Orbit, Abstand innerhalb eines
+  Containers und größeren Abstand zwischen Gruppen/Namespaces.
+- [ ] Zu entscheiden ist die konkrete Vertragsform, zum Beispiel ein
+  `layoutProfiles`-Abschnitt mit `orbitRules` und Gruppendistanzen. Der
+  Adapter darf dafür keine C#-spezifischen Viewer-Regeln erfinden.
 
-## 3. Analysezustand und Build
+### 3. Relevanz- und Größenmetriken
 
-Vorschlag: Die CLI lädt die Solution mit Roslyn/MSBuild und verwendet die
-vorhandenen Projekt-/Restoreinformationen. Sie baut keine Binärdateien und
-führt keine Tests der analysierten Solution aus.
+- [ ] Zu entscheiden: genaue Formel und Normalisierung für `importance`.
+- [ ] Zu entscheiden: PageRank, Betweenness oder eine bewusst einfachere
+  Kombination aus `fanIn`, `fanOut` und Beziehungshäufigkeit.
+- [ ] Zu entscheiden: getrennte Berechnung für Methoden, Typen und Namespaces
+  sowie die Aggregation über Summary-Links.
+- [ ] Kandidaten, die der Adapter zusätzlich als benannte Detailwerte liefern
+  kann: `loc`, Komplexität, direkte/gewichtete Grade, `callCount`, Anzahl
+  referenzierender Projekte, Anzahl erreichbarer eigener Nodes,
+  Zykluszugehörigkeit und Komponentengröße. Keiner dieser Werte wird ohne
+  fachliche Definition zur visuellen Größe.
 
-Frage: Soll ein fehlendes Restore/SDK als harter Fehler gelten? Sollen
-Compilerdiagnosen in einer ansonsten ladbaren Solution die Analyse stoppen oder
-als Graph-Metadaten/Diagnosen ausgegeben werden?
+### 4. Contract-Validierung
 
-## 4. Umfang des vollständigen ersten Releases
+- [X] Die einzige Schemaquelle bleibt
+  `contracts/graph-universe/schema/graph-universe.schema.json`.
+- [ ] Zu entscheiden: Darf die CLI eine kleine .NET-JSON-Schema-
+  Validierungsabhängigkeit verwenden, damit jede Ausgabe vor dem Schreiben
+  geprüft wird, oder bleibt die Laufzeitprüfung in Contract-Tests und einem
+  separaten Repository-Check?
 
-Die Referenzdokumentation nennt viele Node- und Linktypen. Die Roadmap plant
-deren Umsetzung in Slices.
+### 5. CLI-Details
 
-Frage: Muss das erste fertige Release bereits alle in
-`docs/07-CSharp-Referenzgraph.md` genannten Typen und Beziehungen liefern, oder
-ist ein klar dokumentierter MVP mit Solution/Project/Namespace/Type/Method,
-Containment, Calls und Referenzen der gewünschte erste Abschluss?
-
-## 5. Externe und generierte Symbole
-
-Vorschlag: Externe Assemblies und externe Typen werden als Nodes aufgenommen,
-aber standardmäßig nicht rekursiv in ihre Quellen analysiert. Generierte
-Dokumente werden kenntlich gemacht; ihre Aufnahme in die Node-Menge ist eine
-explizite Option oder Policy.
-
-Frage: Sollen externe Nodes standardmäßig enthalten sein? Sollen generierte
-Dateien standardmäßig enthalten, standardmäßig ausgeschlossen oder nur über
-eine CLI-Option steuerbar sein?
-
-## 6. Pfade und reproduzierbare Ausgabe
-
-Vorschlag: IDs enthalten keine absoluten Pfade. Detaildaten verwenden
-Solution-relative Pfade mit `/` als Trennzeichen. `createdAt` wird in der
-Standardausgabe weggelassen, damit identische Eingaben identische JSON-Dateien
-erzeugen.
-
-Frage: Ist diese Policy gewünscht, oder soll die Ausgabe absolute Pfade bzw.
-immer einen Erstellungszeitpunkt enthalten?
-
-## 7. Metriken
-
-Vorschlag für den ersten vollständigen Scope: Quellcodezeilen,
-zyklomatische Komplexität, Fan-in und Fan-out, jeweils nur dort, wo die
-Berechnung belastbar ist. Git-Churn und Testabdeckung bleiben außerhalb.
-
-Frage: Welche Metriken sind für den ersten nutzbaren Adapter zwingend? Reicht
-dieser Vorschlag oder soll zunächst nur LOC geliefert werden?
-
-## 8. Schema-Kopplung
-
-Vorschlag: `contracts/graph-universe/schema/graph-universe.schema.json` bleibt
-die einzige Schemaquelle. Der C#-Contract-Code wird daraus nicht als zweites
-manuelles Schema gepflegt; jede CLI-Ausgabe wird zur Laufzeit bzw. im
-Integrationspfad gegen diese Datei validiert, und Contract-Tests prüfen die
-Parität zwischen Adapter und Viewer.
-
-Frage: Ist eine kleine .NET-Validierungsabhängigkeit für JSON Schema in Ordnung,
-oder soll die Validierung ausschließlich über einen Repository-Check außerhalb
-der CLI erfolgen?
-
-## 9. Teststruktur
-
-Vorschlag: Ein Testprojekt `CodeVisualisierung.CSharp.Tests` mit klar getrennten
-Ordnern für reine Logik, Roslyn-Integration, Contract und CLI. Mehrere
-Produktionsprojekte dürfen intern fachlich sauber getrennt sein.
-
-Frage: Ist ein gemeinsames Testprojekt gewünscht, oder sollen die Testgrenzen
-als mehrere Testprojekte sichtbar werden?
-
-## 10. Namensgebung und Sprache
-
-Vorschlag: Produkt- und API-Namen englisch (`Graph`, `Node`, `Analysis`),
-Dokumentation und CLI-Fehlermeldungen deutsch oder englisch konsistent nach
-einer noch zu treffenden Entscheidung.
-
-Frage: Welche Sprache sollen öffentliche CLI-Texte und Fehlermeldungen haben?
+- [ ] Konkrete Exit-Code-Bereiche für Argument-, Eingabe-, Analyse- und
+  Ausgabefehler festlegen.
+- [ ] Konkretes Summary-Format festlegen, zum Beispiel getrennte Zähler für
+  geladene, analysierte, übersprungene und fehlgeschlagene Projekte,
+  Dokumente, Symbole und Beziehungen.
+- [ ] Sprache der öffentlichen CLI-Texte festlegen; technische Namen und
+  Graph-IDs bleiben englisch.

@@ -27,7 +27,7 @@ Delegated roles:
   orchestrator, implementer, reviewer gemäß .agents/roles/.
 ```
 
-## Slice 0 – Vertrag und Entscheidungen einfrieren
+## [ ] Slice 0 – Vertrag und Entscheidungen einfrieren
 
 Ziel: Die offenen fachlichen Richtungen beantworten und den Adaptervertrag
 konkret machen, bevor Produktionscode entsteht.
@@ -39,18 +39,22 @@ Erwartete Inhalte:
 - Node-/Linkumfang des ersten vollständigen Tasks,
 - Identitäts- und Pfadkonvention,
 - deterministische Metadaten- und Fehlerpolicy,
-- External-/Generated-Code-Policy,
-- Metrikumfang und Compilerdiagnose-Policy.
+- Ausschluss-Policy für externe, Framework- und generierte Artefakte,
+- Metrikumfang und Compilerdiagnose-Policy,
+- generische deklarative Layoutregeln für Hierarchie und Abstände.
 
 Erlaubte Pfade: `tasks/c-sharp-adapter/**`, bei expliziter Vertragsänderung
 zusätzlich `docs/**` und `contracts/graph-universe/**`.
 
 Akzeptanzkriterien:
 
-- `OPEN-QUESTIONS.md` enthält keine ungelöste Richtungsentscheidung mehr,
+- [ ] `OPEN-QUESTIONS.md` enthält keine ungelöste Richtungsentscheidung mehr,
   die den ersten Implementierungsslice blockiert.
-- `CONCEPT.md` und die allgemeine Graphdokumentation widersprechen sich nicht.
-- Alle folgenden Slices haben konkrete erlaubte Pfade und Prüfkriterien.
+- [ ] `CONCEPT.md` und die allgemeine Graphdokumentation widersprechen sich
+  nicht.
+- [ ] Alle folgenden Slices haben konkrete erlaubte Pfade und Prüfkriterien.
+- [ ] Der allgemeine Graphvertrag kann Namespace-/Typ-/Member-Nähe und
+  gruppenübergreifende Abstände deklarativ beschreiben.
 
 Checks: Dokumentenreview, `git diff --check`.
 
@@ -58,7 +62,7 @@ Stop: Eine Entscheidung würde den Graphvertrag oder den Viewerumfang
 grundsätzlich ändern und kann nicht sicher aus den vorhandenen Dokumenten
 abgeleitet werden.
 
-## Slice 1 – .NET-Solution und CLI-Grenze
+## [ ] Slice 1 – .NET-Solution und CLI-Grenze
 
 Ziel: Eine kleine, kompilierbare .NET-10-CLI mit verständlichem Prozessvertrag.
 
@@ -67,42 +71,44 @@ Erlaubte Pfade: `adapters/csharp/**`, notwendige Root-`.gitignore`-Ergänzung,
 
 Akzeptanzkriterien:
 
-- Die C#-Solution und das Testprojekt bauen mit dem vereinbarten SDK.
-- `--help`, `--version`, ungültige Argumente und fehlende Eingaben liefern
+- [ ] Die C#-Solution und das Testprojekt bauen mit dem vereinbarten SDK.
+- [ ] `--help`, `--version`, ungültige Argumente und fehlende Eingaben liefern
   stabile, dokumentierte Ergebnisse.
-- Analyse, Graph und Contract sind nicht in eine God-Klasse gelegt.
-- Der CLI-Test prüft den tatsächlichen Prozessvertrag, nicht nur eine interne
+- [ ] Analyse, Graph und Contract sind nicht in eine God-Klasse gelegt.
+- [ ] Der CLI-Test prüft den tatsächlichen Prozessvertrag, nicht nur eine interne
   Methode.
 
 Checks: `dotnet build`, passende xUnit-/CLI-Tests, `dotnet test`.
 
 Abhängigkeit: Slice 0.
 
-## Slice 2 – Workspace laden und Inventargraph
+## [ ] Slice 2 – Workspace laden und Inventargraph
 
-Ziel: Eine reale kleine `.slnx` laden und Solution, Projekte, Dokumente,
-Assemblies, Module und Namespaces als vertragskonforme Nodes mit Containment
-ausgeben.
+Ziel: Eine reale kleine `.slnx`, `.sln` und `.csproj` laden und Solution,
+Projekte, Dokumente, Assemblies, Module und Namespaces als vertragskonforme
+Nodes mit Containment ausgeben.
 
 Erlaubte Pfade: `adapters/csharp/**`, `contracts/graph-universe/**` nur für
 neue C#-Fixtures, `tasks/c-sharp-adapter/**`.
 
 Akzeptanzkriterien:
 
-- Eine Test-Solution mit mindestens zwei Projekten wird ohne absolute
+- [ ] Eine Test-Solution mit mindestens zwei Projekten wird ohne absolute
   Maschinenpfade in Identitäten analysiert.
-- Die Ausgabe ist gegen exakt
+- [ ] Die Ausgabe ist gegen exakt
   `contracts/graph-universe/schema/graph-universe.schema.json` validiert.
-- Nodes und Links sind dedupliziert und stabil sortiert.
-- Fehlende Projektdateien, Workspace-Fehler und relevante Diagnosen werden
+- [ ] Nodes und Links sind dedupliziert und stabil sortiert.
+- [ ] Fehlende Projektdateien, Workspace-Fehler und relevante Diagnosen werden
   gemäß der festgelegten Policy verständlich behandelt.
+- [ ] Eine gültige Eingabe erzeugt auch bei partiellen Roslyn-Problemen ein
+  valides JSON und eine Konsolensummary mit Zählungen.
 
 Checks: Unit-Tests für Identitäten/Sortierung, Workspace-Integrationstest,
 Schema-Validierung, `dotnet test`.
 
 Abhängigkeit: Slice 1.
 
-## Slice 3 – Typen und Member
+## [ ] Slice 3 – Typen und Member
 
 Ziel: Roslyn-Symbole für Typen und Member vollständig und unterscheidbar in
 den Graph überführen.
@@ -112,35 +118,36 @@ Erlaubte Pfade: `adapters/csharp/**`, C#-Testfixtures und gegebenenfalls
 
 Akzeptanzkriterien:
 
-- Klassen, Interfaces, Records, Structs, Enums, Delegates, Methoden,
+- [ ] Klassen, Interfaces, Records, Structs, Enums, Delegates, Methoden,
   Konstruktoren, Properties, Felder, Events, Operatoren, lokale Funktionen
   und relevante Typparameter werden nach der beschlossenen Policy erkannt.
-- Overloads, Generics, Teiltypen und gleichnamige Symbole erhalten eindeutige
+- [ ] Overloads, Generics, Teiltypen und gleichnamige Symbole erhalten eindeutige
   kanonische IDs.
-- Sichtbarkeit, Quellposition, qualifizierter Name und Container stehen als
+- [ ] Sichtbarkeit, Quellposition, qualifizierter Name und Container stehen als
   vertragskonforme Detaildaten zur Verfügung.
-- Externe Symbole folgen der beschlossenen Include-/Markierungs-Policy.
+- [ ] Externe, Framework- und generierte Symbole werden ausgeschlossen und
+  nicht als Linkziele erzeugt.
 
 Checks: reine ID-/Mapping-Unit-Tests, Referenz-Solution-Integrationstest,
 Schema-Validierung, `dotnet test`.
 
 Abhängigkeit: Slice 2.
 
-## Slice 4 – Semantische Beziehungen
+## [ ] Slice 4 – Semantische Beziehungen
 
 Ziel: Beziehungen aus Syntax und Semantic Model auflösen und korrekt
 referenzieren.
 
 Akzeptanzkriterien:
 
-- `calls`, `constructs`, `inherits`, `implements`, `overrides`, `reads`,
+- [ ] `calls`, `constructs`, `inherits`, `implements`, `overrides`, `reads`,
   `writes`, Typverwendungen und Projekt-/Assemblyreferenzen werden gemäß der
   beschlossenen Zielmenge geliefert.
-- Mehrere Aufrufe derselben Beziehung werden dedupliziert oder über eine
+- [ ] Mehrere Aufrufe derselben Beziehung werden dedupliziert oder über eine
   benannte Metrik aggregiert; die Semantik ist dokumentiert.
-- Nicht auflösbare oder compilerbedingt unvollständige Symbole werden nicht
+- [ ] Nicht auflösbare oder compilerbedingt unvollständige Symbole werden nicht
   in ungültige Links umgewandelt.
-- Jedes Linkziel existiert und die Richtung ist fachlich korrekt.
+- [ ] Jedes Linkziel existiert und die Richtung ist fachlich korrekt.
 
 Erlaubte Pfade: `adapters/csharp/**`, `contracts/graph-universe/**` nur für
 Fixtures, `tasks/c-sharp-adapter/**`.
@@ -150,21 +157,22 @@ Mehrprojekt-Integrationstests, Invarianten- und Schema-Tests, `dotnet test`.
 
 Abhängigkeit: Slice 3.
 
-## Slice 5 – Metriken, externe/generierte Artefakte und Projektionen
+## [ ] Slice 5 – Metriken, externe/generierte Artefakte und Projektionen
 
 Ziel: Die fachlich vereinbarten Zusatzdaten vervollständigen, ohne den
 Viewer mit C#-Sonderlogik zu belasten.
 
 Akzeptanzkriterien:
 
-- LOC-/Komplexitäts-/Fan-in-/Fan-out-Metriken sind benannt, reproduzierbar und
-  mit fehlenden Werten sauber unterschieden.
-- Generierte Dateien, Partial Types und externe Assemblies sind nach Policy
-  sichtbar oder nachvollziehbar ausgeschlossen.
-- Summary-Links und ihre Herkunft sind explizit und gegen die
+- [ ] LOC-/Komplexitäts-/Fan-in-/Fan-out-Metriken sind benannt,
+  reproduzierbar und mit fehlenden Werten sauber unterschieden.
+- [ ] Generierte Dateien und externe Assemblies sind nach der beschlossenen
+  Policy ausgeschlossen; Partial Types bleiben als zusammengehörige eigene
+  Typdeklarationen nachvollziehbar.
+- [ ] Summary-Links und ihre Herkunft sind explizit und gegen die
   Detailbeziehungen prüfbar.
-- `metricDefinitions`, `nodeTypes`, `linkTypes`, Facetten und Profile bleiben
-  mit dem gemeinsamen Vertrag kompatibel.
+- [ ] `metricDefinitions`, `nodeTypes`, `linkTypes`, Facetten, Profile und
+  Layoutregeln bleiben mit dem gemeinsamen Vertrag kompatibel.
 
 Erlaubte Pfade: `adapters/csharp/**`, `contracts/graph-universe/**` für
 Vertrag/Fixtures, `docs/**` bei erforderlicher Vertragsdokumentation,
@@ -175,20 +183,20 @@ Vertragstests, `dotnet test`, `npm run check`.
 
 Abhängigkeit: Slice 4.
 
-## Slice 6 – End-to-End-Härtung und Abschluss
+## [ ] Slice 6 – End-to-End-Härtung und Abschluss
 
 Ziel: Die Anwendung ist als CLI nutzbar, vollständig dokumentiert und gegen
 Regressionen abgesichert.
 
 Akzeptanzkriterien:
 
-- Ein veröffentlichbares CLI-Artefakt kann eine Test-Solution aus einem
+- [ ] Ein veröffentlichbares CLI-Artefakt kann eine Test-Solution aus einem
   beliebigen Arbeitsverzeichnis analysieren.
-- Erfolg, Fehler, deterministische Wiederholung und vorhandene Zieldateien
+- [ ] Erfolg, Fehler, deterministische Wiederholung und vorhandene Zieldateien
   sind als Prozessverhalten getestet.
-- README, C#-Adapterdokumentation, Schema-Referenz-Fixture und Taskstatus
+- [ ] README, C#-Adapterdokumentation, Schema-Referenz-Fixture und Taskstatus
   stimmen überein.
-- Keine Architektur-/Dateigrößenregel des Repositorys ist verletzt.
+- [ ] Keine Architektur-/Dateigrößenregel des Repositorys ist verletzt.
 
 Erlaubte Pfade: `adapters/csharp/**`, zugehörige Tests/Fixtures,
 `contracts/graph-universe/**`, `docs/**`, `README.md`,
