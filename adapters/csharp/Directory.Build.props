@@ -6,4 +6,17 @@
     <Deterministic>true</Deterministic>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
+
+  <!-- Transitive Abhängigkeiten von Microsoft.CodeAnalysis.Workspaces.MSBuild:
+       Die MSBuild-Runtime wird nicht in die Test- oder CLI-Ausgabe kopiert. -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Framework">
+      <PrivateAssets>all</PrivateAssets>
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.StringTools">
+      <PrivateAssets>all</PrivateAssets>
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>
