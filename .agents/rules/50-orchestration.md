@@ -11,9 +11,27 @@ ausführen lässt oder Subagenten, Rollen oder Reviewer verlangt.
 - Subagenten dürfen keine weiteren Subagenten starten.
 - Nur der Orchestrator setzt Roadmap-Checkboxen und erstellt Commits.
 
+## Task-Lebenszyklus
+
+- Der Nutzer beauftragt standardmäßig den vollständigen Task, nicht nur dessen
+  ersten Slice.
+- Vor der Delegation definiert der Orchestrator Scope, explizite Ausschlüsse,
+  Abschlussbedingung und die Reihenfolge der bereiten Arbeit.
+- Ein Slice ist die interne Einheit für Delegation, Review, Checks und Commit.
+  Mehrere Slices dürfen nacheinander in einem Task-Lauf bearbeitet werden.
+- Nach jedem erfolgreichen Slice-Commit liest der Orchestrator Roadmap und
+  Task-Scope erneut und arbeitet automatisch den nächsten bereiten Slice ab.
+- Ein erfolgreicher Slice-Commit ist kein erfolgreicher Abschluss des Tasks.
+- Der Task darf erst als abgeschlossen gemeldet werden, wenn keine offene
+  In-Scope-Arbeit mehr existiert und die Abschlusschecks bestanden sind.
+- Einen einzelnen Slice bearbeitet der Orchestrator nur dann isoliert, wenn
+  der Nutzer dies ausdrücklich verlangt.
+
 ## Task-Slices
 
-- Ein Lauf bearbeitet genau einen fachlich zusammenhängenden Slice.
+- Ein einzelner Arbeitsschritt bearbeitet genau einen fachlich
+  zusammenhängenden Slice; ein vollständiger Task-Lauf kann mehrere solche
+  Slices nacheinander enthalten.
 - Vor der Delegation werden Ziel, erlaubte Dateien, Akzeptanzkriterien,
   Prüfungen und Stop-Bedingung schriftlich festgelegt.
 - Unklare fachliche Richtungsentscheidungen werden vor Implementierung geklärt;
@@ -32,9 +50,13 @@ ausführen lässt oder Subagenten, Rollen oder Reviewer verlangt.
 
 ## Abschluss
 
-- Der Orchestrator führt die relevanten Tests und `npm run check` aus.
+- Der Orchestrator führt die relevanten Tests und `npm run check` für jeden
+  Slice vor dessen Commit aus.
 - Roadmap und Dokumentation werden nur mit nachweislich erledigten Punkten
   aktualisiert.
 - Vor dem Commit werden `git diff`, `git diff --check` und `git status` geprüft.
-- Der Orchestrator committen fachlich abgeschlossene Slices selbst mit einer
-  Conventional-Commit-Nachricht.
+- Der Orchestrator committet fachlich abgeschlossene Slices selbst mit einer
+  Conventional-Commit-Nachricht und setzt danach den Task-Lauf fort.
+- Nach dem letzten In-Scope-Slice wird zusätzlich geprüft, dass die
+  Task-Abschlussbedingung erfüllt ist. Erst dann wird der Task erfolgreich
+  beendet.

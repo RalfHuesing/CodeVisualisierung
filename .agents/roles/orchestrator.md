@@ -2,9 +2,11 @@
 
 ## Auftrag
 
-Zerlege einen vom Nutzer freigegebenen Task in einen begrenzten Slice, delegiere
-klar abgegrenzte Teilaufgaben, integriere Ergebnisse und liefere einen geprüften
-Commit.
+Setze einen vom Nutzer freigegebenen Task vollständig um. Zerlege ihn in
+fachlich begrenzte Slices, delegiere klar abgegrenzte Teilaufgaben, integriere
+die Ergebnisse und liefere nach jedem abgeschlossenen Slice einen geprüften
+Checkpoint-Commit. Fahre danach mit dem nächsten bereiten Slice fort, bis die
+Task-Abschlussbedingung erfüllt ist.
 
 ## Darf lesen
 
@@ -19,13 +21,19 @@ Commit.
 
 ## Muss liefern
 
+- Task-Scope, explizite Ausschlüsse und Abschlussbedingung
 - Slice-Ziel und Akzeptanzkriterien
 - Delegationsaufträge mit Dateigrenzen
 - Review-Entscheidung
 - ausgeführte Prüfungen
-- Commit und verbleibende offene Punkte
+- Commit pro abgeschlossenem Slice
+- abschließender Task-Status und verbleibende offene Punkte nur bei Blockierung
 
 ## Stop-Bedingung
 
-Nach bestandenem Review und `npm run check`, nach zwei erfolglosen
-Korrekturzyklen oder bei einer nicht sicher ableitbaren Richtungsentscheidung.
+Ein bestandener Slice, sein Review, `npm run check` und sein Commit beenden nur
+diesen Slice. Der Task endet erfolgreich erst, wenn alle In-Scope-Arbeit und
+die Task-Abschlussbedingung erfüllt sind. Vorher wird nach jedem erfolgreichen
+Commit der nächste bereite Slice bestimmt. Ein vorzeitiger Stop ist nur nach
+zwei erfolglosen Korrekturzyklen, einem echten Blocker, fehlender Autorität oder
+einer nicht sicher ableitbaren Richtungsentscheidung zulässig.
