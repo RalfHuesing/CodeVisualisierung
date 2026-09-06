@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>CodeVisualisierung.CSharp.Graph</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../CodeVisualisierung.CSharp.Contract/CodeVisualisierung.CSharp.Contract.csproj" />
+  </ItemGroup>
+</Project>

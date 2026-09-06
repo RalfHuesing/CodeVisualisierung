@@ -1,4 +1,7 @@
 <Solution>
   <Project Path="src/CodeVisualisierung.CSharp.Cli/CodeVisualisierung.CSharp.Cli.csproj" />
+  <Project Path="src/CodeVisualisierung.CSharp.Contract/CodeVisualisierung.CSharp.Contract.csproj" />
+  <Project Path="src/CodeVisualisierung.CSharp.Graph/CodeVisualisierung.CSharp.Graph.csproj" />
+  <Project Path="src/CodeVisualisierung.CSharp.Analysis/CodeVisualisierung.CSharp.Analysis.csproj" />
   <Project Path="tests/CodeVisualisierung.CSharp.Tests/CodeVisualisierung.CSharp.Tests.csproj" />
 </Solution>

@@ -3,8 +3,9 @@
 Die kompilierbare .NET-10-CLI liegt in
 [CodeVisualisierung.CSharp.slnx](CodeVisualisierung.CSharp.slnx). Sie enthält
 ein CLI-Projekt und ein xUnit-Testprojekt. Slice 1 definiert die echte
-Prozessgrenze; die Analysepipeline und die Graphschichten werden in späteren
-Slices ergänzt.
+Prozessgrenze; Slice 2 lädt reale Workspaces und erzeugt den validierten
+Inventargraphen. Symbol-, Beziehungs-, Metrik- und Projektionsschichten folgen
+in den abhängigen Slices.
 
 ## CLI-Prozessvertrag
 
@@ -23,11 +24,10 @@ ein fehlendes Ausgabeverzeichnis oder anderer Ausgabe-/Dateisystemfehler mit
 Ausgabe reserviert. Diagnosen stehen auf Deutsch in `stderr`, Graphdaten werden
 niemals auf `stdout` geschrieben.
 
-Die Slice-1-CLI erkennt eine vorhandene unterstützte Eingabe bereits an der
-Prozessgrenze, analysiert sie aber noch nicht. Dieser Fall liefert bis Slice 2
-den dokumentierten Exit-Code `4` mit der Diagnose
-`Die Analysepipeline ist noch nicht verfügbar.`. Es wird dabei keine
-Ausgabedatei erzeugt.
+Die Slice-2-CLI lädt die Eingabe über `MSBuildWorkspace`, verarbeitet eigene
+`.cs`-Dokumente und schreibt einen deterministisch sortierten Inventargraphen.
+Generierte Dateien unter `obj`/`bin`, `.g.cs`-Dateien und verlinkte Dateien
+außerhalb des Projektordners werden übersprungen und in der Summary gezählt.
 
 Gemeinsame MSBuild-Einstellungen für beide Projekte liegen in
 [Directory.Build.props](Directory.Build.props). Zentrale NuGet-Versionen liegen

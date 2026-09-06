@@ -21,6 +21,8 @@ Die Grundlagen unter `adapters/csharp/` sind bereits angelegt:
 - ein angepasstes AiNetLinter-Profil für die reine C#-/CLI-Solution,
 - eine echte CLI-Prozessgrenze mit stabilen Exit-Codes und Diagnosen für Hilfe,
   Version, Argument-, Eingabe-, Analyse- und Ausgabefehler,
+- eine Workspace-/Inventarpipeline für Solutions und Projekte mit Contract-,
+  Graph- und Analysis-Schicht,
 - eine verwaltete, repo-lokale Temp-Infrastruktur für spätere Test-Solutions.
 
 Diese Grundlage ist noch kein Adapterverhalten: Es gibt noch keine
@@ -213,9 +215,11 @@ diagnostics.warnings=... diagnostics.errors=...
 output.bytes=...
 ```
 
-Slice 1 implementiert die Argument- und Prozessgrenze. Der Analysepfad und die
-Graphausgabe sind ausdrücklich noch nicht vorhanden und folgen in abhängigen
-Slices.
+Slice 1 implementiert die Argument- und Prozessgrenze. Slice 2 lädt Workspaces
+und erzeugt die ersten Contract-konformen Solution-, Projekt-, Assembly-,
+Modul-, Namespace- und Datei-Nodes mit Containment und eigenen Referenzen.
+Semantische Symbol-, Beziehungs-, Metrik- und Projektionserfassung folgen in
+abhängigen Slices.
 
 ## Fachliches Datenmodell
 

@@ -6,6 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../../src/CodeVisualisierung.CSharp.Analysis/CodeVisualisierung.CSharp.Analysis.csproj" />
+    <ProjectReference Include="../../src/CodeVisualisierung.CSharp.Contract/CodeVisualisierung.CSharp.Contract.csproj" />
+    <ProjectReference Include="../../src/CodeVisualisierung.CSharp.Graph/CodeVisualisierung.CSharp.Graph.csproj" />
     <ProjectReference Include="../../src/CodeVisualisierung.CSharp.Cli/CodeVisualisierung.CSharp.Cli.csproj" />
     <PackageReference Include="Microsoft.Build.Locator" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />

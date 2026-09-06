@@ -4,6 +4,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="../../shared/LinkedSource.cs" Link="LinkedSource.cs" />
     <ProjectReference Include="../CSharpReferenceMini.Contracts/CSharpReferenceMini.Contracts.csproj" />
   </ItemGroup>
 </Project>

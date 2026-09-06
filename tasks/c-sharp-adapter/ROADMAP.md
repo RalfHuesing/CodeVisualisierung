@@ -112,7 +112,7 @@ Checks: `dotnet build`, passende xUnit-/CLI-Tests, `dotnet test`.
 
 Abhängigkeit: Slice 0.
 
-## [ ] Slice 2 – Workspace laden und Inventargraph
+## [X] Slice 2 – Workspace laden und Inventargraph
 
 Ziel: Eine reale kleine `.slnx`, `.sln` und `.csproj` laden und Solution,
 Projekte, Dokumente, Assemblies, Module und Namespaces als vertragskonforme
