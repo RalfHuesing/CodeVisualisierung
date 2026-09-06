@@ -45,6 +45,7 @@ test("selects a node from the canvas without a pointer-up position error", async
 
   await page.goto("/");
   await page.waitForTimeout(3000);
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-auto-fit-count", "1");
   const canvas = page.locator("#graph-canvas canvas");
   const bounds = await canvas.boundingBox();
   expect(bounds).not.toBeNull();
@@ -86,6 +87,7 @@ test("selects a node from the canvas without a pointer-up position error", async
 
   await expect(page.locator("#selected-node-details")).toBeVisible();
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-selected-node-id", /.+/);
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-auto-fit-count", "1");
   expect([...consoleErrors, ...pageErrors].filter((message) => message.includes("reading 'x'")).length).toBe(0);
 });
 
@@ -201,6 +203,7 @@ test("uploads the nested universe fixture and exposes declarative profiles and m
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "18");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-link-count", "19");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-layout-group-count", "2");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-auto-fit-count", "1");
   await expect(page.locator("#zoom-select option[value='nested-overview']")).toHaveText("Universe overview");
   await expect(page.locator("#node-metric-select option[value='mass']")).toHaveText("Mass");
   await expect(page.locator("#link-metric-select option[value='referenceStrength']")).toHaveText("Reference strength");
@@ -208,6 +211,7 @@ test("uploads the nested universe fixture and exposes declarative profiles and m
   await page.locator("#zoom-select").selectOption("nested-overview");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-layout-profile-id", "nested-overview");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "6");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-auto-fit-count", "2");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-link-count", "5");
   await page.locator("#node-metric-select").selectOption("complexity");
   await expect(page.locator("#legend-node-metric")).toContainText("Complexity");

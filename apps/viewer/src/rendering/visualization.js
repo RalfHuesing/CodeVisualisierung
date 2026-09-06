@@ -15,11 +15,14 @@ export function createGraphRenderer(container, onNodeClick) {
   let selectedNodeId;
   let searchQuery = "";
   let viewOptions = {};
+  let fitState = { requested: true, count: 0 };
 
   function render(graph, options = {}) {
     destroy();
     currentGraph = graph;
     viewOptions = options;
+    fitState = { requested: true, count: 0 };
+    container.dataset.autoFitCount = "0";
     const visualData = createVisualGraphData(filterGraph(graph, viewOptions.filters, viewOptions.profile), viewOptions);
     graphInstance = createForceGraph(
       container,
@@ -28,8 +31,10 @@ export function createGraphRenderer(container, onNodeClick) {
       graph,
       (node) => getNodeColor(node, currentGraph, selectedNodeId, searchQuery),
       (link) => getLinkColor(link, graph, selectedNodeId, searchQuery),
-      (node) => createNodeObject(node, getNodeColor(node, currentGraph, selectedNodeId, searchQuery))
+      (node) => createNodeObject(node, getNodeColor(node, currentGraph, selectedNodeId, searchQuery)),
+      () => fitGraphToContent(graphInstance, container, fitState)
     );
+    graphInstance.graphData(visualData);
     updateDataAttributes(container, visualData);
     refreshStyles();
     return graphInstance;
@@ -42,6 +47,7 @@ export function createGraphRenderer(container, onNodeClick) {
     }
 
     const visualData = createVisualGraphData(filterGraph(currentGraph, viewOptions.filters, viewOptions.profile), viewOptions);
+    fitState.requested = true;
     graphInstance.graphData(visualData);
     updateDataAttributes(container, visualData);
     refreshStyles();
@@ -86,6 +92,7 @@ export function createGraphRenderer(container, onNodeClick) {
       graphInstance._destructor();
       graphInstance = undefined;
     }
+    delete container.dataset.autoFitCount;
     container.replaceChildren();
   }
 
@@ -129,8 +136,18 @@ function getNodeColor(node, graph, selectedNodeId, searchQuery) {
   return node.color;
 }
 
+function fitGraphToContent(graphInstance, container, fitState) {
+  if (!fitState.requested || !graphInstance) {
+    return;
+  }
 
-function createForceGraph(container, onNodeClick, visualData, graph, nodeColor, linkColor, nodeObject) {
+  fitState.requested = false;
+  fitState.count += 1;
+  container.dataset.autoFitCount = String(fitState.count);
+  graphInstance.zoomToFit(400, 40);
+}
+
+function createForceGraph(container, onNodeClick, visualData, graph, nodeColor, linkColor, nodeObject, onEngineStop) {
   const graphInstance = new ForceGraph3D(container, { controlType: "orbit" })
     .backgroundColor(graph.theme?.background ?? "#0b1120")
     .enableNodeDrag(false)
@@ -150,12 +167,11 @@ function createForceGraph(container, onNodeClick, visualData, graph, nodeColor, 
     .linkDirectionalArrowColor(linkColor)
     .onNodeClick((node) => onNodeClick(node.id))
     .onBackgroundClick(() => onNodeClick(null))
-    .onEngineStop(() => graphInstance.zoomToFit(400, 40))
+    .onEngineStop(onEngineStop)
     .warmupTicks(80)
     .cooldownTime(1500);
   graphInstance.d3Force("link").distance((link) => link.distance ?? VIEWER_CONFIG.link.distance);
   graphInstance.d3Force("charge").strength(VIEWER_CONFIG.link.chargeStrength);
-  graphInstance.graphData(visualData);
   return graphInstance;
 }
 
