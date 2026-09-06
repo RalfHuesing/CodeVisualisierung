@@ -1,4 +1,5 @@
 import { resolveVisualToken } from "../domain/graph.js";
+import { DEFAULT_LAYOUT_DISTANCE, prepareLayout } from "./layout.js";
 
 const FALLBACK_NODE_COLOR = "#38bdf8";
 const FALLBACK_LINK_COLOR = "#94a3b8";
@@ -8,7 +9,7 @@ export const VIEWER_CONFIG = Object.freeze({
   link: Object.freeze({
     arrowLength: 3,
     chargeStrength: -120,
-    distance: 90,
+    distance: DEFAULT_LAYOUT_DISTANCE,
     maxWidth: 0.8,
     minWidth: 0.2
   }),
@@ -26,12 +27,15 @@ export function createVisualGraphData(graph, options = {}) {
   const linkValues = graph.links.map((link) => getLinkValue(link, linkMetric)).filter(Number.isFinite);
   const nodes = graph.nodes.map((node) => {
     const visualStyle = getNodeVisualStyle(node, graph);
+    const baseSize = getNodeBaseSize(node, graph);
     return {
       ...node,
+      baseSize,
       color: visualStyle.color,
+      visualRole: visualStyle.role,
       visualShape: visualStyle.shape,
       visualTokenId: visualStyle.tokenId,
-      visualValue: scaleValue(node.metrics?.[nodeMetric], nodeValues, VIEWER_CONFIG.node.minValue, VIEWER_CONFIG.node.maxValue)
+      visualValue: scaleValue(node.metrics?.[nodeMetric], nodeValues, VIEWER_CONFIG.node.minValue, VIEWER_CONFIG.node.maxValue) * baseSize
     };
   });
   const links = graph.links.map((link) => {
@@ -44,7 +48,15 @@ export function createVisualGraphData(graph, options = {}) {
     };
   });
 
-  return { linkMetric, links, nodeMetric, nodes };
+  const layout = prepareLayout({ ...graph, links, nodes }, options.profile);
+  return {
+    groupCount: layout.groupCount,
+    layoutProfileId: layout.layoutProfileId,
+    linkMetric,
+    links: layout.links,
+    nodeMetric,
+    nodes: layout.nodes
+  };
 }
 
 export function findNodeMetric(graph) {
@@ -171,10 +183,20 @@ export function getNodeVisualStyle(node, graph) {
   const resolved = resolveVisualToken(graph, node.visualToken ?? definition?.visualToken);
   return {
     color: resolved.token?.color ?? FALLBACK_NODE_COLOR,
+    role: node.visualRole ?? definition?.visualRole,
     shape: resolved.token?.shape ?? FALLBACK_NODE_SHAPE,
     tokenId: resolved.id,
     usedFallback: resolved.usedFallback
   };
+}
+
+export function getNodeBaseSize(node, graph) {
+  const definition = getDefinition(graph.nodeTypes, node.typeId ?? node.kind);
+  return Number.isFinite(node.baseSize) && node.baseSize > 0
+    ? node.baseSize
+    : Number.isFinite(definition?.baseSize) && definition.baseSize > 0
+      ? definition.baseSize
+      : 1;
 }
 
 export function getLinkVisualStyle(link, graph) {

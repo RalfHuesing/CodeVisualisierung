@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import sampleGraph from "../contracts/graph-universe/fixtures/minimal.json" with { type: "json" };
 import edgeCasesGraph from "../contracts/graph-universe/fixtures/edge-cases.json" with { type: "json" };
+import spatialGraph from "../contracts/graph-universe/fixtures/spatial.json" with { type: "json" };
 import { normalizeGraph } from "../apps/viewer/src/domain/graph.js";
 import {
   createVisualGraphData,
@@ -14,6 +15,12 @@ import {
   getNodeVisualStyle,
   scaleValue
 } from "../apps/viewer/src/rendering/graph-mapping.js";
+import {
+  createDeterministicPositions,
+  getActiveLayoutProfile,
+  getLayoutGroup,
+  getLinkDistance
+} from "../apps/viewer/src/rendering/layout.js";
 import { isWebGLSupported } from "../apps/viewer/src/rendering/webgl.js";
 
 describe("graph visualization calculations", () => {
@@ -103,6 +110,77 @@ describe("graph visualization calculations", () => {
       tokenId: "node",
       usedFallback: true
     });
+  });
+
+});
+
+describe("spatial visualization calculations", () => {
+
+  it("applies type base sizes and keeps visual roles in prepared nodes", () => {
+    const graph = normalizeGraph(spatialGraph);
+    const visualData = createVisualGraphData(graph, { profile: graph.viewProfiles[0] });
+
+    expect(visualData.nodes.find((node) => node.id === "group-north")).toMatchObject({
+      baseSize: 2.4,
+      visualRole: "container",
+      visualValue: 8 * 2.4
+    });
+    expect(visualData.nodes.find((node) => node.id === "item-a")).toMatchObject({
+      baseSize: 1.2,
+      visualRole: "entity"
+    });
+  });
+
+  it("falls back deterministically for missing and constant metrics", () => {
+    const graph = normalizeGraph(structuredClone(spatialGraph));
+    graph.nodes.forEach((node) => delete node.metrics.importance);
+    const missingMetric = createVisualGraphData(graph);
+    graph.nodes.forEach((node) => { node.metrics.importance = 1; });
+    const constantMetric = createVisualGraphData(graph);
+
+    expect(missingMetric.nodes.map((node) => node.visualValue)).toEqual(constantMetric.nodes.map((node) => node.visualValue));
+    expect(missingMetric.nodes.every((node) => Number.isFinite(node.x) && Number.isFinite(node.y) && Number.isFinite(node.z))).toBe(true);
+  });
+
+  it("selects layout profiles with first-profile fallback", () => {
+    const graph = normalizeGraph(spatialGraph);
+
+    expect(getActiveLayoutProfile(graph, graph.viewProfiles[1]).id).toBe("spatial-detail");
+    expect(getActiveLayoutProfile(graph, { layoutProfileId: "missing" }).id).toBe("spatial-overview");
+    expect(getActiveLayoutProfile(graph, null).id).toBe("spatial-overview");
+  });
+
+  it("uses containment, default, and cross-group link distances", () => {
+    const graph = normalizeGraph({ ...structuredClone(spatialGraph), hierarchy: { containmentLinkTypes: ["contains"] } });
+    const profile = getActiveLayoutProfile(graph, graph.viewProfiles[0]);
+    const nodeMap = new Map(graph.nodes.map((node) => [node.id, node]));
+    const defaultLink = { source: "item-a", target: "item-b", typeId: "relates" };
+    const crossGroupContainment = structuredClone(graph);
+    crossGroupContainment.nodes.find((node) => node.id === "item-a").groupId = "south";
+    const crossGroupNodeMap = new Map(crossGroupContainment.nodes.map((node) => [node.id, node]));
+
+    expect(getLinkDistance(graph.links[0], graph, profile, nodeMap)).toBe(20);
+    expect(getLinkDistance(defaultLink, graph, profile, nodeMap)).toBe(26);
+    expect(getLinkDistance(graph.links[7], graph, profile, nodeMap)).toBe(48);
+    expect(getLinkDistance(crossGroupContainment.links[0], crossGroupContainment, profile, crossGroupNodeMap)).toBe(20);
+  });
+
+  it("creates stable positions with separated groups and nearby containment", () => {
+    const graph = normalizeGraph({ ...structuredClone(spatialGraph), hierarchy: { containmentLinkTypes: ["contains"] } });
+    const profile = getActiveLayoutProfile(graph, graph.viewProfiles[0]);
+    const first = createDeterministicPositions(graph, profile);
+    const second = createDeterministicPositions(graph, profile);
+    const parent = first.get("group-north");
+    const child = first.get("item-a");
+    const nestedChild = first.get("detail-a");
+    const otherGroup = first.get("group-south");
+    const distance = (left, right) => Math.hypot(left.x - right.x, left.y - right.y, left.z - right.z);
+
+    expect([...first.entries()]).toEqual([...second.entries()]);
+    expect(distance(parent, child)).toBeLessThan(distance(parent, otherGroup));
+    expect(distance(child, nestedChild)).toBe(12);
+    expect(Math.abs(parent.x - otherGroup.x)).toBe(48);
+    expect(getLayoutGroup(graph.nodes[0], "attributes.team")).toBe("north");
   });
 });
 

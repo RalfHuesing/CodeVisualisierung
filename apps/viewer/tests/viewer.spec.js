@@ -128,6 +128,34 @@ test("communicates the full-mode limit and keeps larger graphs loadable", async 
   await expect(page.locator("#graph-status")).toContainText("weiterhin ladbar");
 });
 
+test("uploads spatial data and exposes the active layout", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#graph-file").setInputFiles({
+    buffer: Buffer.from(JSON.stringify({
+      format: { name: "graph-universe", version: "1.0" },
+      nodeTypes: [
+        { id: "group", visualRole: "container", baseSize: 2 },
+        { id: "item", visualRole: "entity", baseSize: 1 }
+      ],
+      linkTypes: [{ id: "contains" }],
+      viewProfiles: [{ id: "spatial", layoutProfileId: "layout" }],
+      layoutProfiles: [{ id: "layout", groupField: "groupId", groupDistance: 48, defaultDistance: 20 }],
+      hierarchy: { containmentLinkTypes: ["contains"] },
+      nodes: [
+        { id: "group-a", typeId: "group", groupId: "a", metrics: { value: 1 } },
+        { id: "item-a", typeId: "item", groupId: "a", metrics: { value: 1 } },
+        { id: "group-b", typeId: "group", groupId: "b", metrics: { value: 1 } }
+      ],
+      links: [{ id: "contains-a", source: "group-a", target: "item-a", typeId: "contains" }]
+    })),
+    mimeType: "application/json",
+    name: "spatial.json"
+  });
+
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-layout-profile-id", "layout");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-layout-group-count", "2");
+});
+
 test("shows schema and semantic errors for an invalid graph", async ({ page }) => {
   await page.goto("/");
   await page.locator("#graph-file").setInputFiles({

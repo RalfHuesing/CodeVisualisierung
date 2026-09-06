@@ -30,7 +30,7 @@ export function createGraphRenderer(container, onNodeClick) {
       (link) => getLinkColor(link, graph, selectedNodeId, searchQuery),
       (node) => createNodeObject(node, getNodeColor(node, currentGraph, selectedNodeId, searchQuery))
     );
-    updateDataAttributes(visualData);
+    updateDataAttributes(container, visualData);
     refreshStyles();
     return graphInstance;
   }
@@ -43,7 +43,7 @@ export function createGraphRenderer(container, onNodeClick) {
 
     const visualData = createVisualGraphData(filterGraph(currentGraph, viewOptions.filters, viewOptions.profile), viewOptions);
     graphInstance.graphData(visualData);
-    updateDataAttributes(visualData);
+    updateDataAttributes(container, visualData);
     refreshStyles();
   }
 
@@ -89,12 +89,18 @@ export function createGraphRenderer(container, onNodeClick) {
     container.replaceChildren();
   }
 
-  function updateDataAttributes(visualData) {
-    container.dataset.nodeCount = String(visualData.nodes.length);
-    container.dataset.linkCount = String(visualData.links.length);
-  }
-
   return { destroy, focus, render, reset, search, updateOptions };
+}
+
+function updateDataAttributes(container, visualData) {
+  container.dataset.nodeCount = String(visualData.nodes.length);
+  container.dataset.linkCount = String(visualData.links.length);
+  container.dataset.layoutGroupCount = String(visualData.groupCount);
+  if (visualData.layoutProfileId) {
+    container.dataset.layoutProfileId = visualData.layoutProfileId;
+  } else {
+    delete container.dataset.layoutProfileId;
+  }
 }
 
 export function getNodeFocus(graph, nodeId) {
@@ -146,7 +152,7 @@ function createForceGraph(container, onNodeClick, visualData, graph, nodeColor, 
     .onEngineStop(() => graphInstance.zoomToFit(400, 40))
     .warmupTicks(80)
     .cooldownTime(1500);
-  graphInstance.d3Force("link").distance(VIEWER_CONFIG.link.distance);
+  graphInstance.d3Force("link").distance((link) => link.distance ?? VIEWER_CONFIG.link.distance);
   graphInstance.d3Force("charge").strength(VIEWER_CONFIG.link.chargeStrength);
   graphInstance.graphData(visualData);
   return graphInstance;
