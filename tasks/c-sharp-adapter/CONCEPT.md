@@ -397,7 +397,8 @@ Slice alle betroffenen Quellen, insbesondere:
   `docs/06-Graphmodell-und-Visualisierungsprofile.md` bei Änderungen an
   allgemeiner Graphsemantik,
 - `docs/07-CSharp-Referenzgraph.md` bei Änderungen an der C#-Semantik,
-- `docs/05-Roadmap.md` bei erledigten oder geänderten Roadmap-Punkten,
+- `docs/05-Roadmap.md` bei einem klaren globalen Taskereignis wie Start,
+  Blockierung, Scopeänderung oder Abschluss,
 - `adapters/csharp/README.md` bei Änderungen am CLI-Aufruf, Setup oder
   Adapterumfang,
 - diese Task-Dateien bei Änderungen an Scope, Entscheidungen, Slices oder

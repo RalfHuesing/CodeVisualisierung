@@ -19,6 +19,10 @@ Task-Abschlussbedingung erfüllt ist.
 - alle vom Task betroffenen Dateien, aber nur nach eigener Integrationsprüfung
 - Roadmap und Dokumentation
 
+Die globale Roadmap wird nur bei klaren Taskereignissen geändert: Start,
+Blockierung, Scopeänderung, Abbruch oder Abschluss. Diskussionen und
+Brainstorming sind keine Roadmap-Ereignisse.
+
 ## Muss liefern
 
 - Task-Scope, explizite Ausschlüsse und Abschlussbedingung

@@ -19,7 +19,7 @@ flowchart LR
 - [02 – Visualisierung](02-Visualisierung.md): Aktueller Produktfokus, UX und visuelle Grammatik.
 - [03 – Graphformat](03-Graphformat.md): Vertrag für `nodes`, `links`, Metadaten und Metriken.
 - [04 – Datenquellen](04-Datenquellen.md): Abgrenzung und spätere Adapter, zuerst C#.
-- [05 – Roadmap](05-Roadmap.md): Umsetzungsreihenfolge, Tests und offene Entscheidungen.
+- [05 – Offene Roadmap](05-Roadmap.md): Kurzer Index beschlossener, noch offener Vorhaben.
 - [06 – Graphmodell und Visualisierungsprofile](06-Graphmodell-und-Visualisierungsprofile.md): Allgemeine Vertragserweiterung für Typen, Filter, Projektionen und Themes.
 - [07 – C#-Referenzgraph](07-CSharp-Referenzgraph.md): Fachlicher Zielentwurf für den späteren C#-/Roslyn-Exporter.
 - [08 – Mehrere Visualisierungsmodi](08-Mehrere-Visualisierungsmodi.md): Späteres Feature für Stadtkarte, Universum und biologische Ansichten auf derselben Graph-JSON.

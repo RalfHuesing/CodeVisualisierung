@@ -18,6 +18,22 @@
   CLI oder Arbeitsablauf ändert. Keine bewusst veraltete Begleitdokumentation
   zurücklassen.
 
+## Roadmap-Governance
+
+`docs/05-Roadmap.md` ist ein kurzer Index beschlossener, noch offener Arbeit.
+Er enthält keine abgeschlossenen Checklisten und kein Verlaufsprotokoll.
+
+Die Roadmap wird nur bei einem fachlich klaren Ereignis geändert:
+
+- Der Nutzer beschließt ein Vorhaben oder priorisiert es.
+- Ein neuer Task-Ordner wird angelegt oder ein bestehender Task wird umgescoped.
+- Der Orchestrator setzt einen Task auf `active` oder `blocked`.
+- Ein Task wird abgeschlossen, abgebrochen oder aus dem Scope genommen.
+
+Bei Fragen, Möglichkeiten und unverbindlichem Brainstorming bleibt sie
+unverändert. Abgeschlossene Einträge werden entfernt; ihre Details bleiben in
+Git, den Fachdokumenten oder dem Task-Verlauf erhalten.
+
 ## Vor Commit oder Übergabe
 
 - Betroffene Tests ausführen.

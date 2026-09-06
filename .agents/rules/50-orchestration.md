@@ -9,7 +9,7 @@ ausführen lässt oder Subagenten, Rollen oder Reviewer verlangt.
   Integration, Roadmap und Abschluss verantwortlich.
 - Rollen sind Arbeitsverträge, keine autonomen Projektleiter.
 - Subagenten dürfen keine weiteren Subagenten starten.
-- Nur der Orchestrator setzt Roadmap-Checkboxen und erstellt Commits.
+- Nur der Orchestrator aktualisiert den globalen Roadmap-Status und erstellt Commits.
 
 ## Task-Lebenszyklus
 
@@ -17,6 +17,8 @@ ausführen lässt oder Subagenten, Rollen oder Reviewer verlangt.
   ersten Slice.
 - Vor der Delegation definiert der Orchestrator Scope, explizite Ausschlüsse,
   Abschlussbedingung und die Reihenfolge der bereiten Arbeit.
+- Beim Start eines Tasks prüft der Orchestrator den globalen Roadmap-Eintrag
+  und setzt ihn auf `active`, sofern der Task dort geführt wird.
 - Ein Slice ist die interne Einheit für Delegation, Review, Checks und Commit.
   Mehrere Slices dürfen nacheinander in einem Task-Lauf bearbeitet werden.
 - Nach jedem erfolgreichen Slice-Commit liest der Orchestrator Roadmap und
@@ -52,8 +54,8 @@ ausführen lässt oder Subagenten, Rollen oder Reviewer verlangt.
 
 - Der Orchestrator führt die relevanten Tests und `npm run check` für jeden
   Slice vor dessen Commit aus.
-- Roadmap und Dokumentation werden nur mit nachweislich erledigten Punkten
-  aktualisiert.
+- Der globale Roadmap-Status wird nur bei einem nachweisbaren Taskereignis
+  aktualisiert. Ein abgeschlossener Task wird aus der offenen Roadmap entfernt.
 - Vor dem Commit werden `git diff`, `git diff --check` und `git status` geprüft.
 - Der Orchestrator committet fachlich abgeschlossene Slices selbst mit einer
   Conventional-Commit-Nachricht und setzt danach den Task-Lauf fort.

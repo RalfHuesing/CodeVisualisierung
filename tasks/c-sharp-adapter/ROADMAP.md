@@ -3,6 +3,11 @@
 Diese Roadmap ist der interne Orchestrator-Arbeitsvertrag. Die Reihenfolge ist
 verbindlich, bis eine dokumentierte fachliche Entscheidung sie ändert.
 
+Sie ist nicht die globale Projektübersicht. `docs/05-Roadmap.md` enthält nur
+den kurzen offenen Task-Eintrag. Nur der Orchestrator ändert dessen Status bei
+Start, Blockierung, Scopeänderung, Abbruch oder Abschluss und entfernt den
+Eintrag nach erfolgreichem Abschluss.
+
 ## Taskvertrag
 
 ```text
@@ -233,6 +238,6 @@ Abhängigkeit: Slices 0–5.
 
 Ein Slice wird erst nach Implementierung, read-only Review, erfolgreichen
 Checks und einem fachlich eindeutigen Conventional Commit als abgeschlossen
-markiert. Nur der Orchestrator aktualisiert Roadmap-Checkboxen und erstellt
-Commits. Nach einem erfolgreichen Commit wird automatisch der nächste bereite
-Slice bearbeitet; ein Slice-Commit ist kein Taskabschluss.
+markiert. Nur der Orchestrator aktualisiert die Task-Roadmap und den globalen
+Status und erstellt Commits. Nach einem erfolgreichen Commit wird automatisch
+der nächste bereite Slice bearbeitet; ein Slice-Commit ist kein Taskabschluss.

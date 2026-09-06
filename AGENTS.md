@@ -14,6 +14,14 @@ Der Nutzer bevorzugt einfachen, expliziten und gut lesbaren Code. Weniger Code i
 - Keine C#- oder Backend-Infrastruktur in den Browser-Viewer ziehen.
 - Fachlich abgeschlossene Änderungen automatisch committen, wenn die relevanten Checks erfolgreich sind.
 
+## Roadmap-Governance
+
+- `docs/05-Roadmap.md` enthält ausschließlich beschlossene, noch offene Vorhaben.
+- Normale Diskussionen, Brainstorming und reine Konzeptfragen ändern die Roadmap nicht.
+- Ein Roadmap-Eintrag entsteht erst bei einer klaren Umsetzungsentscheidung oder beim Anlegen eines neuen Tasks.
+- Der Eintrag enthält nur Status, Reihenfolge, Abhängigkeiten und Links; Details bleiben im Task-Ordner.
+- Der Orchestrator pflegt den globalen Status. Nach erfolgreichem Abschluss wird der Eintrag entfernt, nicht abgehakt.
+
 ## Verbindliche Regeln
 
 - [Grundsätze](.agents/rules/00-principles.md)

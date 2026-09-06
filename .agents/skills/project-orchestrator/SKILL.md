@@ -48,8 +48,9 @@ true or a real blocker is reached:
 3. Orchestrator inspects the diff and runs targeted tests.
 4. Reviewer returns `pass`, findings, or blocked without editing.
 5. Orchestrator fixes findings, at most twice, then repeats review.
-6. Orchestrator runs `npm run check`, updates only completed roadmap items,
-   checks `git diff --check` and `git status`, and commits the completed slice.
+6. Orchestrator runs `npm run check`, updates the global roadmap only for a
+   documented status event, checks `git diff --check` and `git status`, and
+   commits the completed slice.
 7. After a successful commit, Orchestrator re-reads the task scope and roadmap,
    resolves the next ready slice, and continues automatically.
 8. When no in-scope work remains, Orchestrator performs the final completion
@@ -69,6 +70,19 @@ tests and documentation as acceptance context. Continue through all acceptance
 criteria and deliverables in the user's task. If a roadmap exists, process
 ready open items in dependency order until all items inside the explicit task
 scope are complete; do not silently include excluded or later-phase work.
+
+## Global roadmap governance
+
+`docs/05-Roadmap.md` is a short index of explicitly committed open work. It is
+not a history log and does not contain completed checkboxes. Normal discussion,
+brainstorming, or a concept document alone does not change it.
+
+The main agent records a new item when the user clearly commits to a future
+feature or creates a task for it. The Orchestrator owns subsequent status
+changes: `planned`, `active`, and `blocked`. When a task is complete, cancelled,
+or removed from scope, the Orchestrator removes the item instead of marking it
+complete. Task-local ROADMAP files retain slice details and acceptance
+criteria; the global roadmap only links to them.
 
 If the user explicitly requests only one slice, apply the same slice procedure
 but stop after that slice's successful commit.

@@ -15,7 +15,7 @@ der aktuellen Viewer-Implementierung.
 Die Orchestrierung ergänzt diese Quellen, ersetzt sie aber nicht:
 
 1. `AGENTS.md` und `.agents/rules/` für Repository- und Arbeitsregeln
-2. `docs/05-Roadmap.md` für Reihenfolge und Erledigungsstatus
+2. `docs/05-Roadmap.md` für die Reihenfolge der beschlossenen offenen Vorhaben
 3. die von der Roadmap referenzierten Fachdokumente für fachliche Entscheidungen
 4. Tests und Fixtures für nachweisbares Verhalten
 5. Git-Commits für den integrierten technischen Arbeitsstand
@@ -56,7 +56,8 @@ Delegation, die Review und die Commits, aber nicht den Task-Lauf:
 7. read-only Review durchführen
 8. Findings höchstens zweimal korrigieren
 9. vollständige Checks ausführen
-10. nur erledigte Roadmap-Punkte markieren
+10. den globalen Roadmap-Status nur bei einem nachweisbaren Taskereignis
+    aktualisieren; abgeschlossene Einträge entfernen
 11. einen fachlich eindeutigen Slice-Commit erstellen
 12. Roadmap und Task-Scope erneut lesen und automatisch fortsetzen
 13. erst nach Erfüllung der Task-Abschlussbedingung den Lauf beenden

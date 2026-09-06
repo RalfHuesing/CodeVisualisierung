@@ -14,6 +14,11 @@ freigegebenen Task ab. Der dauerhafte Projektzustand bleibt in den
 Fachdokumenten, der Roadmap und Git. Temporäre Agentenberichte werden nicht
 als zusätzliche Wahrheit neben diesen Dateien gepflegt.
 
+`docs/05-Roadmap.md` ist dabei nur der aktuelle Index beschlossener, offener
+Vorhaben. Der Orchestrator setzt einen gestarteten Task auf `active`, hält echte
+Blockierungen als `blocked` fest und entfernt den Eintrag nach Abschluss. Er
+markiert keine erledigten Punkte als dauerhafte Historie.
+
 ## Feste Grenzen
 
 - ein fachlicher Slice pro Delegations-/Review-/Commit-Zyklus

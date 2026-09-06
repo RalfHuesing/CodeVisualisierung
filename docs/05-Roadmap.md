@@ -1,92 +1,55 @@
-# Roadmap
+# Offene Roadmap
 
-Diese Datei ist der schlanke Arbeitsindex. Fachliche Entscheidungen und
-Akzeptanzkriterien stehen in den verlinkten Dokumenten und werden hier nicht
-dupliziert.
+## Zweck
 
-## Leitplanken
+Diese Datei ist der kurze globale Arbeitsindex des Projekts. Sie enthält nur
+Vorhaben, deren Umsetzung ausdrücklich beschlossen wurde und die noch offen
+sind. Abgeschlossene Arbeit wird entfernt und nicht als dauerhafte Checkliste
+geführt.
 
-- Der aktuelle Lieferumfang ist ein allgemeiner, statisch hostbarer 3D-Viewer.
-- Der Viewer kennt keine C#-, Roslyn- oder andere Quelllogik.
-- 2D-Ansichten und 2D-Fallbacks gehören nicht zum aktuellen 1.0-Umfang.
-- Der allgemeine Graphvertrag ist `graph-universe` 1.0.
+Die fachlichen Entscheidungen stehen in den verlinkten Dokumenten. Die
+Umsetzungsdetails, Slices, Akzeptanzkriterien und Prüfungen stehen in den
+jeweiligen `tasks/<name>/`-Ordnern.
 
-Grundlagen: [Vision](01-Vision.md), [Visualisierung](02-Visualisierung.md),
-[Graphformat](03-Graphformat.md), [Graphmodell und Visualisierungsprofile](06-Graphmodell-und-Visualisierungsprofile.md).
+## Status
 
-## Phase 0 – Bestand und Grundlagen
+- `planned`: beschlossen, aber noch nicht gestartet
+- `active`: aktuell in Umsetzung durch einen Orchestrator-Task
+- `blocked`: offen, aber durch eine dokumentierte Richtungsentscheidung,
+  Abhängigkeit oder externe Voraussetzung blockiert
 
-- [X] Produktvision und 3D-Leitentscheidung dokumentieren → [01](01-Vision.md), [02](02-Visualisierung.md)
-- [X] Graphformat 1.0, Schema und reine Validierung anlegen → [03](03-Graphformat.md)
-- [X] Statischen Viewer-MVP mit Upload, 3D-Szene, Auswahl und Details liefern → [Viewer](../apps/viewer/README.md)
-- [X] Deterministische Tests und Größenlimits einrichten → [Viewer-Tests](../apps/viewer/tests/viewer.spec.js)
+## Reihenfolge der offenen Vorhaben
 
-## Phase 1 – Allgemeiner Graphvertrag 1.0
+### 1. C#-/Roslyn-Adapter — `planned`
 
-- [X] `nodeTypes` und `linkTypes` als deklarative Definitionen festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [X] Facetten, Filterquellen und benannte Metriken festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [X] View-Profile und Detailstufen festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [X] Hierarchie, Containment und Summary-Links festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [X] Visualisierungstokens und Theme-Auflösung festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [X] Schema, gültige Fixtures und ungültige Fixtures für 1.0 ergänzen → [03](03-Graphformat.md), [06](06-Graphmodell-und-Visualisierungsprofile.md)
+Eine quellennahe Datenquelle soll aus C#-Solutions vertragskonformes
+Graph-JSON erzeugen.
 
-## Phase 2 – Domänenneutrale Referenzdaten
+- [Taskvertrag](../tasks/c-sharp-adapter/README.md)
+- [Umsetzungs-Roadmap](../tasks/c-sharp-adapter/ROADMAP.md)
+- [C#-Referenzgraph](07-CSharp-Referenzgraph.md)
 
-- [X] Kleine, mittlere, große und deterministische Belastungs-Fixtures pflegen → [Fixtures](../contracts/graph-universe/fixtures)
-- [X] Edge Cases für leere, isolierte, parallele und unvollständige Graphen pflegen → [Edge Fixture](../contracts/graph-universe/fixtures/edge-cases.json)
-- [X] Einen Familienstammbaum als Nicht-Code-Graph ergänzen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [X] Ein Firmen- oder Beteiligungsgeflecht als Nicht-Code-Graph ergänzen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [X] Eine C#-Referenz-Fixture für den späteren Exporter spezifizieren und anlegen → [07](07-CSharp-Referenzgraph.md)
+Abhängigkeit: Der gemeinsame Graphvertrag 1.0 bleibt maßgeblich. Ein
+separater Viewer-Layoutvertrag darf nicht in den Adapter gezogen werden.
 
-## Phase 3 – Schema-gesteuerter Viewer
+### 2. Mehrere Visualisierungsmodi — `planned`
 
-- [X] Mehrere Beispiele, Upload, Suche, Auswahl, Reset und Grundfilter anbieten → [Viewer](../apps/viewer/README.md)
-- [X] Node-Arten mit Geometrie, Farbe, Metrik und sichtbarer Legende darstellen → [02](02-Visualisierung.md)
-- [X] Filter und Facetten vollständig aus dem Graph-JSON erzeugen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [X] View-Profile aus dem Graph-JSON laden und auswählbar machen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [X] Summary-Links und Projektionen bei jeder Detailstufe korrekt darstellen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [X] Typabhängige Größenrollen, Containment-Abstände und getrennte Gruppen generisch aus dem Graph-JSON aufbereiten → [02](02-Visualisierung.md), [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [X] Unbekannte Typen und Visualisierungstokens mit dokumentiertem Fallback behandeln → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [X] C#-Begriffe vollständig aus dem Viewer-Code entfernen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+Eine Graph-JSON soll später zwischen Stadtkarte, Universum und biologischer
+Netzwerkansicht wechseln können.
 
-## Phase 4 – Skalierung und Qualitätsgrenzen
+- [Taskvertrag](../tasks/multi-visualization-modes/README.md)
+- [Konzept](08-Mehrere-Visualisierungsmodi.md)
 
-- [X] Deterministische Aufbereitungs-Benchmarks für alle Ziel-Fixtures ausführen → [Visualisierung](02-Visualisierung.md)
-- [X] Statische Produktionsausgabe bauen und Smoke-Tests gegen den Build ausführen → [Viewer](../apps/viewer/README.md)
-- [X] Fehler-, Leer-, WebGL-, Resize- und große-Graph-Zustände testen → [Viewer-Tests](../apps/viewer/tests/viewer.spec.js)
-- [X] Zeit bis zum ersten sichtbaren Bild, Interaktionslatenz, FPS und Speicher im Zielbrowser messen → [Visualisierung](02-Visualisierung.md)
-- [X] Unterstützten interaktiven Vollmodus und Verhalten darüber festlegen → [Visualisierung](02-Visualisierung.md)
-- [X] Aggregation oder weitere Detailstufen nur aus den Messungen ableiten → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+Abhängigkeit: Gemeinsame semantische Graphaufbereitung und Renderer-
+Schnittstelle müssen vor zusätzlichen Modi geklärt werden.
 
-## Phase 5 – Viewer-Abschluss
+## Governance
 
-- [X] Bedienung, Graphformat, Beispiele und bekannte Grenzen dokumentieren → [Dokumentationsindex](README.md)
-- [X] Viewer-Version und fachlichen Meilenstein festlegen → [Visualisierung](02-Visualisierung.md)
-- [X] Alle offenen Punkte aus Phase 1, 3 und 4 abschließen → dieses Dokument
+Die Roadmap wird nicht bei unverbindlichen Ideen, Fragen oder normalem
+Brainstorming geändert. Ein Eintrag entsteht bei einer klaren
+Umsetzungsentscheidung oder beim Anlegen eines neuen Tasks.
 
-## Phase 6 – Spätere Datenquellen
-
-- [ ] C#-/Roslyn-Exporter implementieren → [07](07-CSharp-Referenzgraph.md)
-- [ ] C#-Graphen gegen Vertrag, Referenz-Fixture und Projektionen prüfen → [07](07-CSharp-Referenzgraph.md)
-- [ ] Weitere Datenquellenprofile ergänzen, ohne den Viewer zu ändern → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-
-## Phase 7 – Mehrere Visualisierungsmodi
-
-Die fachliche Zielidee und die Abgrenzung stehen in [08 – Mehrere
-Visualisierungsmodi](08-Mehrere-Visualisierungsmodi.md). Die Graph-JSON bleibt
-dabei die gemeinsame Datenbasis.
-
-- [ ] Gemeinsame Renderer-Schnittstelle und Modusumschaltung entwerfen → [08](08-Mehrere-Visualisierungsmodi.md)
-- [ ] Stadtkarte als stabile 2D-Architekturansicht prototypisch umsetzen → [08](08-Mehrere-Visualisierungsmodi.md)
-- [ ] Auswahl, Filter und Detailzustand zwischen Modi erhalten → [08](08-Mehrere-Visualisierungsmodi.md)
-- [ ] Biologischen Myzel-/Signalmodus evaluieren → [08](08-Mehrere-Visualisierungsmodi.md)
-- [ ] Erst nach einem konkreten Renderer über `visualizationProfiles` im Graphvertrag entscheiden → [08](08-Mehrere-Visualisierungsmodi.md)
-
-## Außerhalb des aktuellen Umfangs
-
-- Git-Metriken und Zeitverläufe
-- Live-Deltas und Agentenereignisse
-- Animationen ohne erklärende fachliche Bedeutung
-- Backend- oder Upload-Server
-
-Diese Themen werden erst nach dem Viewer-Abschluss separat priorisiert.
+Der Orchestrator aktualisiert den Status bei Start, Blockierung,
+Scopeänderung, Abbruch oder Abschluss. Nach erfolgreichem Abschluss wird der
+Eintrag entfernt. Die Task-eigene Roadmap darf ihre Slice-Checklisten und den
+Arbeitsverlauf behalten; diese werden nicht in diese Datei kopiert.

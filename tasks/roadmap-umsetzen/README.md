@@ -4,8 +4,9 @@ Dieser Ordner ist der dauerhafte Orchestrationsauftrag für die Umsetzung der
 Viewer-Roadmap.
 
 - Das Konzept steht in [CONCEPT.md](CONCEPT.md).
-- Die fachliche Wahrheit bleibt in [docs/05-Roadmap.md](../../docs/05-Roadmap.md)
-  und den dort referenzierten Dokumenten.
+- Die globale Übersicht offener Vorhaben bleibt in
+  [docs/05-Roadmap.md](../../docs/05-Roadmap.md); fachliche Wahrheit und
+  Slice-Details bleiben in den jeweils referenzierten Dokumenten und Tasks.
 - Der technische Arbeitsstand bleibt in Git-Commits und Tests.
 - Der Orchestrator bearbeitet den vollständigen Task in fachlich
   zusammenhängenden Slices. Jeder Slice ist ein Review- und Commit-Checkpoint;

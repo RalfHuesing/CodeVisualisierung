@@ -10,6 +10,13 @@ Orchestrator-Rolle umgesetzt.
   Akzeptanzkriterien und Prüfungen.
 - [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md) enthält ungeklärte Entscheidungen.
 
+Der globale offene Status steht in
+[`docs/05-Roadmap.md`](../../docs/05-Roadmap.md). Dieser Task-Ordner enthält
+dagegen die vollständige interne Slice-Roadmap. Der Orchestrator aktualisiert
+den globalen Eintrag nur bei Taskereignissen und entfernt ihn nach dem
+Abschluss; die Slice-Checkboxen bleiben als Arbeitsvertrag und Verlauf im
+Task bestehen.
+
 Die fachliche Wahrheit für das Ausgabeformat bleibt in
 `contracts/graph-universe/` sowie in den referenzierten Dokumenten unter
 `docs/`. Diese Task-Dateien ergänzen die vorhandenen Dokumente um den
