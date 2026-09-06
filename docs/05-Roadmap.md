@@ -20,7 +20,7 @@ jeweiligen `tasks/<name>/`-Ordnern.
 
 ## Reihenfolge der offenen Vorhaben
 
-### 1. C#-/Roslyn-Adapter — `planned`
+### 1. C#-/Roslyn-Adapter — `active`
 
 Eine quellennahe Datenquelle soll aus C#-Solutions vertragskonformes
 Graph-JSON erzeugen.

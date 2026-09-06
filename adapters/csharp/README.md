@@ -1,10 +1,33 @@
 # C# / Roslyn Adapter
 
-Die kompilierbare .NET-Grundlage liegt in
+Die kompilierbare .NET-10-CLI liegt in
 [CodeVisualisierung.CSharp.slnx](CodeVisualisierung.CSharp.slnx). Sie enthält
-aktuell ein CLI-Projekt und ein xUnit-Testprojekt. Die Analysepipeline und die
-Graphschichten werden in späteren Slices ergänzt; die Grundlage implementiert
-bewusst noch keinen Adapter.
+ein CLI-Projekt und ein xUnit-Testprojekt. Slice 1 definiert die echte
+Prozessgrenze; die Analysepipeline und die Graphschichten werden in späteren
+Slices ergänzt.
+
+## CLI-Prozessvertrag
+
+Aufruf:
+
+```text
+codegraph-csharp <input> --output <graph.json>
+```
+
+Unterstützte Eingaben sind `.slnx`, `.sln` und `.csproj`. `--help` und
+`--version` schreiben ausschließlich nach `stdout` und beenden mit `0`. Ein
+Argumentfehler, etwa ein fehlender Eingabepfad, beendet mit `2`; eine nicht
+lesbare oder nicht unterstützte Eingabe mit `3`; ein fataler Analyse- oder Vertragsfehler mit `4`;
+ein fehlendes Ausgabeverzeichnis oder anderer Ausgabe-/Dateisystemfehler mit
+`5`. `1` ist für einen späteren validen partiellen Lauf mit geschriebener
+Ausgabe reserviert. Diagnosen stehen auf Deutsch in `stderr`, Graphdaten werden
+niemals auf `stdout` geschrieben.
+
+Die Slice-1-CLI erkennt eine vorhandene unterstützte Eingabe bereits an der
+Prozessgrenze, analysiert sie aber noch nicht. Dieser Fall liefert bis Slice 2
+den dokumentierten Exit-Code `4` mit der Diagnose
+`Die Analysepipeline ist noch nicht verfügbar.`. Es wird dabei keine
+Ausgabedatei erzeugt.
 
 Gemeinsame MSBuild-Einstellungen für beide Projekte liegen in
 [Directory.Build.props](Directory.Build.props). Zentrale NuGet-Versionen liegen

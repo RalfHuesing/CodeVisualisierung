@@ -19,7 +19,8 @@ Die Grundlagen unter `adapters/csharp/` sind bereits angelegt:
   Warnungen als Fehler,
 - zentral verwaltete NuGet-Versionen für Roslyn/MSBuild und xUnit,
 - ein angepasstes AiNetLinter-Profil für die reine C#-/CLI-Solution,
-- eine kleine CLI-Grenze mit `--help` und `--version`,
+- eine echte CLI-Prozessgrenze mit stabilen Exit-Codes und Diagnosen für Hilfe,
+  Version, Argument-, Eingabe-, Analyse- und Ausgabefehler,
 - eine verwaltete, repo-lokale Temp-Infrastruktur für spätere Test-Solutions.
 
 Diese Grundlage ist noch kein Adapterverhalten: Es gibt noch keine
@@ -212,9 +213,9 @@ diagnostics.warnings=... diagnostics.errors=...
 output.bytes=...
 ```
 
-Die aktuelle Grundlage implementiert aus diesem Zielvertrag nur `--help` und
-`--version`; der Analysepfad und die Ausgabe sind ausdrücklich noch nicht
-vorhanden.
+Slice 1 implementiert die Argument- und Prozessgrenze. Der Analysepfad und die
+Graphausgabe sind ausdrücklich noch nicht vorhanden und folgen in abhängigen
+Slices.
 
 ## Fachliches Datenmodell
 
