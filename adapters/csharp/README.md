@@ -6,6 +6,10 @@ aktuell ein CLI-Projekt und ein xUnit-Testprojekt. Die Analysepipeline und die
 Graphschichten werden in späteren Slices ergänzt; die Grundlage implementiert
 bewusst noch keinen Adapter.
 
+Gemeinsame MSBuild-Einstellungen für beide Projekte liegen in
+[Directory.Build.props](Directory.Build.props). Projektbezogene Eigenschaften
+und NuGet-Pakete bleiben in den jeweiligen Projektdateien.
+
 Die AiNetLinter-Integration wird über
 [ainetlinter.project.json](ainetlinter.project.json) und [rules.json](rules.json)
 adressiert. Der Test AiNetLinterTests führt die angegebene lokale Binary gegen
