@@ -6,30 +6,24 @@
   "type": "object",
   "required": ["format", "nodes", "links"],
   "properties": {
-    "format": {
-      "$ref": "#/$defs/format"
-    },
-    "meta": {
-      "$ref": "#/$defs/meta"
-    },
+    "format": { "$ref": "#/$defs/format" },
+    "meta": { "$ref": "#/$defs/meta" },
     "metricDefinitions": {
       "type": "object",
-      "additionalProperties": {
-        "$ref": "#/$defs/metricDefinition"
-      }
+      "additionalProperties": { "$ref": "#/$defs/metricDefinition" }
     },
-    "nodes": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/node"
-      }
-    },
-    "links": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/link"
-      }
-    }
+    "nodeTypes": { "$ref": "#/$defs/definitions" },
+    "linkTypes": { "$ref": "#/$defs/definitions" },
+    "facets": { "type": "array", "items": { "$ref": "#/$defs/facet" } },
+    "filterSources": { "type": "array", "items": { "$ref": "#/$defs/filterSource" } },
+    "viewProfiles": { "type": "array", "items": { "$ref": "#/$defs/viewProfile" } },
+    "projections": { "type": "array", "items": { "$ref": "#/$defs/projection" } },
+    "containmentRules": { "type": "array", "items": { "$ref": "#/$defs/containmentRule" } },
+    "hierarchy": { "$ref": "#/$defs/hierarchy" },
+    "visualTokens": { "type": "object", "additionalProperties": { "$ref": "#/$defs/visualToken" } },
+    "theme": { "$ref": "#/$defs/theme" },
+    "nodes": { "type": "array", "items": { "$ref": "#/$defs/node" } },
+    "links": { "type": "array", "items": { "$ref": "#/$defs/link" } }
   },
   "additionalProperties": true,
   "$defs": {
@@ -37,13 +31,8 @@
       "type": "object",
       "required": ["name", "version"],
       "properties": {
-        "name": {
-          "const": "graph-universe"
-        },
-        "version": {
-          "type": "string",
-          "pattern": "^[0-9]+\\.[0-9]+$"
-        }
+        "name": { "const": "graph-universe" },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+$" }
       },
       "additionalProperties": false
     },
@@ -53,14 +42,7 @@
         "title": { "type": "string" },
         "description": { "type": "string" },
         "createdAt": { "type": "string", "format": "date-time" },
-        "source": {
-          "type": "object",
-          "properties": {
-            "name": { "type": "string" },
-            "version": { "type": "string" }
-          },
-          "additionalProperties": true
-        }
+        "source": { "type": "object", "additionalProperties": true }
       },
       "additionalProperties": true
     },
@@ -74,23 +56,97 @@
       },
       "additionalProperties": true
     },
-    "node": {
+    "definitions": {
+      "oneOf": [
+        { "type": "array", "items": { "$ref": "#/$defs/typeDefinition" } },
+        { "type": "object", "additionalProperties": { "$ref": "#/$defs/legacyTypeDefinition" } }
+      ]
+    },
+    "typeDefinition": {
       "type": "object",
       "required": ["id"],
       "properties": {
         "id": { "type": "string", "minLength": 1 },
         "label": { "type": "string" },
+        "role": { "type": "string" },
+        "visualToken": { "type": "string", "minLength": 1 },
+        "directed": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "legacyTypeDefinition": { "type": "object", "additionalProperties": true },
+    "facet": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string" },
+        "source": {
+          "type": "object",
+          "required": ["scope", "field"],
+          "properties": {
+            "scope": { "enum": ["node", "link", "graph"] },
+            "field": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "filterSource": {
+      "type": "object",
+      "required": ["id", "facetId"],
+      "properties": { "id": { "type": "string" }, "facetId": { "type": "string" }, "label": { "type": "string" } },
+      "additionalProperties": true
+    },
+    "viewProfile": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string" },
+        "detailLevel": { "type": "integer", "minimum": 0 },
+        "visibleNodeTypes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "visibleLinkTypes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "nodeMetric": { "type": "string" },
+        "linkMetric": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "projection": {
+      "type": "object",
+      "required": ["id"],
+      "properties": { "id": { "type": "string", "minLength": 1 }, "label": { "type": "string" }, "fromProfile": { "type": "string" }, "toProfile": { "type": "string" }, "linkTypeId": { "type": "string" } },
+      "additionalProperties": true
+    },
+    "containmentRule": {
+      "type": "object",
+      "required": ["id", "linkTypeId"],
+      "properties": { "id": { "type": "string", "minLength": 1 }, "linkTypeId": { "type": "string" }, "parentTypeId": { "type": "string" }, "childTypeId": { "type": "string" }, "maxParents": { "type": "integer", "minimum": 1 }, "acyclic": { "type": "boolean" } },
+      "additionalProperties": true
+    },
+    "hierarchy": {
+      "type": "object",
+      "properties": { "containmentLinkTypes": { "type": "array", "items": { "type": "string" } }, "maxParents": { "type": "integer", "minimum": 1 }, "acyclic": { "type": "boolean" } },
+      "additionalProperties": true
+    },
+    "visualToken": { "type": "object", "additionalProperties": true },
+    "theme": {
+      "type": "object",
+      "properties": { "id": { "type": "string" }, "fallbackToken": { "type": "string" }, "background": { "type": "string" } },
+      "additionalProperties": true
+    },
+    "node": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "typeId": { "type": "string", "minLength": 1 },
+        "label": { "type": "string" },
         "kind": { "type": "string" },
         "groupId": { "type": "string" },
-        "tags": {
-          "type": "array",
-          "items": { "type": "string" },
-          "uniqueItems": true
-        },
-        "metrics": {
-          "type": "object",
-          "additionalProperties": { "type": "number" }
-        },
+        "tags": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "metrics": { "type": "object", "additionalProperties": { "type": "number" } },
         "attributes": { "type": "object" }
       },
       "additionalProperties": true
@@ -102,13 +158,13 @@
         "id": { "type": "string", "minLength": 1 },
         "source": { "type": "string", "minLength": 1 },
         "target": { "type": "string", "minLength": 1 },
+        "typeId": { "type": "string", "minLength": 1 },
         "kind": { "type": "string" },
         "directed": { "type": "boolean" },
         "weight": { "type": "number" },
-        "metrics": {
-          "type": "object",
-          "additionalProperties": { "type": "number" }
-        },
+        "summary": { "oneOf": [{ "type": "boolean" }, { "type": "object" }] },
+        "derivedFrom": { "oneOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }] },
+        "metrics": { "type": "object", "additionalProperties": { "type": "number" } },
         "attributes": { "type": "object" }
       },
       "additionalProperties": true

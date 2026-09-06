@@ -24,12 +24,12 @@ Grundlagen: [Vision](01-Vision.md), [Visualisierung](02-Visualisierung.md),
 
 ## Phase 1 – Allgemeiner Graphvertrag 0.2
 
-- [ ] `nodeTypes` und `linkTypes` als deklarative Definitionen festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [ ] Facetten, Filterquellen und benannte Metriken festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [ ] View-Profile und Detailstufen festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [ ] Hierarchie, Containment und Summary-Links festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [ ] Visualisierungstokens und Theme-Auflösung festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [ ] Schema, gültige Fixtures und ungültige Fixtures für 0.2 ergänzen → [03](03-Graphformat.md), [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [X] `nodeTypes` und `linkTypes` als deklarative Definitionen festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [X] Facetten, Filterquellen und benannte Metriken festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [X] View-Profile und Detailstufen festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [X] Hierarchie, Containment und Summary-Links festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [X] Visualisierungstokens und Theme-Auflösung festlegen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [X] Schema, gültige Fixtures und ungültige Fixtures für 0.2 ergänzen → [03](03-Graphformat.md), [06](06-Graphmodell-und-Visualisierungsprofile.md)
 
 ## Phase 2 – Domänenneutrale Referenzdaten
 

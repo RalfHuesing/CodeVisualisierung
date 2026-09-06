@@ -1,11 +1,36 @@
 {
   "format": {
     "name": "graph-universe",
-    "version": "0.1"
+    "version": "0.2"
   },
+  "nodeTypes": {
+    "service": { "label": "Service", "visualToken": "node" },
+    "storage": { "label": "Storage", "visualToken": "node" },
+    "namespace": { "label": "Namespace", "visualToken": "node" },
+    "file": { "label": "File", "visualToken": "node" },
+    "class": { "label": "Class", "visualToken": "node" },
+    "method": { "label": "Method", "visualToken": "node" }
+  },
+  "linkTypes": {
+    "calls": { "label": "Calls", "role": "relation", "visualToken": "link" },
+    "depends-on": { "label": "Depends on", "role": "relation", "visualToken": "link" },
+    "contains": { "label": "Contains", "role": "containment", "visualToken": "link" },
+    "related-to": { "label": "Related to", "role": "relation", "visualToken": "link" }
+  },
+  "facets": [],
+  "filterSources": [],
+  "viewProfiles": [{ "id": "default", "label": "Default", "detailLevel": 0 }],
+  "hierarchy": { "containmentLinkTypes": [], "maxParents": 1, "acyclic": true },
+  "projections": [],
+  "visualTokens": {
+    "node": { "kind": "node", "color": "#38bdf8", "shape": "sphere" },
+    "link": { "kind": "link", "color": "#a78bfa", "lineStyle": "solid" }
+  },
+  "theme": { "id": "default", "fallbackToken": "node", "background": "#0b1120" },
   "nodes": [
     {
-      "id": "duplicate"
+      "id": "duplicate",
+      "typeId": "missing-node-type"
     },
     {
       "id": "duplicate"

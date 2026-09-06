@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { normalizeGraph, parseGraphText, validateGraph } from "../apps/viewer/src/domain/graph.js";
+import { normalizeGraph, parseGraphText, resolveVisualToken, validateGraph } from "../apps/viewer/src/domain/graph.js";
 import { EXAMPLE_CATALOG, getExampleGraph } from "../apps/viewer/src/domain/catalog.js";
 import invalidFixture from "../contracts/graph-universe/fixtures/invalid.json" with { type: "json" };
 import edgeCasesFixture from "../contracts/graph-universe/fixtures/edge-cases.json" with { type: "json" };
@@ -33,12 +33,24 @@ describe("validateGraph", () => {
     expect(validateGraph(validGraph)).toEqual({ valid: true, errors: [] });
   });
 
+  it("accepts summary links with explicit source link IDs", () => {
+    const graph = structuredClone(validGraph);
+    graph.links[0].derivedFrom = ["depends-orders-database"];
+
+    expect(validateGraph(graph)).toEqual({ valid: true, errors: [] });
+  });
+
   it("rejects the deliberately invalid fixture", () => {
     const validation = validateGraph(invalidFixture);
 
     expect(validation.valid).toBe(false);
     expect(validation.errors.some((error) => error.message.includes("duplicated"))).toBe(true);
     expect(validation.errors.some((error) => error.message.includes("does not reference"))).toBe(true);
+    expect(validation.errors).toContainEqual({
+      kind: "semantic",
+      path: "/nodes/0/typeId",
+      message: "Node type 'missing-node-type' does not reference a node type."
+    });
   });
 
   it("accepts edge cases without requiring optional values", () => {
@@ -78,7 +90,9 @@ describe("validateGraph", () => {
       message: "must be number"
     });
   });
+});
 
+describe("graph parsing", () => {
   it("parses and normalizes valid JSON text", () => {
     const result = parseGraphText(JSON.stringify(validGraph));
 
@@ -115,5 +129,76 @@ describe("validateGraph", () => {
       kind: "related-to"
     });
     expect(graph.nodes[0]).toEqual({ id: "single" });
+  });
+});
+
+describe("graph-universe 0.2 definitions", () => {
+  it("validates type references and definition IDs", () => {
+    const graph = structuredClone(validGraph);
+
+    graph.nodes[0].typeId = "unknown";
+    expect(validateGraph(graph).errors).toContainEqual({
+      kind: "semantic",
+      path: "/nodes/0/typeId",
+      message: "Node type 'unknown' does not reference a node type."
+    });
+
+    const duplicateDefinitionGraph = structuredClone(validGraph);
+    duplicateDefinitionGraph.nodeTypes.push({ id: "service" });
+    expect(validateGraph(duplicateDefinitionGraph).errors).toContainEqual({
+      kind: "semantic",
+      path: "/nodeTypes/6/id",
+      message: "nodeTypes ID 'service' is duplicated."
+    });
+
+    const invalidMetricGraph = structuredClone(validGraph);
+    invalidMetricGraph.viewProfiles[0].nodeMetric = "missing-metric";
+    expect(validateGraph(invalidMetricGraph).errors).toContainEqual({
+      kind: "semantic",
+      path: "/viewProfiles/0/nodeMetric",
+      message: "metric 'missing-metric' does not reference a defined metric."
+    });
+
+    const invalidDerivedLinkGraph = structuredClone(validGraph);
+    invalidDerivedLinkGraph.links[0].derivedFrom = ["missing-link"];
+    expect(validateGraph(invalidDerivedLinkGraph).errors).toContainEqual({
+      kind: "semantic",
+      path: "/links/0/derivedFrom/0",
+      message: "Derived link 'missing-link' does not reference a link ID."
+    });
+  });
+});
+
+describe("graph normalization compatibility", () => {
+  it("keeps 0.1-style graphs valid and adds only display defaults", () => {
+    const legacyGraph = {
+      format: { name: "graph-universe", version: "0.1" },
+      nodes: [{ id: "one" }],
+      links: [{ source: "one", target: "one" }]
+    };
+
+    expect(validateGraph(legacyGraph)).toEqual({ valid: true, errors: [] });
+    expect(normalizeGraph(legacyGraph)).toMatchObject({
+      facets: [],
+      filterSources: [],
+      projections: [],
+      containmentRules: [],
+      hierarchy: { containmentLinkTypes: [], acyclic: true },
+      visualTokens: {},
+      theme: {},
+      nodes: [{ typeId: "node" }],
+      links: [{ typeId: "related-to" }]
+    });
+  });
+
+  it("resolves unknown visual tokens through the theme fallback", () => {
+    const graph = normalizeGraph(validGraph);
+    const resolved = resolveVisualToken(graph, "missing-token");
+
+    expect(resolved).toEqual({
+      id: "node",
+      token: graph.visualTokens.node,
+      usedFallback: true
+    });
   });
 });

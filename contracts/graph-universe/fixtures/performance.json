@@ -1,8 +1,43 @@
 {
   "format": {
     "name": "graph-universe",
-    "version": "0.1"
+    "version": "0.2"
   },
+  "nodeTypes": {
+    "service": { "label": "Service", "visualToken": "node" },
+    "storage": { "label": "Storage", "visualToken": "node" },
+    "namespace": { "label": "Namespace", "visualToken": "node" },
+    "file": { "label": "File", "visualToken": "node" },
+    "class": { "label": "Class", "visualToken": "node" },
+    "method": { "label": "Method", "visualToken": "node" }
+  },
+  "linkTypes": {
+    "calls": { "label": "Calls", "role": "relation", "visualToken": "link" },
+    "depends-on": { "label": "Depends on", "role": "relation", "visualToken": "link" },
+    "contains": { "label": "Contains", "role": "containment", "visualToken": "link" },
+    "related-to": { "label": "Related to", "role": "relation", "visualToken": "link" }
+  },
+  "facets": [
+    { "id": "node-type", "label": "Node type", "source": { "scope": "node", "field": "typeId" } },
+    { "id": "group", "label": "Group", "source": { "scope": "node", "field": "groupId" } },
+    { "id": "tag", "label": "Tag", "source": { "scope": "node", "field": "tags" } }
+  ],
+  "filterSources": [
+    { "id": "node-type", "facetId": "node-type", "label": "Node type" },
+    { "id": "group", "facetId": "group", "label": "Group" },
+    { "id": "tag", "facetId": "tag", "label": "Tag" }
+  ],
+  "viewProfiles": [
+    { "id": "overview", "label": "Overview", "detailLevel": 0, "visibleNodeTypes": ["service", "storage", "namespace", "file", "class"], "visibleLinkTypes": ["depends-on", "contains", "related-to"] },
+    { "id": "detail", "label": "Detail", "detailLevel": 1, "visibleNodeTypes": ["service", "storage", "namespace", "file", "class", "method"], "visibleLinkTypes": ["calls", "depends-on", "contains", "related-to"] }
+  ],
+  "hierarchy": { "containmentLinkTypes": ["contains"], "maxParents": 1, "acyclic": true },
+  "projections": [],
+  "visualTokens": {
+    "node": { "kind": "node", "color": "#38bdf8", "shape": "sphere" },
+    "link": { "kind": "link", "color": "#a78bfa", "lineStyle": "solid" }
+  },
+  "theme": { "id": "default", "fallbackToken": "node", "background": "#0b1120" },
   "meta": {
     "title": "Performance graph",
     "description": "A deterministic load fixture for renderer and filtering measurements.",

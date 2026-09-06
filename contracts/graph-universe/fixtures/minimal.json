@@ -1,8 +1,60 @@
 {
   "format": {
     "name": "graph-universe",
-    "version": "0.1"
+    "version": "0.2"
   },
+  "nodeTypes": [
+    { "id": "service", "label": "Service", "visualToken": "node" },
+    { "id": "storage", "label": "Storage", "visualToken": "node" },
+    { "id": "namespace", "label": "Namespace", "visualToken": "node" },
+    { "id": "file", "label": "File", "visualToken": "node" },
+    { "id": "class", "label": "Class", "visualToken": "node" },
+    { "id": "method", "label": "Method", "visualToken": "node" }
+  ],
+  "linkTypes": [
+    { "id": "calls", "label": "Calls", "role": "relation", "visualToken": "link" },
+    { "id": "depends-on", "label": "Depends on", "role": "relation", "visualToken": "link" },
+    { "id": "contains", "label": "Contains", "role": "containment", "visualToken": "link" },
+    { "id": "related-to", "label": "Related to", "role": "relation", "visualToken": "link" }
+  ],
+  "facets": [
+    { "id": "node-type", "label": "Node type", "source": { "scope": "node", "field": "typeId" } },
+    { "id": "group", "label": "Group", "source": { "scope": "node", "field": "groupId" } },
+    { "id": "tag", "label": "Tag", "source": { "scope": "node", "field": "tags" } }
+  ],
+  "filterSources": [
+    { "id": "node-type", "facetId": "node-type", "label": "Node type" },
+    { "id": "group", "facetId": "group", "label": "Group" },
+    { "id": "tag", "facetId": "tag", "label": "Tag" }
+  ],
+  "viewProfiles": [
+    {
+      "id": "overview",
+      "label": "Overview",
+      "detailLevel": 0,
+      "visibleNodeTypes": ["service", "storage", "namespace", "file", "class"],
+      "visibleLinkTypes": ["depends-on", "contains", "related-to"]
+    },
+    {
+      "id": "detail",
+      "label": "Detail",
+      "detailLevel": 1,
+      "visibleNodeTypes": ["service", "storage", "namespace", "file", "class", "method"],
+      "visibleLinkTypes": ["calls", "depends-on", "contains", "related-to"]
+    }
+  ],
+  "hierarchy": { "containmentLinkTypes": ["contains"], "maxParents": 1, "acyclic": true },
+  "containmentRules": [
+    { "id": "contains-one-parent", "linkTypeId": "contains", "maxParents": 1, "acyclic": true }
+  ],
+  "projections": [
+    { "id": "overview-to-detail", "fromProfile": "overview", "toProfile": "detail", "linkTypeId": "depends-on" }
+  ],
+  "visualTokens": {
+    "node": { "kind": "node", "color": "#38bdf8", "shape": "sphere" },
+    "link": { "kind": "link", "color": "#a78bfa", "lineStyle": "solid" }
+  },
+  "theme": { "id": "default", "fallbackToken": "node", "background": "#0b1120" },
   "meta": {
     "title": "Minimal example",
     "description": "A tiny graph used for development and tests",
@@ -28,6 +80,7 @@
     {
       "id": "api",
       "label": "API",
+      "typeId": "service",
       "kind": "service",
       "groupId": "web",
       "tags": ["entrypoint"],
@@ -38,6 +91,7 @@
     {
       "id": "orders",
       "label": "Orders",
+      "typeId": "service",
       "kind": "service",
       "groupId": "core",
       "metrics": {
@@ -47,6 +101,7 @@
     {
       "id": "database",
       "label": "Database",
+      "typeId": "storage",
       "kind": "storage",
       "groupId": "data",
       "metrics": {
@@ -56,18 +111,23 @@
   ],
   "links": [
     {
+      "id": "summary-api-orders",
       "source": "api",
       "target": "orders",
+      "typeId": "depends-on",
       "kind": "depends-on",
       "directed": true,
+      "summary": true,
       "weight": 0.8,
       "metrics": {
         "callCount": 120
       }
     },
     {
+      "id": "depends-orders-database",
       "source": "orders",
       "target": "database",
+      "typeId": "depends-on",
       "kind": "depends-on",
       "directed": true,
       "weight": 0.5,
