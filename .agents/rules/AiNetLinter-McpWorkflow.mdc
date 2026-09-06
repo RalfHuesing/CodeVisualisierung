@@ -1,0 +1,162 @@
+---
+description: Dauerhafte Nutzungsregeln für die semantische .NET-Analyse mit dem AiNetLinter-MCP-Server.
+globs: *
+alwaysApply: true
+---
+# AiNetLinter MCP-Nutzung
+
+AiNetLinter analysiert .NET-Solutions mit Roslyn. Für semantische Fragen zu
+C#-Code gelten die folgenden verbindlichen Prioritäten; die AiNetLinter-MCP-
+Tools kennen Symbole, Typen,
+Referenzen und Abhängigkeiten.
+
+## Verbindliche Priorität (MCP-first, pragmatisch)
+
+> **Standard: AiNetLinter-MCP-Tools verwenden** — bei jeder C#-Aufgabe (Symbole, Typen, Aufrufketten, Referenzen, Abhängigkeiten, Regelverstöße) MUSS zuerst das passende MCP-Tool gewählt werden. Sie liefern semantisch aufgelöste, kompakte Ergebnisse und verbrauchen deutlich weniger Kontext als seitenweises Dateilesen.
+>
+> **Werkzeugwahl nach Stärken — kein blindes Verbot:**
+>
+> | Situation | Bevorzugtes Tool |
+> |---|---|
+> | Aufrufbaum einer Methode verstehen | `get_call_tree` (outgoing/incoming) |
+> | Methodenrumpf lesen | `get_symbol_body` mit Symbol-ID |
+> | Symbol/Klasse suchen | `find_symbol` (pattern, namePattern, kind) |
+> | Definierende Assembly & DLL-Pfad eines Typs ermitteln | `resolve_type_origin` |
+> | Konkrete Implementierungen/Overrides finden | `find_implementations` |
+> | Klassenhierarchie, Basisklassen & Interfaces | `get_type_hierarchy` |
+> | Klassenstruktur / Members | `get_class_structure` |
+> | Signaturen & Dateiüberblick | `get_file_skeleton` |
+> | Regelverstöße, Impact, Hotspots | `get_violations`, `get_impact`, `get_hotspots` |
+> | Text/Strings/Razor/Config projektweit oder Fallback | `search_pattern` (pattern, scopeType, isRegex auto) |
+> | Physische Dateistruktur / Dateisuche | `get_file_tree` (fileFilter, view="summary"/"tree"/"files") |
+> | Codebase-Metriken (Größe, Komplexität, Violations) | `metrics_tree` (mode, fileFilter, depth) |
+> | Namespace- & Typhierarchie erkunden | `get_namespace_tree` (namespacePrefix, depth) |
+> | Kleiner, exakt bekannter Codeausschnitt editieren | `view_file` (gezielt, wenige Zeilen) |
+> | Konfiguration, Projektstruktur | `list_dir`, `view_file` |
+>
+> **Wann rg/view_file trotzdem sinnvoll sein können:**
+> - Exakter Zeilenbereich für einen minimalen Edit bereits bekannt → `view_file` (gezielt, wenige Zeilen) günstiger als MCP-Roundtrip.
+> - Textuelle Suchen außerhalb des analysierten Projekt-Repositories oder in reinen Nicht-Code-Verzeichnissen.
+> - Spezialisierte Batch-Ersetzungen über Systemtools.
+>
+> **Was vermieden werden soll:** Reflexartig *alle* Dateien einer Aufrufkette seitenweise einlesen, anstatt `get_call_tree` + `get_symbol_body` zu nutzen. Das verbrennt unnötig Kontext.
+
+
+## Standard
+
+- Jeder zielgebundene MCP-Tool-Aufruf verwendet einen absoluten `targetPath` und
+  die im aktuellen Toolschema vorgesehene `targetType`-Zuordnung (`project` oder
+  `assembly`). `targetType=project` adressiert den absoluten Projektroot des jeweiligen
+  Repositories (den Projekt-/Arbeitsbereichs-Root). Für die beiden
+  Assembly-only-Tools darf `targetType` gemäß ihrem Schema entfallen; ein
+  `.dll`-/`.exe`-`targetPath` wird dort als `assembly` inferiert. `tools/list`
+  weist je Tool aus, ob der gemeinsame read-only Projekt-/Assembly-Sessionpfad,
+  nur der Projektpfad oder nur der Assemblypfad unterstützt wird; Symbolgraph,
+  Struktur und Metriken können Assemblys über dekompilierte
+  Sessions abfragen.
+- `get_server_health` ist die einzige Ausnahme mit einem optionalen Target:
+  `targetType` und `targetPath` müssen paarweise angegeben werden; ohne Target
+  aggregiert das Tool getrennte Projekt- und Assembly-Sessions. Der Default ist
+  kompakt; `includeDiagnostics=true` fordert begrenzte Samples an und
+  `maxDiagnostics` wird serverseitig gedeckelt. Regeln, Audits,
+  Dateisuche, Tests und Git-Impact bleiben projektgebunden; `report_observability_feedback` ist
+  nicht zielgebunden und erhält keinen Target-Block.
+- Das Query-Argument wird ausschließlich in den Resource-URIs
+  `ainetlinter://overview{?projectRoot}` und
+  `ainetlinter://rules{?projectRoot}` verwendet; dort ist es absolut und
+  URL-kodiert anzugeben.
+- Die aktuellen Tool- und Parameterschemas aus der MCP-Tooldefinition verwenden
+  (typischerweise über `tools/list` bereitgestellt); diese Regel dupliziert keine
+  Toolschemas.
+- Für `get_feature_context` und `get_test_context` ist `symbolIdentifier` der
+  primäre Parametername (`symbol` bleibt kompatibler Alias).
+- Für `find_symbol` ist `pattern` (oder `namePattern`/`namePatterns` für Batch)
+  das primäre Suchmuster; unterstützt Substring, Glob (`*`, `?`), Regex (`^...$`)
+  und generische Typen (`<T>` wird tolerant bereinigt). `kind` filtert optional
+  nach kanonischen C#-Arten (`class`, `method`, `interface`, `record`, `struct`, `enum`, `delegate`, `property`).
+- Für `search_pattern` und `search_assembly` ist `pattern` das Suchmuster mit
+  automatischem Regex-Autodetect (`isRegex: null` als Standard-Tri-State; Plain-First
+  verhindert False-Positives bei typischer C#-Syntax, automatische Promotion bei 0
+  Plain-Treffern). `scopeType` steuert den Suchraum (`all` [Default], `production`, `tests`).
+- `get_file_tree` token-effizient und kontextschonend nutzen: `fileFilter` durchsucht
+  den Teilbaum rekursiv nach Dateipfaden/Globs (z. B. `*.cs` oder `*Service*`).
+  Auf Projekt-Root-Ebene (`root="."` oder weggelassen) OHNE Filter NIEMALS ungefiltert
+  mit `view="files"` oder `maxResults > 100` aufrufen (verhindert Token-Flooding von 15k+ Tokens).
+  Zur initialen Orientierung immer `view="summary"` (~250 Tokens) oder `view="tree"`
+  mit `treeDepth <= 2` einsetzen. Die Dateiansicht `view="files"` ist gezielten
+  Unterpfaden oder aktiven `fileFilter`-Abfragen vorbehalten. Für C#-Code-Suchen
+  direkt `find_symbol` oder `get_feature_context` verwenden.
+
+## MCP-first-Kontextphase
+
+Jeder Task mit C#-Semantik durchläuft eine MCP-first-Kontextphase innerhalb des
+bestehenden Implementierungsablaufs. Die Phase beginnt bei einem bekannten
+Symbol mit `get_feature_context`; ist der Einstiegspunkt unbekannt, wird er
+zuerst mit `find_symbol` lokalisiert. Weitere Abfragen schließen ausschließlich
+konkret sichtbare Lücken, etwa bei Implementierungsinhalt, Aufrufern,
+Abhängigkeiten, Tests oder Violations.
+
+Der Implementierer entscheidet anhand der sichtbaren Befunde, wann der Kontext
+ausreicht. Es gibt weder einen vorgelagerten Scout noch eine feste Mindestzahl
+oder starre Reihenfolge von MCP-Aufrufen. Relevante Befunde, Trunkierungen und
+Unsicherheiten werden knapp im Arbeitsgedächtnis bzw. der Task-Notiz (z. B. `code-map.md`) festgehalten;
+vollständige Tool-Rohantworten gehören nicht in die Map.
+
+## Werkzeugwahl
+
+| Anliegen | Zuerst verwenden |
+| :--- | :--- |
+| Physische Projektstruktur und gezielte Dateisuche | `get_file_tree` (`fileFilter` für Dateien; `view="summary"` oder `treeDepth <= 2` für Übersicht) |
+| C#-Symbol oder Feature verstehen | `get_feature_context`; bei unbekanntem Namen `find_symbol` |
+| Text, String-Literale, Razor/Config oder Fallback bei 0 Symboltreffern | `search_pattern` (`pattern`, `scopeType`, `isRegex: null` auto) |
+| Codebase nach Größe, Komplexität oder Violations erkunden | `metrics_tree` (`mode`, `fileFilter`, `depth`) |
+| Semantische Solution-, Namespace- und Typhierarchie erkunden | `get_namespace_tree` (`namespacePrefix`, `depth`) |
+| Definierende Assembly und DLL-Pfad eines Typs ermitteln | `resolve_type_origin` |
+| Konkrete Implementierungen oder Overrides finden | `find_implementations` |
+| Klassenhierarchie, Basisklassen & Interfaces eines Typs | `get_type_hierarchy` |
+| Signaturen und Struktur überblicken | `get_file_skeleton`, `get_class_structure`, dann `get_symbol_body` |
+| Öffentliche API einer lokalen .NET-Assembly (.dll/.exe) untersuchen | `inspect_assembly` |
+| Text-/Mustersuche in dekompilierten Fremd-Assemblies | `search_assembly` (`declarationOnly=true` für Symbole, `data_access`, `external_calls`) |
+| Klassische Extension-Methoden einer lokalen .NET-Assembly (.dll/.exe) prüfen | `find_assembly_extensions` |
+| Aufrufer, Abhängigkeiten oder Tests prüfen | `find_references`, `get_impact`, `dependency_graph`, `get_test_context` |
+| Nach C#-Änderungen gezielt prüfen | `get_impact`, `get_violations`; bei Bedarf `metrics_lookup` |
+| Vor größerem Abschluss auditieren | `safeguard`; passend zum Risiko `find_duplicates`, `find_dead_code` oder `find_magic_values` |
+| Toolfehler oder fehlende Analysefähigkeit melden | `report_observability_feedback` |
+
+`get_file_tree` ist der erste Discovery-Schritt für die physische Projektstruktur:
+Er liefert relative Pfade, Verzeichnisaggregation, optionale Metadaten und
+sichtbare Completeness-/Trunkierungsangaben auch für Dateien außerhalb des
+Roslyn-Solutionindexes. **Token-Effizienz beachten:** Für die Übersicht auf
+Root-Ebene immer `view="summary"` oder `view="tree"` (`treeDepth <= 2`) nutzen;
+`view="files"` auf Root-Ebene ist verboten. Danach sind `get_index_scope`
+(Indexabdeckung), `search_pattern` (Inhalt/Text) und die semantischen C#-Tools
+gezielt einzusetzen.
+`rg`/`grep`, Read und interne Agenten-Tools bleiben für konkrete Edit-/Diff-
+Arbeit, Konfiguration und exakte Textarbeit erlaubt. Sie ersetzen bei
+C#-Symbol-, Referenz- und Impact-Fragen nicht die semantische MCP-Analyse.
+
+Für beide Assembly-Tools ist `targetPath` mit einem absoluten, lokalen `.dll`- oder
+`.exe`-Pfad Pflicht. `targetType` darf entfallen und wird als `assembly` behandelt;
+bei expliziter Angabe ist nur `assembly` zulässig. Die Spezialtools arbeiten
+metadata-only, benötigen kein Consumer-Projekt und laden oder führen die Assembly
+nicht aus. Bei `inspect_assembly` zuerst die öffentliche API untersuchen;
+`find_assembly_extensions` prüft klassische C#-Extensions und weist ohne
+Consumer-Projekt die Roslyn-Anwendbarkeit als `not_decidable` aus.
+`completeness`, Diagnostics-Summaries sowie Trunkierungsangaben beachten. Die
+Antworten begrenzen Diagnose-Samples und Referenz-/Session-Listen gemeinsam in
+Text und StructuredContent.
+
+Für `find_symbol`, `find_references` und `get_call_tree` bleibt bei
+`targetType: "assembly"` der Root-Snapshot der Default. Nur
+`includeReferences: true` aktiviert die bounded Suche beziehungsweise Traversierung
+über eröffnete Referenz-Sessions; `origin`, `navigation.completeness` und partielle
+Diagnostics sind dabei zu beachten. Decompilierte API-Stubs können ohne sichtbare
+Call-Sites bleiben, ohne dass daraus eine globale Negativaussage folgt.
+
+Target-Aufrufe verwenden keine Legacy-Pfadparameter; historische Query-
+Parameter bleiben ausschließlich den projektbezogenen Resource-URIs vorbehalten.
+
+Bei `PROJECT_NOT_INITIALIZED` oder `RULES_INVALID` nicht ungefragt eine
+Projektintegration durchführen. Nur bei einem ausdrücklichen
+Integrationsauftrag den einmaligen Leitfaden über `ainetlinter://agent-guide`
+lesen; er enthält den Bootstrap-Ablauf und die dauerhafte Regeldatei.

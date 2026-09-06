@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/CodeVisualisierung.CSharp.Cli/CodeVisualisierung.CSharp.Cli.csproj" />
+  <Project Path="tests/CodeVisualisierung.CSharp.Tests/CodeVisualisierung.CSharp.Tests.csproj" />
+</Solution>
