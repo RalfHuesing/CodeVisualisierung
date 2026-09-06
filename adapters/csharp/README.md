@@ -18,6 +18,20 @@ Vorgesehene Namespace-Verantwortungen innerhalb des CLI-Projekts:
 - CodeVisualisierung.CSharp.Graph — Zwischenmodell, IDs und Beziehungen
 - CodeVisualisierung.CSharp.Contract — Graphvertrag, Serialisierung und Validierung
 
+## AiNetLinter-Profil
+
+Die [rules.json](rules.json) ist kein unverändertes AiNetLinter-Template:
+
+- C#-Qualität, Nullable, ASCII-Namen, semantische Benennung, Namespace-Pfadmapping,
+  Immutability und Agent-Kontextgrenzen bleiben aktiv.
+- Web-, JavaScript-, Razor- und UI-spezifische Prüfungen sind für die reine
+  CLI-/Roslyn-Solution deaktiviert.
+- AiNetLinter-eigene Pfad-, Typ- und TestKit-Ausnahmen sind entfernt.
+- Tests dürfen sealed-/Immutability-Regeln gezielt lockern und erhalten eigene,
+  aber weiterhin begrenzte Methodenlimits.
+- XML-Dokumentation für öffentliche APIs, keine blockierenden Task-Zugriffe und
+  eine maximale LINQ-Kettenlänge von vier bleiben Teil des Adapterprofils.
+
 Voraussichtliche Aufgaben:
 
 - Projekte und Solutions mit Roslyn einlesen

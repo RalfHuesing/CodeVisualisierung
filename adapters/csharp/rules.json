@@ -8,7 +8,7 @@
     "EnableTestSentinel": true,
     "EnforcePascalCase": true,
     "EnforceAsciiIdentifiers": true,
-    "EnforceXmlDocumentation": false,
+    "EnforceXmlDocumentation": true,
     "EnforceSemanticNaming": true,
     "EnforceNullableEnable": true,
     "EnforceNoSilentCatch": true,
@@ -33,7 +33,7 @@
       "Program"
     ],
     "ResultPatternAllowCatchRethrow": true,
-    "EnforceExplicitStateImmutability": false,
+    "EnforceExplicitStateImmutability": true,
     "AllowedExceptions": [
       "ArgumentException",
       "ArgumentNullException",
@@ -51,9 +51,7 @@
     "NamespaceDirectoryMappingMode": "suffix-match",
     "NamespaceDirectoryMappingIgnorePathSegments": [
       "src",
-      "Source",
-      "Domains",
-      "Handlers"
+      "Source"
     ],
     "NamespaceDirectoryMappingRequiredTrailingSegments": 2,
     "DetectAndBanPhantomDependencies": true,
@@ -69,10 +67,7 @@
       "Adapter",
       "Facade"
     ],
-    "MiddleManExemptBaseTypes": [
-      "ComponentBase",
-      "LayoutComponentBase"
-    ],
+    "MiddleManExemptBaseTypes": [],
     "ImmutabilityExemptSuffixes": [
       "Dto",
       "Entity",
@@ -88,15 +83,7 @@
       "Foundation",
       "Host"
     ],
-    "ImmutabilityExemptBaseTypes": [
-      "ComponentBase",
-      "LayoutComponentBase",
-      "ObservableObject",
-      "ObservableRecipient",
-      "BackgroundService",
-      "AuthenticationStateProvider",
-      "INotifyPropertyChanged"
-    ],
+    "ImmutabilityExemptBaseTypes": [],
     "ImmutabilityAllowPrivateBackingFields": true,
     "EnablePerformanceProfiling": false,
     "BanAsyncVoid": true,
@@ -128,13 +115,13 @@
     "MaxMethodParameterCountAllowPrivate": false,
     "MaxMethodParameterCountForNonPublic": 6,
     "MaxMethodLineCount": 60,
-    "MaxCyclomaticComplexity": 12,
+    "MaxCyclomaticComplexity": 10,
     "MaxCognitiveComplexity": 15,
     "MaxInheritanceDepth": 3,
     "MinCognitiveComplexityForTest": 5,
     "AggregatePartialClassLineCount": false,
     "MaxMethodOverloads": 5,
-    "MaxConstructorDependencies": 5,
+    "MaxConstructorDependencies": 4,
     "MaxDirectoryDepth": 4,
     "InheritanceDepthFrameworkPrefixes": [],
     "ConstructorDependencyIgnoreTypePrefixes": [
@@ -151,18 +138,9 @@
     "ConstructorDependencyExemptClassSuffixes": [
       "Exception"
     ],
-    "MaxAIContextFootprint": 2500,
+    "MaxAIContextFootprint": 2000,
     "FootprintIgnoreNamespacePrefixes": [],
-    "FootprintIgnoreTypeNames": [
-      "LinterEngine",
-      "NamingChecker",
-      "AssemblyAnalysisRegistry",
-      "AssemblyAnalysisSession",
-      "AssemblyAnalysisSnapshotLease",
-      "ExternalSourceRepositoryAcquirer",
-      "ExternalSourceRepositoryAcquirerFactory",
-      "DaemonHostCommand"
-    ],
+    "FootprintIgnoreTypeNames": [],
     "ComplexityNearMissTolerance": 1,
     "ExcludeSwitchDispatcherCases": true,
     "SwitchDispatcherMaxCaseBodyLines": 3,
@@ -178,9 +156,7 @@
     ],
     "MaxDirectoryChildren": 30,
     "MaxDirectoryChildrenExemptNames": [
-      "Migrations",
       "Generated",
-      "wwwroot",
       "obj",
       "bin",
       ".git",
@@ -188,14 +164,10 @@
       "publish",
       "TestResults",
       ".vs",
-      "speedup-tests",
-      "temp",
-      "tasks"
+      "temp"
     ],
     "MaxPartialClassFiles": 2,
-    "MaxPartialClassFilesExemptTypes": [
-      "RuleRegistry"
-    ],
+    "MaxPartialClassFilesExemptTypes": [],
     "MaxPublicMembersPerType": 15,
     "MaxPublicMembersPerTypeExemptSuffixes": [
       "Extensions",
@@ -206,7 +178,7 @@
       "Args"
     ],
     "MaxPublicMembersPerTypeApplyToTestFiles": false,
-    "MaxLinqChainLength": 0,
+    "MaxLinqChainLength": 4,
     "LinqMethodNames": [
       "Where",
       "Select",
@@ -292,18 +264,9 @@
     "ExemptClassNameSuffixes": [
       "Extensions",
       "Constants",
-      "Converter",
-      "Profile",
-      "Seed",
-      "Migration",
-      "Startup",
-      "Module"
+      "Converter"
     ],
-    "ExemptWhenInheritsFrom": [
-      "ComponentBase",
-      "IValueConverter",
-      "Profile"
-    ],
+    "ExemptWhenInheritsFrom": [],
     "ExemptStaticClasses": true,
     "TestProjectNameSuffixes": [
       "Tests",
@@ -315,15 +278,10 @@
     ]
   },
   "UiSeparation": {
-    "BlazorRequireCodeBehind": true,
-    "BlazorRequireCssIsolation": true,
-    "WpfRequireMinimalCodeBehind": true,
-    "WpfCodeBehindBaseTypes": [
-      "Window",
-      "UserControl",
-      "Page",
-      "NavigationWindow"
-    ],
+    "BlazorRequireCodeBehind": false,
+    "BlazorRequireCssIsolation": false,
+    "WpfRequireMinimalCodeBehind": false,
+    "WpfCodeBehindBaseTypes": [],
     "BlazorExcludeFileNames": [
       "_Imports.razor"
     ],
@@ -345,7 +303,7 @@
     "SkipGeneratedCodeAttribute": true
   },
   "Web": {
-    "IsEnabled": true,
+    "IsEnabled": false,
     "Css": {
       "MaxCssLineCount": 300,
       "PreferScopedCss": true,
@@ -394,10 +352,6 @@
       "Severity": "warning",
       "Intent": "test-coverage"
     },
-    "EnforceMinimalApiAsParameters": {
-      "Severity": "error",
-      "Intent": "aspnet-binding"
-    },
     "EnforceNoSilentCatch": {
       "Severity": "error",
       "Intent": "agent-resilience"
@@ -405,35 +359,22 @@
     "BanPublicNestedTypes": {
       "Severity": "error",
       "Intent": "agent-context"
+    },
+    "EnforceNamespaceDirectoryMapping": {
+      "Severity": "error",
+      "Intent": "architecture"
     }
   },
   "ForbiddenNamespaceDependencies": [],
   "ProjectOverrides": {
     "*Tests": {
       "Global": {
-        "EnforceSealedClasses": false
+        "EnforceSealedClasses": false,
+        "EnforceExplicitStateImmutability": false
       },
       "Metrics": {
-        "MaxMethodLineCount": 100,
-        "MaxPublicMembersPerTypeExemptSuffixes": [
-          "Extensions",
-          "Mapper",
-          "Constants",
-          "Config",
-          "ConfigOverride",
-          "Args",
-          "Tests",
-          "Test",
-          "Specs"
-        ]
-      }
-    },
-    "AiNetLinter.TestKit": {
-      "Global": {
-        "EnforceSealedClasses": false
-      },
-      "Metrics": {
-        "MaxMethodLineCount": 100,
+        "MaxMethodParameterCountInTestFiles": 8,
+        "MaxMethodLineCount": 80,
         "MaxPublicMembersPerTypeExemptSuffixes": [
           "Extensions",
           "Mapper",
@@ -448,96 +389,5 @@
       }
     }
   },
-  "PathOverrides": {
-    "src/AiNetLinter/Mcp/McpCodeGraphServer.cs": {
-      "Metrics": {
-        "MaxAIContextFootprint": 2520
-      }
-    },
-    "src/AiNetLinter/Mcp/McpServerOptionsFactory.cs": {
-      "Metrics": {
-        "MaxAIContextFootprint": 2830
-      }
-    },
-    "src/AiNetLinter/Mcp/Registration/OverviewResourceRegistration.cs": {
-      "Metrics": {
-        "MaxAIContextFootprint": 2650
-      }
-    },
-    "src/AiNetLinter/Mcp/Registration/SymbolGraphToolRegistrations.cs": {
-      "Metrics": {
-        "MaxAIContextFootprint": 2900
-      }
-    },
-    "src/AiNetLinter/Mcp/Tools/FindReferencesTool.cs": {
-      "Metrics": {
-        "MaxAIContextFootprint": 2700
-      }
-    },
-    "src/AiNetLinter/Mcp/Tools/FindSymbolTool.cs": {
-      "Metrics": {
-        "MaxAIContextFootprint": 2690
-      }
-    },
-    "src/AiNetLinter/Mcp/Tools/GetFileSkeletonTool.cs": {
-      "Metrics": {
-        "MaxAIContextFootprint": 2620
-      }
-    },
-    "src/AiNetLinter/Mcp/Tools/GetHotspotsTool.cs": {
-      "Metrics": {
-        "MaxAIContextFootprint": 2610
-      }
-    },
-    "src/AiNetLinter/Mcp/Tools/GetIndexScopeTool.cs": {
-      "Metrics": {
-        "MaxAIContextFootprint": 2620
-      }
-    },
-    "src/AiNetLinter/Mcp/Tools/GetImpactTool.cs": {
-      "Metrics": {
-        "MaxAIContextFootprint": 2650
-      }
-    },
-    "src/AiNetLinter/Mcp/Tools/GetTypeHierarchyTool.cs": {
-      "Metrics": {
-        "MaxAIContextFootprint": 2620
-      }
-    },
-    "src/AiNetLinter/Mcp/Tools/GetViolationsTool.cs": {
-      "Metrics": {
-        "MaxAIContextFootprint": 2620
-      }
-    },
-    "src/AiNetLinter/Mcp/Tools/SearchPatternTool.cs": {
-      "Metrics": {
-        "MaxAIContextFootprint": 2650
-      }
-    },
-    "src/AiNetLinter/Mcp/Tools/GetSymbolBodyTool.cs": {
-      "Metrics": {
-        "MaxAIContextFootprint": 2700
-      }
-    },
-    "src/AiNetLinter/Mcp/Registration/SymbolBodyToolRegistrations.cs": {
-      "Metrics": {
-        "MaxAIContextFootprint": 2830
-      }
-    },
-    "src/AiNetLinter/Mcp/Registration/ServerMaintenanceToolRegistrations.cs": {
-      "Metrics": {
-        "MaxAIContextFootprint": 2860
-      }
-    },
-    "src/AiNetLinter/Mcp/Tools/GetServerHealthTool.cs": {
-      "Metrics": {
-        "MaxAIContextFootprint": 2860
-      }
-    },
-    "src/AiNetLinter/Mcp/Tools/ReloadConfigTool.cs": {
-      "Metrics": {
-        "MaxAIContextFootprint": 2610
-      }
-    }
-  }
+  "PathOverrides": {}
 }
