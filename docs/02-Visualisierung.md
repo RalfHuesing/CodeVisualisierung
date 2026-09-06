@@ -107,3 +107,16 @@ Der deterministische Aufbereitungs-Benchmark läuft mit `npm run benchmark` übe
 Der Produktionsbuild bleibt statisch hostbar. Der aktuelle JavaScript-Bundle liegt bei rund 2,0 MB unkomprimiert bzw. 440 kB gzip; die Abhängigkeit wird wegen der vollständigen 3D-Geometrien vorerst nicht weiter aufgeteilt.
 
 Der geprüfte interaktive Vollmodus umfasst aktuell die große Fixture mit 248 Nodes und 448 Links. Die Belastungs-Fixture mit 684 Nodes und 1.260 Links ist für deterministische Aufbereitungs- und Filtermessungen vorgesehen; eine verbindliche WebGL-FPS-Grenze für darüber hinausgehende Graphen bleibt offen.
+
+Der reproduzierbare Browser-Messlauf wird mit `npm run benchmark:browser` ausgeführt. Das Script baut die statische App, startet einen lokalen Preview-Server auf einem freien Port und misst jede Fixture in einem neuen Playwright-Chromium-Kontext. `timeToFirstVisibleCanvasMs` ist die Zeit vom Seitenstart bis zum ersten sichtbaren Canvas; `fixtureReadyMs` beschreibt zusätzlich die Zeit zum Umschalten auf die gemessene Fixture. Die Node-Auswahl-Latenz reicht vom Auslösen der Auswahl bis zum sichtbaren Detailbereich. Die FPS werden über ein 1.500-ms-rAF-Fenster bestimmt. Nicht unterstützte Heap-APIs werden als `unavailable` ausgegeben.
+
+Messlauf vom 06.09.2026, 09:19 Uhr Europe/Berlin (Chromium 153.0.8010.12, Playwright, lokaler Windows-Lauf):
+
+| Fixture | Canvas sichtbar | Fixture bereit | Node-Auswahl | rAF-FPS | JS-Heap genutzt / gesamt / Limit |
+|---|---:|---:|---:|---:|---:|
+| groß, 248 / 448 | 175,9 ms | 256,1 ms | 164,1 ms | 56,88 | 19,55 / 54,17 / 3.585,82 MiB |
+| Belastung, 684 / 1.260 | 165,3 ms | 699,1 ms | 321,8 ms | 24,13 | 57,51 / 92,89 / 3.585,82 MiB |
+
+Die große Fixture mit 248 Nodes und 448 Links ist damit die unterstützte interaktive Vollmodusgrenze. Die Belastungs-Fixture mit 684 Nodes und 1.260 Links bleibt weiterhin ladbar und auswählbar, wird aber als außerhalb des geprüften interaktiven Vollmodus gekennzeichnet. Ihre geringere Bildrate und höhere Auswahl-/Bereitstellungslatenz sind eine Belastungsbeobachtung, keine automatische Datenreduktion.
+
+Aus den Messungen wird keine neue Aggregation und keine zusätzliche Detailstufe aus einer Einzelmessung abgeleitet. Für diesen Qualitätsabschluss bleibt die Entscheidung deshalb explizit: Vollmodus bis zur großen Fixture, darüber vollständiges Laden mit sichtbarer Kennzeichnung; Aggregation bleibt eine spätere, separat zu messende Darstellungsentscheidung.

@@ -52,6 +52,7 @@ const nodeCount = document.querySelector("#node-count");
 const linkCount = document.querySelector("#link-count");
 const selectedDetails = document.querySelector("#selected-node-details");
 const graphRenderer = createGraphRenderer(graphCanvas, handleNodeClick);
+const FULL_MODE_LIMIT = Object.freeze({ nodes: 248, links: 448 });
 
 let currentGraph;
 let filterControls = new Map();
@@ -174,7 +175,7 @@ function showGraph(graph, sourceName) {
   linkCount.textContent = String(graph.links.length);
   updateLegend();
   updateAccessibleNodes();
-  status.textContent = graph.nodes.length === 0 ? `${sourceName} geladen: Der Graph ist leer.` : `${sourceName} erfolgreich geladen.`;
+  status.textContent = getLoadStatus(graph, sourceName);
   closeDetails();
 }
 
@@ -336,7 +337,7 @@ function refreshGraphView() {
   updateLegend();
   updateAccessibleNodes(visibleGraph);
   const profileLabel = viewOptions.profile?.label ?? "Standard";
-  status.textContent = `${visibleGraph.nodes.length} von ${currentGraph.nodes.length} Nodes sichtbar · ${profileLabel}.`;
+  status.textContent = `${visibleGraph.nodes.length} von ${currentGraph.nodes.length} Nodes sichtbar · ${profileLabel}.${getScaleStatus(currentGraph)}`;
 }
 
 function handleKeyDown(event) {
@@ -458,7 +459,25 @@ function updateAccessibleNodes(graph = currentGraph) {
 function getGraphMeta(graph, sourceName) {
   const format = `${graph.format.name} ${graph.format.version}`;
   const source = graph.meta?.source?.name ? ` · Quelle: ${graph.meta.source.name}` : "";
-  return `${format}${source} · ${sourceName}`;
+  return `${format}${source} · ${sourceName}${getScaleStatus(graph)}`;
+}
+
+function getLoadStatus(graph, sourceName) {
+  if (graph.nodes.length === 0) {
+    return `${sourceName} geladen: Der Graph ist leer.`;
+  }
+  return `${sourceName} erfolgreich geladen.${getScaleStatus(graph)}`;
+}
+
+function getScaleStatus(graph) {
+  const exceedsFullMode = graph.nodes.length > FULL_MODE_LIMIT.nodes || graph.links.length > FULL_MODE_LIMIT.links;
+  if (exceedsFullMode) {
+    return ` Außerhalb des geprüften interaktiven Vollmodus (Grenze: ${FULL_MODE_LIMIT.nodes} Nodes / ${FULL_MODE_LIMIT.links} Links); weiterhin ladbar.`;
+  }
+  if (graph.nodes.length === FULL_MODE_LIMIT.nodes && graph.links.length === FULL_MODE_LIMIT.links) {
+    return ` Interaktiver Vollmodus geprüft (Grenze: ${FULL_MODE_LIMIT.nodes} Nodes / ${FULL_MODE_LIMIT.links} Links).`;
+  }
+  return "";
 }
 
 function formatDetailsCode(value) {

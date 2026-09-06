@@ -5,6 +5,7 @@
   "scripts": {
     "build": "vite build",
     "benchmark": "node scripts/benchmark-fixtures.mjs",
+    "benchmark:browser": "node scripts/benchmark-browser.mjs",
     "check": "npm run check:code-size && npm run lint:js && npm run lint:css && npm run lint:html && npm test && npm run test:e2e",
     "check:code-size": "node scripts/check-code-size.mjs",
     "lint:js": "eslint .",

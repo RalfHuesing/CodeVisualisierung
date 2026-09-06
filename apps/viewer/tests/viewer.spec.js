@@ -114,6 +114,20 @@ test("renders the large target fixture and survives a resize", async ({ page }) 
   await expect(page.locator("#graph-canvas canvas")).toBeVisible();
 });
 
+test("communicates the full-mode limit and keeps larger graphs loadable", async ({ page }) => {
+  await page.goto("/");
+
+  await page.locator("#example-select").selectOption("large");
+  await expect(page.locator("#graph-status")).toContainText("Interaktiver Vollmodus geprüft");
+  await expect(page.locator("#graph-status")).toContainText("248 Nodes / 448 Links");
+
+  await page.locator("#example-select").selectOption("performance");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "684");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-link-count", "1260");
+  await expect(page.locator("#graph-status")).toContainText("Außerhalb des geprüften interaktiven Vollmodus");
+  await expect(page.locator("#graph-status")).toContainText("weiterhin ladbar");
+});
+
 test("shows schema and semantic errors for an invalid graph", async ({ page }) => {
   await page.goto("/");
   await page.locator("#graph-file").setInputFiles({

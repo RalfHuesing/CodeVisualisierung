@@ -54,9 +54,9 @@ Grundlagen: [Vision](01-Vision.md), [Visualisierung](02-Visualisierung.md),
 - [X] Deterministische Aufbereitungs-Benchmarks für alle Ziel-Fixtures ausführen → [Visualisierung](02-Visualisierung.md)
 - [X] Statische Produktionsausgabe bauen und Smoke-Tests gegen den Build ausführen → [Viewer](../apps/viewer/README.md)
 - [X] Fehler-, Leer-, WebGL-, Resize- und große-Graph-Zustände testen → [Viewer-Tests](../apps/viewer/tests/viewer.spec.js)
-- [ ] Zeit bis zum ersten sichtbaren Bild, Interaktionslatenz, FPS und Speicher im Zielbrowser messen → [Visualisierung](02-Visualisierung.md)
-- [ ] Unterstützten interaktiven Vollmodus und Verhalten darüber festlegen → [Visualisierung](02-Visualisierung.md)
-- [ ] Aggregation oder weitere Detailstufen nur aus den Messungen ableiten → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [X] Zeit bis zum ersten sichtbaren Bild, Interaktionslatenz, FPS und Speicher im Zielbrowser messen → [Visualisierung](02-Visualisierung.md)
+- [X] Unterstützten interaktiven Vollmodus und Verhalten darüber festlegen → [Visualisierung](02-Visualisierung.md)
+- [X] Aggregation oder weitere Detailstufen nur aus den Messungen ableiten → [06](06-Graphmodell-und-Visualisierungsprofile.md)
 
 ## Phase 5 – Viewer-Abschluss
 
