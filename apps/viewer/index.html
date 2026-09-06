@@ -45,29 +45,11 @@
             <span class="visually-hidden">Link-Metrik</span>
             <select id="link-metric-select" aria-label="Link-Metrik"></select>
           </label>
-          <label class="filter-picker">
-            <span class="visually-hidden">Node-Art filtern</span>
-            <select id="kind-filter" aria-label="Node-Art filtern"><option value="">Alle Arten</option></select>
-          </label>
           <label class="zoom-picker">
-            <span class="visually-hidden">Detailstufe</span>
-            <select id="zoom-select" aria-label="Detailstufe">
-              <option value="detail">Detail</option>
-              <option value="overview">Übersicht · Methoden ausblenden</option>
-            </select>
+            <span class="visually-hidden">Ansicht auswählen</span>
+            <select id="zoom-select" aria-label="Ansicht auswählen"></select>
           </label>
-          <label class="filter-picker">
-            <span class="visually-hidden">Gruppe filtern</span>
-            <select id="group-filter" aria-label="Gruppe filtern"><option value="">Alle Gruppen</option></select>
-          </label>
-          <label class="filter-picker">
-            <span class="visually-hidden">Tag filtern</span>
-            <select id="tag-filter" aria-label="Tag filtern"><option value="">Alle Tags</option></select>
-          </label>
-          <label class="filter-picker">
-            <span class="visually-hidden">Link-Art filtern</span>
-            <select id="link-kind-filter" aria-label="Link-Art filtern"><option value="">Alle Link-Arten</option></select>
-          </label>
+          <div id="filter-controls" class="filter-controls toolbar" role="group" aria-label="Graphfilter"></div>
           <label class="toolbar-button">
             JSON laden
             <input id="graph-file" class="visually-hidden" type="file" accept=".json,application/json">

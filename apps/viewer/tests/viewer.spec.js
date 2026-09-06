@@ -75,11 +75,11 @@ test("filters the 3d graph without losing the source graph", async ({ page }) =>
   await expect(page.locator("#selected-node-details")).toBeVisible();
 
   await page.locator("#zoom-select").selectOption("overview");
-  await expect(page.locator("#graph-status")).toContainText("Übersicht");
+  await expect(page.locator("#graph-status")).toContainText("Overview");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "10");
   await page.locator("#zoom-select").selectOption("detail");
 
-  await page.locator("#kind-filter").selectOption("method");
+  await page.locator("#node-type-filter").selectOption("method");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "8");
   await expect(page.locator("#accessible-nodes li")).toHaveCount(8);
   await expect(page.locator("#selected-node-details")).toBeHidden();

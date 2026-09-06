@@ -43,11 +43,11 @@ Grundlagen: [Vision](01-Vision.md), [Visualisierung](02-Visualisierung.md),
 
 - [X] Mehrere Beispiele, Upload, Suche, Auswahl, Reset und Grundfilter anbieten → [Viewer](../apps/viewer/README.md)
 - [X] Node-Arten mit Geometrie, Farbe, Metrik und sichtbarer Legende darstellen → [02](02-Visualisierung.md)
-- [ ] Filter und Facetten vollständig aus dem Graph-JSON erzeugen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [ ] View-Profile aus dem Graph-JSON laden und auswählbar machen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [X] Filter und Facetten vollständig aus dem Graph-JSON erzeugen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [X] View-Profile aus dem Graph-JSON laden und auswählbar machen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
 - [ ] Summary-Links und Projektionen bei jeder Detailstufe korrekt darstellen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [ ] Unbekannte Typen und Visualisierungstokens mit dokumentiertem Fallback behandeln → [06](06-Graphmodell-und-Visualisierungsprofile.md)
-- [ ] C#-Begriffe vollständig aus dem Viewer-Code entfernen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [X] Unbekannte Typen und Visualisierungstokens mit dokumentiertem Fallback behandeln → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+- [X] C#-Begriffe vollständig aus dem Viewer-Code entfernen → [06](06-Graphmodell-und-Visualisierungsprofile.md)
 
 ## Phase 4 – Skalierung und Qualitätsgrenzen
 

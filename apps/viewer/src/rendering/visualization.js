@@ -5,7 +5,6 @@ import { createVisualGraphData, filterGraph, findSearchMatches, getNodeNeighborh
 const INCOMING_COLOR = "#fbbf24";
 const OUTGOING_COLOR = "#38bdf8";
 const RELATED_COLOR = "#a78bfa";
-const DEFAULT_LINK_COLOR = "#94a3b8";
 const DIMMED_NODE_COLOR = "#1e293b";
 const DIMMED_LINK_COLOR = "#1e293b";
 const NODE_GEOMETRIES = new Map();
@@ -21,13 +20,14 @@ export function createGraphRenderer(container, onNodeClick) {
     destroy();
     currentGraph = graph;
     viewOptions = options;
-    const visualData = createVisualGraphData(filterGraph(graph, viewOptions.filters), viewOptions);
+    const visualData = createVisualGraphData(filterGraph(graph, viewOptions.filters, viewOptions.profile), viewOptions);
     graphInstance = createForceGraph(
       container,
       onNodeClick,
       visualData,
+      graph,
       (node) => getNodeColor(node, currentGraph, selectedNodeId, searchQuery),
-      (link) => getLinkColor(link, selectedNodeId, searchQuery),
+      (link) => getLinkColor(link, graph, selectedNodeId, searchQuery),
       (node) => createNodeObject(node, getNodeColor(node, currentGraph, selectedNodeId, searchQuery))
     );
     updateDataAttributes(visualData);
@@ -41,7 +41,7 @@ export function createGraphRenderer(container, onNodeClick) {
       return;
     }
 
-    const visualData = createVisualGraphData(filterGraph(currentGraph, viewOptions.filters), viewOptions);
+    const visualData = createVisualGraphData(filterGraph(currentGraph, viewOptions.filters, viewOptions.profile), viewOptions);
     graphInstance.graphData(visualData);
     updateDataAttributes(visualData);
     refreshStyles();
@@ -77,8 +77,8 @@ export function createGraphRenderer(container, onNodeClick) {
     graphInstance
       .nodeColor((node) => getNodeColor(node, currentGraph, selectedNodeId, searchQuery))
       .nodeThreeObject((node) => createNodeObject(node, getNodeColor(node, currentGraph, selectedNodeId, searchQuery)))
-      .linkColor((link) => getLinkColor(link, selectedNodeId, searchQuery))
-      .linkDirectionalArrowColor((link) => getLinkColor(link, selectedNodeId, searchQuery));
+      .linkColor((link) => getLinkColor(link, currentGraph, selectedNodeId, searchQuery))
+      .linkDirectionalArrowColor((link) => getLinkColor(link, currentGraph, selectedNodeId, searchQuery));
   }
 
   function destroy() {
@@ -124,9 +124,9 @@ function getNodeColor(node, graph, selectedNodeId, searchQuery) {
 }
 
 
-function createForceGraph(container, onNodeClick, visualData, nodeColor, linkColor, nodeObject) {
+function createForceGraph(container, onNodeClick, visualData, graph, nodeColor, linkColor, nodeObject) {
   const graphInstance = new ForceGraph3D(container, { controlType: "orbit" })
-    .backgroundColor(VIEWER_CONFIG.background)
+    .backgroundColor(graph.theme?.background ?? "#0b1120")
     .showNavInfo(false)
     .nodeRelSize(VIEWER_CONFIG.node.relativeSize)
     .nodeLabel((node) => `${node.label} (${node.kind})`)
@@ -153,47 +153,48 @@ function createForceGraph(container, onNodeClick, visualData, nodeColor, linkCol
 }
 
 function createNodeObject(node, color) {
-  const geometry = getNodeGeometry(node.kind);
+  const geometry = getNodeGeometry(node.visualShape);
   const material = new THREE.MeshBasicMaterial({ color });
   const mesh = new THREE.Mesh(geometry, material);
   mesh.scale.setScalar(Math.max(0.75, node.visualValue / 2));
   return mesh;
 }
 
-function getNodeGeometry(kind) {
-  if (NODE_GEOMETRIES.has(kind)) {
-    return NODE_GEOMETRIES.get(kind);
+function getNodeGeometry(shape) {
+  const normalizedShape = shape ?? "tetrahedron";
+  if (NODE_GEOMETRIES.has(normalizedShape)) {
+    return NODE_GEOMETRIES.get(normalizedShape);
   }
 
-  const geometry = createNodeGeometry(kind);
-  NODE_GEOMETRIES.set(kind, geometry);
+  const geometry = createNodeGeometry(normalizedShape);
+  NODE_GEOMETRIES.set(normalizedShape, geometry);
   return geometry;
 }
 
-function createNodeGeometry(kind) {
-  if (kind === "namespace") {
+function createNodeGeometry(shape) {
+  if (shape === "sphere") {
     return new THREE.SphereGeometry(1, 12, 8);
   }
-  if (kind === "class") {
+  if (shape === "box") {
     return new THREE.BoxGeometry(1.5, 1.5, 1.5);
   }
-  if (kind === "method") {
+  if (shape === "octahedron") {
     return new THREE.OctahedronGeometry(1.2, 0);
   }
-  if (kind === "file") {
+  if (shape === "cylinder") {
     return new THREE.CylinderGeometry(0.9, 0.9, 1.5, 10);
   }
   return new THREE.TetrahedronGeometry(1.2, 0);
 }
 
-function getLinkColor(link, selectedNodeId, searchQuery) {
+function getLinkColor(link, graph, selectedNodeId, searchQuery) {
   const sourceId = getEndpointId(link.source);
   const targetId = getEndpointId(link.target);
   if (searchQuery.trim() && !matchesSearchId(sourceId, searchQuery) && !matchesSearchId(targetId, searchQuery)) {
     return DIMMED_LINK_COLOR;
   }
   if (!selectedNodeId) {
-    return DEFAULT_LINK_COLOR;
+    return link.color ?? graph.theme?.linkColor ?? "#94a3b8";
   }
   if (link.directed && targetId === selectedNodeId) {
     return INCOMING_COLOR;
@@ -204,7 +205,7 @@ function getLinkColor(link, selectedNodeId, searchQuery) {
   if (!link.directed && (sourceId === selectedNodeId || targetId === selectedNodeId)) {
     return RELATED_COLOR;
   }
-  return DEFAULT_LINK_COLOR;
+  return link.color ?? graph.theme?.linkColor ?? "#94a3b8";
 }
 
 function matchesSearch(node, query) {

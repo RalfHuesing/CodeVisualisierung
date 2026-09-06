@@ -9,7 +9,12 @@ import {
   getMetricLabel,
   getMetricNames,
   getNodeKindColor,
+  getNodeTypeLabel,
+  getNodeVisualStyle,
   getNodeNeighborhood,
+  getDefaultViewProfile,
+  getViewProfile,
+  getViewProfiles,
   findLinkMetric,
   findNodeMetric
 } from "./rendering/graph-mapping.js";
@@ -25,12 +30,7 @@ const nodeSelect = document.querySelector("#node-select");
 const exampleSelect = document.querySelector("#example-select");
 const nodeMetricSelect = document.querySelector("#node-metric-select");
 const linkMetricSelect = document.querySelector("#link-metric-select");
-const filterControls = {
-  groupId: document.querySelector("#group-filter"),
-  kind: document.querySelector("#kind-filter"),
-  linkKind: document.querySelector("#link-kind-filter"),
-  tag: document.querySelector("#tag-filter")
-};
+const filterControlsContainer = document.querySelector("#filter-controls");
 const resetFiltersButton = document.querySelector("#reset-filters");
 const zoomSelect = document.querySelector("#zoom-select");
 const status = document.querySelector("#graph-status");
@@ -54,6 +54,7 @@ const selectedDetails = document.querySelector("#selected-node-details");
 const graphRenderer = createGraphRenderer(graphCanvas, handleNodeClick);
 
 let currentGraph;
+let filterControls = new Map();
 let viewOptions = { filters: {} };
 
 populateExampleSelector();
@@ -69,8 +70,7 @@ nodeSelect.addEventListener("change", handleNodeSelection);
 exampleSelect.addEventListener("change", handleExampleSelection);
 nodeMetricSelect.addEventListener("change", handleMetricChange);
 linkMetricSelect.addEventListener("change", handleMetricChange);
-zoomSelect.addEventListener("change", handleZoomChange);
-Object.values(filterControls).forEach((control) => control.addEventListener("change", handleFilterChange));
+zoomSelect.addEventListener("change", handleProfileChange);
 resetFiltersButton.addEventListener("click", resetFilters);
 document.addEventListener("keydown", handleKeyDown);
 dropZone.addEventListener("dragover", handleDragOver);
@@ -138,12 +138,20 @@ function handleExampleSelection(event) {
 
 function showGraph(graph, sourceName) {
   currentGraph = graph;
-  viewOptions = { filters: {}, linkMetric: findLinkMetric(graph), nodeMetric: findNodeMetric(graph) };
-  zoomSelect.value = "detail";
+  const profile = getDefaultViewProfile(graph);
+  viewOptions = {
+    filters: {},
+    linkMetric: profile?.linkMetric ?? findLinkMetric(graph),
+    nodeMetric: profile?.nodeMetric ?? findNodeMetric(graph),
+    profile,
+    profileId: profile?.id ?? ""
+  };
+  zoomSelect.value = profile?.id ?? "";
   errorsPanel.hidden = true;
   errorList.replaceChildren();
   dropHint.hidden = true;
   selectedDetails.hidden = true;
+  populateProfileSelector(graph);
   populateMetricSelectors(graph);
   populateFilterSelectors(graph);
   if (!isWebGLSupported(document)) {
@@ -286,27 +294,30 @@ function handleMetricChange(event) {
 }
 
 function handleFilterChange() {
-  const hiddenKinds = viewOptions.filters.hiddenKinds ?? [];
   viewOptions.filters = Object.fromEntries(
-    Object.entries(filterControls).map(([name, control]) => [name, control.value]).filter(([, value]) => value)
+    [...filterControls.entries()].map(([name, control]) => [name, control.value]).filter(([, value]) => value)
   );
-  if (hiddenKinds.length > 0) {
-    viewOptions.filters.hiddenKinds = hiddenKinds;
-  }
   refreshGraphView();
 }
 
-function handleZoomChange(event) {
-  viewOptions.filters = { ...viewOptions.filters, hiddenKinds: event.target.value === "overview" ? ["method"] : [] };
+function handleProfileChange(event) {
+  const profile = getViewProfile(currentGraph, event.target.value);
+  viewOptions = {
+    ...viewOptions,
+    linkMetric: profile?.linkMetric ?? findLinkMetric(currentGraph),
+    nodeMetric: profile?.nodeMetric ?? findNodeMetric(currentGraph),
+    profile,
+    profileId: profile?.id ?? ""
+  };
+  populateMetricSelectors(currentGraph);
   refreshGraphView();
 }
 
 function resetFilters() {
-  Object.values(filterControls).forEach((control) => {
+  [...filterControls.values()].forEach((control) => {
     control.value = "";
   });
   viewOptions.filters = {};
-  zoomSelect.value = "detail";
   refreshGraphView();
 }
 
@@ -316,7 +327,7 @@ function refreshGraphView() {
   }
 
   graphRenderer.updateOptions(viewOptions);
-  const visibleGraph = filterGraph(currentGraph, viewOptions.filters);
+  const visibleGraph = filterGraph(currentGraph, viewOptions.filters, viewOptions.profile);
   const selectedNodeId = nodeSelect.value;
   updateNodeSelector(visibleGraph);
   if (selectedNodeId && !visibleGraph.nodes.some((node) => node.id === selectedNodeId)) {
@@ -324,8 +335,8 @@ function refreshGraphView() {
   }
   updateLegend();
   updateAccessibleNodes(visibleGraph);
-  const zoomLabel = zoomSelect.value === "overview" ? "Übersicht" : "Detail";
-  status.textContent = `${visibleGraph.nodes.length} von ${currentGraph.nodes.length} Nodes sichtbar · ${zoomLabel}.`;
+  const profileLabel = viewOptions.profile?.label ?? "Standard";
+  status.textContent = `${visibleGraph.nodes.length} von ${currentGraph.nodes.length} Nodes sichtbar · ${profileLabel}.`;
 }
 
 function handleKeyDown(event) {
@@ -360,16 +371,37 @@ function populateExampleSelector() {
 }
 
 function populateMetricSelectors(graph) {
-  populateSelect(nodeMetricSelect, getMetricNames(graph, "node"), findNodeMetric(graph), (metric) => getMetricLabel(graph, metric));
-  populateSelect(linkMetricSelect, ["weight", ...getMetricNames(graph, "link")], findLinkMetric(graph), (metric) => getMetricLabel(graph, metric));
+  populateSelect(nodeMetricSelect, getMetricNames(graph, "node"), viewOptions.nodeMetric, (metric) => getMetricLabel(graph, metric));
+  populateSelect(linkMetricSelect, ["weight", ...getMetricNames(graph, "link")], viewOptions.linkMetric, (metric) => getMetricLabel(graph, metric));
 }
 
 function populateFilterSelectors(graph) {
-  const options = getFilterOptions(graph);
-  populateSelect(filterControls.kind, options.kinds, "", (value) => value, "Alle Arten");
-  populateSelect(filterControls.groupId, options.groups, "", (value) => value, "Alle Gruppen");
-  populateSelect(filterControls.tag, options.tags, "", (value) => value, "Alle Tags");
-  populateSelect(filterControls.linkKind, options.linkKinds, "", (value) => value, "Alle Link-Arten");
+  filterControls = new Map();
+  filterControlsContainer.replaceChildren();
+  getFilterOptions(graph).sources.forEach((source) => {
+    const label = document.createElement("label");
+    label.className = "filter-picker";
+    label.htmlFor = `${source.id}-filter`;
+    label.textContent = source.label;
+    const select = document.createElement("select");
+    select.id = `${source.id}-filter`;
+    select.setAttribute("aria-label", source.label);
+    populateSelect(select, source.values, "", (value) => value, `Alle ${source.label}`);
+    select.addEventListener("change", handleFilterChange);
+    label.append(select);
+    filterControlsContainer.append(label);
+    filterControls.set(source.id, select);
+  });
+}
+
+function populateProfileSelector(graph) {
+  populateSelect(
+    zoomSelect,
+    getViewProfiles(graph).map((profile) => profile.id),
+    viewOptions.profileId,
+    (profileId) => getViewProfile(graph, profileId)?.label ?? profileId,
+    "Ansicht auswählen"
+  );
 }
 
 function populateSelect(select, values, selectedValue, label, emptyLabel = "Keine Auswahl") {
@@ -395,18 +427,19 @@ function updateLegend() {
   legendNodeMetric.textContent = `Node-Größe: ${getMetricLabel(currentGraph, viewOptions.nodeMetric)}`;
   legendLinkMetric.textContent = `Linkbreite: ${getMetricLabel(currentGraph, viewOptions.linkMetric)}`;
   legendKinds.replaceChildren();
-  [...new Set(currentGraph.nodes.map((node) => node.kind))].forEach((kind) => {
+  const types = new Map(currentGraph.nodes.map((node) => [node.typeId ?? node.kind, node]));
+  types.forEach((node) => {
     const item = document.createElement("li");
     const sample = document.createElement("span");
     sample.className = "legend-swatch";
-    sample.style.backgroundColor = getNodeKindColor({ kind }, currentGraph);
-    item.append(sample, document.createTextNode(`${kind} · ${getShapeLabel(kind)}`));
+    sample.style.backgroundColor = getNodeKindColor(node, currentGraph);
+    item.append(sample, document.createTextNode(`${getNodeTypeLabel(node, currentGraph)} · ${getShapeLabel(node)}`));
     legendKinds.append(item);
   });
 }
 
-function getShapeLabel(kind) {
-  return { class: "Würfel", file: "Zylinder", method: "Oktaeder", namespace: "Kugel" }[kind] ?? "Tetraeder";
+function getShapeLabel(node) {
+  return getNodeVisualStyle(node, currentGraph).shape;
 }
 
 function updateAccessibleNodes(graph = currentGraph) {

@@ -1,5 +1,10 @@
+import { resolveVisualToken } from "../domain/graph.js";
+
+const FALLBACK_NODE_COLOR = "#38bdf8";
+const FALLBACK_LINK_COLOR = "#94a3b8";
+const FALLBACK_NODE_SHAPE = "tetrahedron";
+
 export const VIEWER_CONFIG = Object.freeze({
-  background: "#0b1120",
   link: Object.freeze({
     arrowLength: 3,
     chargeStrength: -120,
@@ -8,7 +13,6 @@ export const VIEWER_CONFIG = Object.freeze({
     minWidth: 0.2
   }),
   node: Object.freeze({
-    colors: Object.freeze(["#38bdf8", "#a78bfa", "#34d399", "#fbbf24"]),
     maxValue: 8,
     minValue: 2,
     relativeSize: 4
@@ -20,15 +24,25 @@ export function createVisualGraphData(graph, options = {}) {
   const linkMetric = options.linkMetric ?? findLinkMetric(graph);
   const nodeValues = graph.nodes.map((node) => node.metrics?.[nodeMetric]).filter(Number.isFinite);
   const linkValues = graph.links.map((link) => getLinkValue(link, linkMetric)).filter(Number.isFinite);
-  const nodes = graph.nodes.map((node) => ({
-    ...node,
-    color: getNodeKindColor(node, graph),
-    visualValue: scaleValue(node.metrics?.[nodeMetric], nodeValues, VIEWER_CONFIG.node.minValue, VIEWER_CONFIG.node.maxValue)
-  }));
-  const links = graph.links.map((link) => ({
-    ...link,
-    visualWidth: scaleValue(getLinkValue(link, linkMetric), linkValues, VIEWER_CONFIG.link.minWidth, VIEWER_CONFIG.link.maxWidth)
-  }));
+  const nodes = graph.nodes.map((node) => {
+    const visualStyle = getNodeVisualStyle(node, graph);
+    return {
+      ...node,
+      color: visualStyle.color,
+      visualShape: visualStyle.shape,
+      visualTokenId: visualStyle.tokenId,
+      visualValue: scaleValue(node.metrics?.[nodeMetric], nodeValues, VIEWER_CONFIG.node.minValue, VIEWER_CONFIG.node.maxValue)
+    };
+  });
+  const links = graph.links.map((link) => {
+    const visualStyle = getLinkVisualStyle(link, graph);
+    return {
+      ...link,
+      color: visualStyle.color,
+      visualTokenId: visualStyle.tokenId,
+      visualWidth: scaleValue(getLinkValue(link, linkMetric), linkValues, VIEWER_CONFIG.link.minWidth, VIEWER_CONFIG.link.maxWidth)
+    };
+  });
 
   return { linkMetric, links, nodeMetric, nodes };
 }
@@ -63,18 +77,48 @@ export function getMetricLabel(graph, metricName) {
 }
 
 export function getFilterOptions(graph) {
+  const sources = (graph.filterSources ?? []).flatMap((source) => {
+    const facet = (graph.facets ?? []).find((item) => item.id === source.facetId);
+    if (!facet?.source?.field) {
+      return [];
+    }
+
+    return [{
+      field: facet.source.field,
+      id: source.id,
+      label: source.label ?? facet.label ?? source.id,
+      scope: facet.source.scope,
+      values: getFacetValues(graph, facet)
+    }];
+  });
+
   return {
     groups: getUniqueValues(graph.nodes, "groupId"),
     kinds: getUniqueValues(graph.nodes, "kind"),
     linkKinds: getUniqueValues(graph.links, "kind"),
+    sources,
     tags: [...new Set(graph.nodes.flatMap((node) => node.tags ?? []))].sort()
   };
 }
 
-export function filterGraph(graph, filters = {}) {
-  const nodes = graph.nodes.filter((node) => matchesNodeFilters(node, filters));
+export function getViewProfiles(graph) {
+  return graph.viewProfiles ?? [];
+}
+
+export function getDefaultViewProfile(graph) {
+  return [...getViewProfiles(graph)].sort((left, right) => (right.detailLevel ?? 0) - (left.detailLevel ?? 0))[0] ?? null;
+}
+
+export function getViewProfile(graph, profileId) {
+  return getViewProfiles(graph).find((profile) => profile.id === profileId) ?? null;
+}
+
+export function filterGraph(graph, filters = {}, profile = null) {
+  const nodes = graph.nodes.filter((node) => matchesNodeFilters(node, filters, graph, profile));
   const nodeIds = new Set(nodes.map((node) => node.id));
-  const links = graph.links.filter((link) => nodeIds.has(link.source) && nodeIds.has(link.target) && matchesLinkFilters(link, filters));
+  const links = graph.links.filter(
+    (link) => nodeIds.has(link.source) && nodeIds.has(link.target) && matchesLinkFilters(link, filters, graph, profile)
+  );
   return { ...graph, links, nodes };
 }
 
@@ -119,9 +163,33 @@ export function getNodeNeighborhood(graph, nodeId) {
 }
 
 export function getNodeKindColor(node, graph) {
-  const kinds = [...new Set(graph.nodes.map((item) => item.kind ?? "node"))];
-  const kindIndex = kinds.indexOf(node.kind ?? "node");
-  return VIEWER_CONFIG.node.colors[kindIndex % VIEWER_CONFIG.node.colors.length];
+  return getNodeVisualStyle(node, graph).color;
+}
+
+export function getNodeVisualStyle(node, graph) {
+  const definition = getDefinition(graph.nodeTypes, node.typeId ?? node.kind);
+  const resolved = resolveVisualToken(graph, node.visualToken ?? definition?.visualToken);
+  return {
+    color: resolved.token?.color ?? FALLBACK_NODE_COLOR,
+    shape: resolved.token?.shape ?? FALLBACK_NODE_SHAPE,
+    tokenId: resolved.id,
+    usedFallback: resolved.usedFallback
+  };
+}
+
+export function getLinkVisualStyle(link, graph) {
+  const definition = getDefinition(graph.linkTypes, link.typeId ?? link.kind);
+  const resolved = resolveVisualToken(graph, link.visualToken ?? definition?.visualToken);
+  return {
+    color: resolved.token?.color ?? FALLBACK_LINK_COLOR,
+    tokenId: resolved.id,
+    usedFallback: resolved.usedFallback
+  };
+}
+
+export function getNodeTypeLabel(node, graph) {
+  const definition = getDefinition(graph.nodeTypes, node.typeId ?? node.kind);
+  return definition?.label ?? node.typeId ?? node.kind ?? "Node";
 }
 
 function getLinkValue(link, metricName) {
@@ -132,18 +200,48 @@ function getLinkValue(link, metricName) {
   return Number.isFinite(link.metrics?.[metricName]) ? link.metrics[metricName] : 1;
 }
 
+function getFacetValues(graph, facet) {
+  const items = facet.source.scope === "link" ? graph.links : graph.nodes;
+  return [...new Set(items.flatMap((item) => {
+    return getItemValues(item, facet.source.field);
+  }))].sort();
+}
+
 function getUniqueValues(items, propertyName) {
   return [...new Set(items.map((item) => item[propertyName]).filter(Boolean))].sort();
 }
 
-function matchesNodeFilters(node, filters) {
-  const hiddenKind = filters.hiddenKinds?.includes(node.kind);
-  const groupMatches = !filters.groupId || node.groupId === filters.groupId;
-  const kindMatches = !filters.kind || node.kind === filters.kind;
-  const tagMatches = !filters.tag || node.tags?.includes(filters.tag);
-  return !hiddenKind && groupMatches && kindMatches && tagMatches;
+function matchesNodeFilters(node, filters, graph, profile) {
+  if (profile?.visibleNodeTypes && !profile.visibleNodeTypes.includes(node.typeId ?? node.kind)) {
+    return false;
+  }
+
+  return matchesFacetFilters(node, filters, graph, "node");
 }
 
-function matchesLinkFilters(link, filters) {
-  return !filters.linkKind || link.kind === filters.linkKind;
+function matchesLinkFilters(link, filters, graph, profile) {
+  if (profile?.visibleLinkTypes && !profile.visibleLinkTypes.includes(link.typeId ?? link.kind)) {
+    return false;
+  }
+
+  return matchesFacetFilters(link, filters, graph, "link");
+}
+
+function matchesFacetFilters(item, filters, graph, scope) {
+  return getFilterOptions(graph).sources
+    .filter((source) => source.scope === scope && filters[source.id])
+    .every((source) => getItemValues(item, source.field).includes(filters[source.id]));
+}
+
+function getItemValues(item, field) {
+  const value = field.split(".").reduce((current, segment) => current?.[segment], item);
+  return Array.isArray(value) ? value : value === undefined || value === null ? [] : [value];
+}
+
+function getDefinition(definitions, id) {
+  if (Array.isArray(definitions)) {
+    return definitions.find((definition) => definition.id === id);
+  }
+
+  return definitions?.[id];
 }
