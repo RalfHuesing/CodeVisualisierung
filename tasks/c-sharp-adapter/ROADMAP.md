@@ -20,7 +20,8 @@ Task scope:
   xUnit vollständig testen.
 
 Explicit exclusions:
-  Vieweränderungen einschließlich Layout-/Orbitlogik, Backend/Live-Modus,
+  Vieweränderungen einschließlich Layout-/Orbitlogik, ausgenommen die
+  generische Nutzung deklarierter normalisierter Scores, Backend/Live-Modus,
   Git-Churn, externe Coverage-Reports, Agentenereignisse und nicht gemessene
   Performanceversprechen.
 
@@ -38,14 +39,14 @@ Delegated roles:
 Die vorbereitende C#-Grundlage ist vorhanden: Solution, CLI-Projekt,
 Testprojekt, gemeinsame .NET-/Paketvorgaben, AiNetLinter-Profil und die
 repo-lokale Temp-Testinfrastruktur. Die fachliche Vertragsklärung in Slice 0
-ist abgeschlossen. Slice 4 ist im Arbeitsbaum implementiert, befindet sich
-aber noch im zweiten und letzten Korrekturzyklus und bleibt bis zum Orchestrator-Commit
-offen.
+ist abgeschlossen. Slices 1 bis 5 sind committed. Slice 6 bleibt für
+End-to-End-Härtung und Abschluss offen.
 
 Workspace-Inventargraph, Graph-/Contract-Schichten und vertragskonforme
 JSON-Ausgabe sind in Slice 2 umgesetzt. Slice 3 ergänzt die Roslyn-
-Deklarationsauswertung und Slice 4 die semantischen Beziehungen; Metriken und
-Projektionen bleiben für die abhängigen Slices offen.
+Deklarationsauswertung und Slice 4 die semantischen Beziehungen. Slice 5
+ergänzt Metriken, globale Scores, Partial-Footprints und prüfbare
+Summary-Projektionen.
 
 ## Externer Vorgänger: Viewer-Layoutvertrag
 
@@ -192,7 +193,7 @@ Mehrprojekt-Integrationstests, Invarianten- und Schema-Tests, `dotnet test`.
 
 Abhängigkeit: Slice 3.
 
-## [ ] Slice 5 – Metriken, externe/generierte Artefakte und Projektionen
+## [X] Slice 5 – Metriken, externe/generierte Artefakte und Projektionen
 
 Ziel: Die fachlich vereinbarten Zusatzdaten vervollständigen, ohne den
 Viewer mit C#-Sonderlogik zu belasten.

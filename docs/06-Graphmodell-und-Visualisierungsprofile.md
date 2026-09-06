@@ -129,6 +129,10 @@ Ein `viewProfile` kann eine verständliche Startansicht beschreiben:
 }
 ```
 
+Das Profil mit der ID `overview` (bei domänenspezifischem Präfix `*-overview`)
+ist die deklarierte Übersicht und damit die bevorzugte Standardansicht. Ein
+höheres `detailLevel` macht ein Profil nicht automatisch zum Startprofil.
+
 Der Viewer darf zusätzliche freie Filter anbieten. Ein Profil legt eine
 Darstellungsentscheidung fest, nicht eine neue Datenquelle und keine neue
 Graphstruktur.

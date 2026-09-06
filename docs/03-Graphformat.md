@@ -41,6 +41,10 @@ fachliche Darstellungsrolle und eine typabhängige Basisgröße deklarieren.
   Metriken mit expliziter Score-Semantik im Bereich `[0, 1]` sind bereits
   normalisiert und dürfen vom Viewer nicht erneut relativ zur sichtbaren
   Teilmenge skaliert werden.
+  `valueKind: "raw"` kennzeichnet mess- oder zählbare Rohwerte;
+  `valueKind: "normalized-score"` kennzeichnet einen bereits global
+  normalisierten Score. Ein optionales `range: [0, 1]` dokumentiert dessen
+  Wertebereich.
 - `layoutProfiles` beschreibt deklarative räumliche Regeln: `groupField` ist
   ein Punktpfad am Node und verwendet standardmäßig `groupId`, während
   `groupDistance`, `defaultDistance` und `containmentDistances` positive
@@ -65,6 +69,10 @@ fachliche Darstellungsrolle und eine typabhängige Basisgröße deklarieren.
   Beziehungstypen deklariert.
 - `weight`, `metrics`, `summary` und `derivedFrom` dokumentieren optionale
   Stärke, Herkunft und Aggregation einer Beziehung.
+- Summary-Links bleiben auf die vollständigen Detailbeziehungen zurückführbar:
+  `derivedFrom` enthält deren Link-IDs; `metrics.occurrences` und
+  `metrics.relationshipWeight` enthalten die aggregierten Werte. Die
+  Herkunfts- und Quell-/Ziellevel stehen in `attributes.aggregation`.
 
 ### Optionale deklarative Bereiche
 

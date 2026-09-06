@@ -10,6 +10,7 @@ import {
   findLinkMetric,
   findNodeMetric,
   findSearchMatches,
+  getDefaultViewProfile,
   getFilterOptions,
   getLinkVisualStyle,
   getNodeNeighborhood,
@@ -143,12 +144,32 @@ describe("spatial visualization calculations", () => {
     expect(missingMetric.nodes.every((node) => Number.isFinite(node.x) && Number.isFinite(node.y) && Number.isFinite(node.z))).toBe(true);
   });
 
+  it("keeps normalized scores on their declared range after filtering", () => {
+    const graph = normalizeGraph({
+      ...structuredClone(spatialGraph),
+      metricDefinitions: { importance: { valueKind: "normalized-score", range: [0, 1] } }
+    });
+    const full = createVisualGraphData(graph, { nodeMetric: "importance" });
+    const visible = createVisualGraphData(filterGraph(graph, { group: "north" }), { nodeMetric: "importance" });
+    const fullValues = new Map(full.nodes.map((node) => [node.id, node.visualValue]));
+
+    expect(visible.nodes.map((node) => [node.id, node.visualValue])).toEqual(
+      visible.nodes.map((node) => [node.id, fullValues.get(node.id)])
+    );
+  });
+
   it("selects layout profiles with first-profile fallback", () => {
     const graph = normalizeGraph(spatialGraph);
 
     expect(getActiveLayoutProfile(graph, graph.viewProfiles[1]).id).toBe("spatial-detail");
     expect(getActiveLayoutProfile(graph, { layoutProfileId: "missing" }).id).toBe("spatial-overview");
     expect(getActiveLayoutProfile(graph, null).id).toBe("spatial-overview");
+  });
+
+  it("defaults to the overview profile instead of the most detailed profile", () => {
+    const graph = normalizeGraph(nestedUniverseGraph);
+
+    expect(getDefaultViewProfile(graph).id).toBe("nested-overview");
   });
 
   it("uses containment, default, and cross-group link distances", () => {

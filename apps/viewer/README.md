@@ -46,8 +46,14 @@ Gruppenwerte, Containment-/Summary-Links und deklarative Profile. Ein Node-Typ
 kann mit `visualRole` und `baseSize` seine fachliche Rolle und eine relative
 Grundgröße beschreiben; `metricDefinitions` benennt Metriken wie `importance`,
 deren konkrete Werte an Nodes oder Links liegen. Der Viewer wählt die aktive
-Metrik, skaliert sie auf visuelle Größe bzw. Linkbreite und wendet die
-`baseSize` an.
+Metrik, skaliert Rohmetriken lokal auf visuelle Größe bzw. Linkbreite und
+wendet die `baseSize` an. Bei `valueKind: "normalized-score"` verwendet er
+den gelieferten Wert zusammen mit dem deklarierten `range` und skaliert bei
+Profil- oder Filterwechsel nicht erneut über die sichtbare Teilmenge.
+
+Als Standardansicht wird das deklarierte Profil mit der ID `overview` bzw.
+`*-overview` verwendet; die höchste Detailstufe ist nicht automatisch der
+Startpunkt.
 
 Ein Layoutprofil legt über `groupField`, `groupDistance`, `defaultDistance` und
 `containmentDistances` fest, wie Gruppen, normale Links und hierarchische

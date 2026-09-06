@@ -127,6 +127,7 @@ test("switches examples and exposes active visual metrics", async ({ page }) => 
   await page.goto("/");
 
   await page.locator("#example-select").selectOption("small");
+  await page.locator("#zoom-select").selectOption("detail");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "18");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-link-count", "30");
   await expect(page.locator("#legend-node-metric")).toContainText("Komplexität");
@@ -170,6 +171,7 @@ test("reports an empty but valid graph clearly", async ({ page }) => {
 test("renders the large target fixture and survives a resize", async ({ page }) => {
   await page.goto("/");
   await page.locator("#example-select").selectOption("large");
+  await page.locator("#zoom-select").selectOption("detail");
 
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "248");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-link-count", "448");
@@ -183,10 +185,12 @@ test("communicates the full-mode limit and keeps larger graphs loadable", async 
   await page.goto("/");
 
   await page.locator("#example-select").selectOption("large");
+  await page.locator("#zoom-select").selectOption("detail");
   await expect(page.locator("#graph-status")).toContainText("Interaktiver Vollmodus geprüft");
   await expect(page.locator("#graph-status")).toContainText("248 Nodes / 448 Links");
 
   await page.locator("#example-select").selectOption("performance");
+  await page.locator("#zoom-select").selectOption("detail");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "684");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-link-count", "1260");
   await expect(page.locator("#graph-status")).toContainText("Außerhalb des geprüften interaktiven Vollmodus");
@@ -199,15 +203,19 @@ test("uploads the nested universe fixture and exposes declarative profiles and m
 
   await expect(page.locator("#node-count")).toHaveText("18");
   await expect(page.locator("#link-count")).toHaveText("19");
-  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-layout-profile-id", "nested-detail");
-  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "18");
-  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-link-count", "19");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-layout-profile-id", "nested-overview");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "6");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-link-count", "5");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-layout-group-count", "2");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-auto-fit-count", "1");
   await expect(page.locator("#zoom-select option[value='nested-overview']")).toHaveText("Universe overview");
   await expect(page.locator("#node-metric-select option[value='mass']")).toHaveText("Mass");
   await expect(page.locator("#link-metric-select option[value='referenceStrength']")).toHaveText("Reference strength");
 
+  await page.locator("#zoom-select").selectOption("nested-detail");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-layout-profile-id", "nested-detail");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "18");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-link-count", "19");
   await page.locator("#zoom-select").selectOption("nested-overview");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-layout-profile-id", "nested-overview");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "6");

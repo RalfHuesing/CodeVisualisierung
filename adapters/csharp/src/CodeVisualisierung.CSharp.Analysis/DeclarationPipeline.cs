@@ -1,6 +1,7 @@
 using CodeVisualisierung.CSharp.Contract;
 using CodeVisualisierung.CSharp.Graph;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CodeVisualisierung.CSharp.Analysis;
@@ -136,7 +137,9 @@ internal sealed record DeclarationFact(
     ISymbol Symbol,
     string NodeTypeId,
     string RelativePath,
-    SourcePosition Position);
+    SourcePosition Position,
+    IReadOnlyList<int> NonEmptyLines,
+    int? CyclomaticComplexity);
 
 /// <summary>One-based source span with a solution-relative path.</summary>
 public sealed record SourcePosition(string Path, int Line, int Column, int EndLine, int EndColumn);
@@ -155,6 +158,9 @@ internal sealed class DeclarationAccumulator
         }
 
         entry.Positions.Add(fact.Position);
+        entry.NonEmptyLines.UnionWith(fact.NonEmptyLines.Select(line => $"{fact.RelativePath}:{line}"));
+        if (fact.CyclomaticComplexity is not null)
+            entry.CyclomaticComplexities.Add(fact.CyclomaticComplexity.Value);
     }
 
     public string ProjectId { get; }
@@ -195,7 +201,7 @@ internal sealed class DeclarationAccumulator
             ["declarationFiles"] = positions.Select(position => position.Path).Distinct(StringComparer.Ordinal).ToArray()
         };
 
-        if (entry.Symbol is INamedTypeSymbol)
+        if (entry.Symbol is INamedTypeSymbol namedType && IsPartial(namedType))
             attributes["partialDeclarationCount"] = positions.Length;
 
         var parentId = GetParentId(entry.Symbol);
@@ -208,9 +214,25 @@ internal sealed class DeclarationAccumulator
             TypeId = entry.NodeTypeId,
             Label = GetLabel(entry.Symbol, entry.NodeTypeId),
             GroupId = parentId ?? ProjectId,
+            Metrics = CreateMetrics(entry, positions),
             Attributes = attributes
         };
     }
+
+    private static Dictionary<string, double> CreateMetrics(DeclarationEntry entry, IReadOnlyList<SourcePosition> positions)
+    {
+        var metrics = new Dictionary<string, double> { ["loc"] = entry.NonEmptyLines.Count };
+        if (entry.CyclomaticComplexities.Count > 0)
+            metrics["cyclomaticComplexity"] = entry.CyclomaticComplexities.Max();
+        if (entry.Symbol is INamedTypeSymbol namedType && IsPartial(namedType))
+            metrics["partialDeclarationCount"] = positions.Count;
+        return metrics;
+    }
+
+    private static bool IsPartial(INamedTypeSymbol symbol) => symbol.DeclaringSyntaxReferences
+        .Select(reference => reference.GetSyntax())
+        .OfType<TypeDeclarationSyntax>()
+        .Any(type => type.Modifiers.Any(modifier => modifier.IsKind(SyntaxKind.PartialKeyword)));
 
     private void AddContainment(DeclarationEntry entry, GraphBuilder builder)
     {
@@ -304,6 +326,8 @@ internal sealed class DeclarationAccumulator
         public ISymbol Symbol { get; } = symbol;
         public string NodeTypeId { get; } = nodeTypeId;
         public List<SourcePosition> Positions { get; } = [];
+        public HashSet<string> NonEmptyLines { get; } = new(StringComparer.Ordinal);
+        public List<int> CyclomaticComplexities { get; } = [];
     }
 }
 
@@ -369,8 +393,14 @@ internal static class DeclarationCollector
                 position.StartLinePosition.Line + 1,
                 position.StartLinePosition.Character + 1,
                 position.EndLinePosition.Line + 1,
-                position.EndLinePosition.Character + 1));
+                position.EndLinePosition.Character + 1),
+            SourceMetrics.GetNonEmptyLines(syntax),
+            IsComplexitySymbol(symbol) ? SourceMetrics.GetCyclomaticComplexity(syntax) : null);
     }
+
+    private static bool IsComplexitySymbol(ISymbol symbol) => symbol is IMethodSymbol method
+        && method.MethodKind is MethodKind.Ordinary or MethodKind.Constructor or MethodKind.UserDefinedOperator
+            or MethodKind.Conversion or MethodKind.LocalFunction;
 
     private static readonly Type[] DeclarationSyntaxTypes =
     [

@@ -88,6 +88,8 @@ public sealed class WorkspaceAnalysis
             EmitRelations(analyzedProject, exportedNodes, builder, counters);
 
         var graph = builder.Build();
+        GraphMetricsAndProjections.Apply(graph);
+        GraphContractValidator.Validate(graph);
         return new AnalysisResult(graph, counters.CreateSummary(inputKind, projects.Length, graph, diagnostics));
     }
 
@@ -218,7 +220,7 @@ public sealed class WorkspaceAnalysis
                 ?? throw new InvalidOperationException($"Dokument '{document.Name}' besitzt keinen Syntaxbaum.");
             var semanticModel = await document.GetSemanticModelAsync(cancellationToken)
                 ?? throw new InvalidOperationException($"Dokument '{document.Name}' besitzt kein SemanticModel.");
-            var namespaces = GetNamespaces(root, semanticModel, cancellationToken);
+            context.Analysis.Builder.SetNodeMetric(fileId, "loc", SourceMetrics.GetNonEmptyLines(root).Count); var namespaces = GetNamespaces(root, semanticModel, cancellationToken);
             foreach (var namespaceName in namespaces)
             {
                 var namespaceId = $"namespace:{context.ProjectId}:{namespaceName}";

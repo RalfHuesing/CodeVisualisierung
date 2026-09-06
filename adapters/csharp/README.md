@@ -5,8 +5,9 @@ Die kompilierbare .NET-10-CLI liegt in
 ein CLI-Projekt und ein xUnit-Testprojekt. Slice 1 definiert die echte
 Prozessgrenze; Slice 2 lädt reale Workspaces; Slice 3 ergänzt die semantische
 Deklarationsauswertung; Slice 4 ergänzt semantisch aufgelöste Beziehungen.
-Slice 4 befindet sich im zweiten und letzten Korrekturzyklus; Metrik- und
-Projektionsschichten folgen in den abhängigen Slices.
+Slice 5 ergänzt im gemeinsamen Arbeitsbaum die globale Metrikberechnung,
+normalisierte Scores, Partial-Footprints und deklarative Projektionen; der
+Slice bleibt bis zum Orchestrator-Commit offen.
 
 ## CLI-Prozessvertrag
 
@@ -40,8 +41,9 @@ Die Signatur kommt aus `SymbolDisplayFormat.FullyQualifiedFormat` mit
 Containing Type, Generic-Arity und Parametertypen. Attribute enthalten
 `qualifiedName`, `signature`, `accessibility`, `containerId`, `source`,
 `sourcePositions` und `declarationFiles`; Pfade sind relativ und verwenden `/`.
-Partial Types werden je Projekt über ihre Symbol-ID zusammengeführt und
-führen `partialDeclarationCount` sowie alle Deklarationsstellen.
+Partial Types werden je Projekt über ihre Symbol-ID zusammengeführt. Nur
+tatsächlich partielle Named Types führen `partialDeclarationCount`; alle
+Deklarationsstellen und Quelldateien werden berücksichtigt.
 
 Die Scope-Policy bleibt strikt: Nur Symbole aus eigenen, nicht generierten
 Quelldokumenten werden betrachtet. Framework-/externe Symbole, `obj`/`bin`,

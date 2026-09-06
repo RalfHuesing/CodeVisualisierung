@@ -23,8 +23,8 @@ export const VIEWER_CONFIG = Object.freeze({
 export function createVisualGraphData(graph, options = {}) {
   const nodeMetric = options.nodeMetric ?? findNodeMetric(graph);
   const linkMetric = options.linkMetric ?? findLinkMetric(graph);
-  const nodeValues = graph.nodes.map((node) => node.metrics?.[nodeMetric]).filter(Number.isFinite);
-  const linkValues = graph.links.map((link) => getLinkValue(link, linkMetric)).filter(Number.isFinite);
+  const nodeValues = getMetricScaleValues(graph, "node", nodeMetric);
+  const linkValues = getMetricScaleValues(graph, "link", linkMetric);
   const nodes = graph.nodes.map((node) => {
     const visualStyle = getNodeVisualStyle(node, graph);
     const baseSize = getNodeBaseSize(node, graph);
@@ -35,7 +35,7 @@ export function createVisualGraphData(graph, options = {}) {
       visualRole: visualStyle.role,
       visualShape: visualStyle.shape,
       visualTokenId: visualStyle.tokenId,
-      visualValue: scaleValue(node.metrics?.[nodeMetric], nodeValues, VIEWER_CONFIG.node.minValue, VIEWER_CONFIG.node.maxValue) * baseSize
+      visualValue: scaleMetricValue(node.metrics?.[nodeMetric], nodeValues, VIEWER_CONFIG.node.minValue, VIEWER_CONFIG.node.maxValue) * baseSize
     };
   });
   const links = graph.links.map((link) => {
@@ -44,7 +44,7 @@ export function createVisualGraphData(graph, options = {}) {
       ...link,
       color: visualStyle.color,
       visualTokenId: visualStyle.tokenId,
-      visualWidth: scaleValue(getLinkValue(link, linkMetric), linkValues, VIEWER_CONFIG.link.minWidth, VIEWER_CONFIG.link.maxWidth)
+      visualWidth: scaleMetricValue(getLinkValue(link, linkMetric, graph.metricDefinitions?.[linkMetric]), linkValues, VIEWER_CONFIG.link.minWidth, VIEWER_CONFIG.link.maxWidth)
     };
   });
 
@@ -118,7 +118,11 @@ export function getViewProfiles(graph) {
 }
 
 export function getDefaultViewProfile(graph) {
-  return [...getViewProfiles(graph)].sort((left, right) => (right.detailLevel ?? 0) - (left.detailLevel ?? 0))[0] ?? null;
+  const profiles = getViewProfiles(graph);
+  return profiles.find((profile) => profile.id === "overview")
+    ?? profiles.find((profile) => profile.id?.endsWith("-overview"))
+    ?? [...profiles].sort((left, right) => (left.detailLevel ?? 0) - (right.detailLevel ?? 0))[0]
+    ?? null;
 }
 
 export function getViewProfile(graph, profileId) {
@@ -156,6 +160,10 @@ export function scaleValue(value, values, outputMin, outputMax) {
 
   const ratio = (value - inputMin) / (inputMax - inputMin);
   return outputMin + Math.min(1, Math.max(0, ratio)) * (outputMax - outputMin);
+}
+
+function scaleMetricValue(value, scaleValues, outputMin, outputMax) {
+  return scaleValue(value, scaleValues, outputMin, outputMax);
 }
 
 export function getNodeNeighborhood(graph, nodeId) {
@@ -214,12 +222,29 @@ export function getNodeTypeLabel(node, graph) {
   return definition?.label ?? node.typeId ?? node.kind ?? "Node";
 }
 
-function getLinkValue(link, metricName) {
+function getLinkValue(link, metricName, definition) {
   if (metricName === "weight" && Number.isFinite(link.weight)) {
     return link.weight;
   }
 
+  if (definition?.valueKind === "normalized-score") {
+    return link.metrics?.[metricName];
+  }
+
   return Number.isFinite(link.metrics?.[metricName]) ? link.metrics[metricName] : 1;
+}
+
+function getMetricScaleValues(graph, type, metricName) {
+  const items = type === "node" ? graph.nodes : graph.links;
+  const definition = graph.metricDefinitions?.[metricName];
+  if (definition?.valueKind === "normalized-score") {
+    return definition.range?.length === 2 ? definition.range : [0, 1];
+  }
+
+  return items.map((item) => type === "node"
+    ? item.metrics?.[metricName]
+    : getLinkValue(item, metricName, definition))
+    .filter(Number.isFinite);
 }
 
 function getFacetValues(graph, facet) {

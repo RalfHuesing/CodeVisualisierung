@@ -10,6 +10,12 @@ public sealed class GraphBuilder
 
     public void AddNode(GraphNode node) => nodes.TryAdd(node.Id, node);
 
+    public void SetNodeMetric(string nodeId, string metricName, double value)
+    {
+        if (nodes.TryGetValue(nodeId, out var node))
+            node.Metrics[metricName] = value;
+    }
+
     public void AddLink(string typeId, string source, string target)
     {
         var id = $"link:{typeId}:{source}:{target}";
@@ -53,6 +59,8 @@ public sealed class GraphBuilder
             TypeId = entry.Link.TypeId,
             Directed = entry.Link.Directed,
             Weight = metrics["relationshipWeight"],
+            Summary = entry.Link.Summary,
+            DerivedFrom = entry.Link.DerivedFrom,
             Metrics = metrics,
             Attributes = entry.Link.Attributes
         };
@@ -65,6 +73,14 @@ public sealed class GraphBuilder
         {
             NodeTypes = NodeTypes.ToList(),
             LinkTypes = LinkTypes.ToList(),
+            MetricDefinitions = GraphContractDefinitions.MetricDefinitions(),
+            Facets = GraphContractDefinitions.Facets().ToList(),
+            FilterSources = GraphContractDefinitions.FilterSources().ToList(),
+            ViewProfiles = GraphContractDefinitions.ViewProfiles().ToList(),
+            LayoutProfiles = GraphContractDefinitions.LayoutProfiles().ToList(),
+            Projections = GraphContractDefinitions.Projections().ToList(),
+            ContainmentRules = GraphContractDefinitions.ContainmentRules().ToList(),
+            Hierarchy = GraphContractDefinitions.Hierarchy(),
             Nodes = nodes.Values.OrderBy(node => node.Id, StringComparer.Ordinal).ToList(),
             Links = links.Values.Select(entry => entry.Link).OrderBy(link => link.Id, StringComparer.Ordinal).ToList()
         };
@@ -112,7 +128,10 @@ public sealed class GraphBuilder
         new() { Id = "parameter-type", Label = "Parameter type", Role = "relation" },
         new() { Id = "project-reference", Label = "Project reference", Role = "relation" },
         new() { Id = "references-assembly", Label = "Assembly reference", Role = "relation" },
-        new() { Id = "tests", Label = "Tests", Role = "relation" }
+        new() { Id = "tests", Label = "Tests", Role = "relation" },
+        new() { Id = "summary-calls", Label = "Summary calls", Role = "summary" },
+        new() { Id = "summary-depends-on", Label = "Summary dependency", Role = "summary" },
+        new() { Id = "summary-references", Label = "Summary reference", Role = "summary" }
     ];
 
     private sealed record LinkEntry(GraphLink Link);

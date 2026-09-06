@@ -100,6 +100,14 @@ Keine dieser Metriken ist Pflichtbestandteil des allgemeinen Graphschemas. Der
 Exporter definiert sie mit Einheit und Beschreibung und bietet sie für
 View-Profile und Legenden an.
 
+Der v1-Adapter liefert `loc`, `cyclomaticComplexity`, `fanIn`, `fanOut`,
+`weightedFanIn`, `weightedFanOut`, `pageRank`, `fileCount`, `typeCount`,
+`memberCount` und – nur bei tatsächlich partiellen Named Types –
+`partialDeclarationCount` als Rohmetriken. `importance` und `footprint` sind dagegen mit
+`valueKind: "normalized-score"` und `range: [0, 1]` deklarierte, nach der
+vollständigen Analyse berechnete Scores. Fehlende fachlich nicht anwendbare
+Metriken werden ausgelassen; sie werden nicht durch `0` ersetzt.
+
 ## Projektionen für C#
 
 Für den C#-Referenzgraphen werden Summary-Links auf mehreren Ebenen empfohlen:
@@ -112,9 +120,17 @@ Assembly X --references--> Assembly Y
 ```
 
 Die höher aggregierten Links müssen auf ihre Quellbeziehungen zurückführbar
-sein, wenn das für Details oder Metriken relevant ist. Dadurch kann der Viewer
+sein, wenn das für Details oder Metriken relevant ist. Das gilt auch für
+Member→Typ-Beziehungen wie `uses-type`, `returns-type`, `parameter-type` und
+`constructs`, damit Architekturprofile keine Abhängigkeiten verlieren.
+Dadurch kann der Viewer
 bei ausgeblendeten Methoden weiterhin Namespace- und Klassenbeziehungen
-anzeigen, ohne die Fachlichkeit selbst zu rekonstruieren.
+anzeigen, ohne die Fachlichkeit selbst zu rekonstruieren. Der Adapter schreibt
+diese Links vollständig ins JSON. Ihre Herkunft steht in `derivedFrom` und
+`attributes.aggregation`; `occurrences` und `relationshipWeight` werden aus
+den Detailbeziehungen summiert. Partial Types bleiben ein Node, während LOC
+und Physical Footprint alle eigenen Quelldateien der Teildeklarationen
+berücksichtigen.
 
 ## Referenz-Fixture
 

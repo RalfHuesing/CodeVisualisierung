@@ -34,10 +34,10 @@ Der aktuelle Implementierungsstand unter `adapters/csharp/` umfasst:
 - eine dokumentweise SemanticModel-Pipeline für die v1-Beziehungen mit
   deterministischer Auflösung, Filterung und Aggregation.
 
-Die Slices 1 bis 3 sind umgesetzt. Slice 4 ist im gemeinsamen Arbeitsbaum
-implementiert und wird im zweiten und letzten Korrekturzyklus nachgeschärft;
-sein Abschlussstatus wird erst mit dem Orchestrator-Commit gesetzt. Metriken
-und Projektionen folgen in den abhängigen Slices.
+Die Slices 1 bis 4 sind umgesetzt. Slice 5 ist im gemeinsamen Arbeitsbaum
+implementiert; sein Abschlussstatus bleibt bis zum Orchestrator-Commit offen.
+Die Metrik- und Projektionsschicht arbeitet nach vollständiger Analyse global
+auf dem vollständigen Graphen.
 
 Der Zielvertrag ist auf Solutions bis mindestens 180.000 Quellcodezeilen
 ausgelegt. Vollständige Analyse bedeutet dabei vollständige fachlich relevante
@@ -237,9 +237,10 @@ und erzeugt Contract-konforme Solution-, Projekt-, Assembly-, Modul-,
 Namespace- und Datei-Nodes mit Containment und eigenen Referenzen. Slice 3
 ergänzt die semantischen Deklarations-Nodes mit stabilen IDs, Details,
 Partial-Type-Zusammenführung und Generated-Code-Policy. Slice 4 ergänzt die
-semantischen Beziehungen; die laufende Korrektur betrifft nur die fachliche
-Nachschärfung vor dem Orchestrator-Commit. Metriken und Projektionen folgen in
-abhängigen Slices.
+semantischen Beziehungen. Slices 1 bis 4 sind committed; Slice 5 ist im
+Arbeitsbaum implementiert und befindet sich im zweiten und letzten
+Review-Korrekturzyklus vor dem Orchestrator-Commit. Metriken und Projektionen
+sind in diesem Arbeitsstand enthalten.
 
 ## Fachliches Datenmodell
 

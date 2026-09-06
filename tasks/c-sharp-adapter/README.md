@@ -23,12 +23,12 @@ Die fachliche Wahrheit für das Ausgabeformat bleibt in
 `docs/`. Diese Task-Dateien ergänzen die vorhandenen Dokumente um den
 konkreten C#-Auftrag; sie ersetzen den allgemeinen Graphvertrag nicht.
 
-Der v1-Fachvertrag ist entschieden. Slice 2 liefert den Workspace-
-Inventargraphen, Slice 3 die semantische Deklarationspipeline für Typen und
-Member und Slice 4 die aufgelösten Beziehungen mit Zählern und
-Determinismusregeln. Slice 4 befindet sich im zweiten und letzten
+Der v1-Fachvertrag ist entschieden. Die Slices 1 bis 4 sind committed und
+liefern Workspace-Inventar, Deklarationen sowie aufgelöste Beziehungen mit
+Zählern und Determinismusregeln. Slice 5 ist im gemeinsamen Arbeitsbaum
+implementiert und befindet sich im zweiten und letzten Review-
 Korrekturzyklus; der Abschlussstatus wird erst mit dem Orchestrator-Commit
-gesetzt. Danach folgen Metriken und Projektionen.
+gesetzt. Metriken, Scores und Projektionen sind Teil dieses Arbeitsstands.
 
 ## Späterer Aufruf
 

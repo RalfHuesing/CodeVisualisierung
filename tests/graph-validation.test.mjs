@@ -60,13 +60,10 @@ describe("C# reference fixture", () => {
     const nodeIds = new Set(csharpReferenceFixture.nodes.map((node) => node.id));
     const linkIds = new Set(csharpReferenceFixture.links.map((link) => link.id));
     const nodeTypeIds = new Set(csharpReferenceFixture.nodeTypes.map((type) => type.id));
-    const linkTypeIds = new Set(csharpReferenceFixture.linkTypes.map((type) => type.id));
 
     expect(validateGraph(csharpReferenceFixture)).toEqual({ valid: true, errors: [] });
-    expect(nodeIds.size).toBe(csharpReferenceFixture.nodes.length);
-    expect(linkIds.size).toBe(csharpReferenceFixture.links.length);
+    expect([nodeIds.size, linkIds.size]).toEqual([csharpReferenceFixture.nodes.length, csharpReferenceFixture.links.length]);
     expect(csharpReferenceFixture.nodes.every((node) => nodeTypeIds.has(node.typeId))).toBe(true);
-    expect(csharpReferenceFixture.links.every((link) => linkTypeIds.has(link.typeId))).toBe(true);
     expect(csharpReferenceFixture.links.every((link) => nodeIds.has(link.source) && nodeIds.has(link.target))).toBe(true);
     expect(csharpReferenceFixture.links
       .filter((link) => link.derivedFrom)
@@ -83,8 +80,26 @@ describe("C# reference fixture", () => {
     });
     expect(csharpReferenceFixture.nodes.filter((node) => node.label === "Get")).toHaveLength(3);
     expect(csharpReferenceFixture.nodes.find((node) => node.id === "method-repository-get-generic").attributes.genericArity).toBe(1);
-    expect(csharpReferenceFixture.links.filter((link) => link.summary)).toHaveLength(5);
-    expect(csharpReferenceFixture.links.find((link) => link.id === "summary-project-calls").derivedFrom).toEqual(["summary-assembly-calls"]);
+    expect(csharpReferenceFixture.links.filter((link) => link.summary)).toHaveLength(6);
+    expect(csharpReferenceFixture.links.find((link) => link.id === "summary-type-repository-order")).toMatchObject({
+      typeId: "summary-depends-on",
+      source: "class-repository",
+      target: "record-order",
+      derivedFrom: expect.arrayContaining(["repository-get-uses-order", "repository-get-returns-order"])
+    });
+    expect(csharpReferenceFixture.links.find((link) => link.id === "summary-class-calls")).toMatchObject({
+      derivedFrom: ["client-load-calls-repository"],
+      metrics: { occurrences: 4, relationshipWeight: 12 }
+    });
+    expect(csharpReferenceFixture.links.find((link) => link.id === "summary-project-calls")).toMatchObject({
+      derivedFrom: ["client-load-calls-repository"],
+      metrics: { occurrences: 4, relationshipWeight: 12 }
+    });
+  });
+});
+
+describe("C# reference fixture contract declarations", () => {
+  it("declares C# profiles, metrics, and visual contract references", () => {
     expect(csharpReferenceFixture.viewProfiles.map((profile) => profile.id)).toEqual([
       "assembly-overview",
       "type-detail",
@@ -109,10 +124,24 @@ describe("C# reference fixture", () => {
       "returns-type"
     ]));
     expect(csharpReferenceFixture.metricDefinitions).toMatchObject({
-      complexity: { unit: "score" },
+      complexity: { unit: "branches", valueKind: "raw" },
       callCount: { unit: "calls" },
-      dependencyStrength: { unit: "score" }
+      dependencyStrength: { unit: "score", valueKind: "raw" },
+      importance: { valueKind: "normalized-score", range: [0, 1] },
+      footprint: { valueKind: "normalized-score", range: [0, 1] }
     });
+    expect(csharpReferenceFixture.nodes.find((node) => node.id === "class-repository").metrics).toMatchObject({
+      loc: 82,
+      fileCount: 2,
+      partialDeclarationCount: 2,
+      importance: 0.8,
+      footprint: 0.9
+    });
+    expect(csharpReferenceFixture.links.filter((link) => link.summary).every((link) => (
+      link.metrics.occurrences > 0
+      && link.metrics.relationshipWeight > 0
+      && link.attributes.aggregation.origin === "detail-relations"
+    ))).toBe(true);
   });
 });
 

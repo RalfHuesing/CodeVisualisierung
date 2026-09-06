@@ -37,6 +37,7 @@
     { "id": "implements", "label": "Implements", "role": "relation", "visualToken": "relation" },
     { "id": "overrides", "label": "Overrides", "role": "relation", "visualToken": "relation" },
     { "id": "calls", "label": "Calls", "role": "relation", "visualToken": "relation" },
+    { "id": "constructs", "label": "Constructs", "role": "relation", "visualToken": "relation" },
     { "id": "uses-type", "label": "Uses type", "role": "relation", "visualToken": "relation" },
     { "id": "parameter-type", "label": "Parameter type", "role": "relation", "visualToken": "relation" },
     { "id": "returns-type", "label": "Returns type", "role": "relation", "visualToken": "relation" },
@@ -45,12 +46,14 @@
     { "id": "summary-references", "label": "Summary reference", "role": "summary", "visualToken": "summary" }
   ],
   "metricDefinitions": {
-    "complexity": { "label": "Cyclomatic complexity", "unit": "score", "valueType": "number", "description": "Deterministic example complexity." },
-    "linesOfCode": { "label": "Lines of code", "unit": "lines", "valueType": "number" },
-    "fanIn": { "label": "Fan-in", "unit": "callers", "valueType": "number" },
-    "fanOut": { "label": "Fan-out", "unit": "callees", "valueType": "number" },
-    "callCount": { "label": "Call count", "unit": "calls", "valueType": "number" },
-    "dependencyStrength": { "label": "Dependency strength", "unit": "score", "valueType": "number" }
+    "complexity": { "label": "Cyclomatic complexity", "unit": "branches", "valueType": "number", "valueKind": "raw", "description": "Deterministic example complexity." },
+    "linesOfCode": { "label": "Lines of code", "unit": "lines", "valueType": "number", "valueKind": "raw" },
+    "fanIn": { "label": "Fan-in", "unit": "callers", "valueType": "number", "valueKind": "raw" },
+    "fanOut": { "label": "Fan-out", "unit": "callees", "valueType": "number", "valueKind": "raw" },
+    "callCount": { "label": "Call count", "unit": "calls", "valueType": "number", "valueKind": "raw" },
+    "dependencyStrength": { "label": "Dependency strength", "unit": "score", "valueType": "number", "valueKind": "raw" },
+    "importance": { "label": "Importance", "unit": "score", "valueType": "number", "valueKind": "normalized-score", "range": [0, 1] },
+    "footprint": { "label": "Physical footprint", "unit": "score", "valueType": "number", "valueKind": "normalized-score", "range": [0, 1] }
   },
   "viewProfiles": [
     {
@@ -130,7 +133,7 @@
     { "id": "interface-irepository", "label": "IOrderRepository", "typeId": "interface", "attributes": { "qualifiedName": "Orders.Core.IOrderRepository" }, "metrics": { "linesOfCode": 12 } },
     { "id": "record-order", "label": "Order", "typeId": "record", "attributes": { "qualifiedName": "Orders.Core.Models.Order" }, "metrics": { "linesOfCode": 24 } },
     { "id": "enum-order-status", "label": "OrderStatus", "typeId": "enum", "attributes": { "qualifiedName": "Orders.Core.Models.OrderStatus" }, "metrics": { "linesOfCode": 8 } },
-    { "id": "class-repository", "label": "OrderRepository", "typeId": "class", "attributes": { "qualifiedName": "Orders.Core.OrderRepository", "partial": true }, "metrics": { "linesOfCode": 82, "complexity": 9 } },
+    { "id": "class-repository", "label": "OrderRepository", "typeId": "class", "attributes": { "qualifiedName": "Orders.Core.OrderRepository", "partial": true }, "metrics": { "linesOfCode": 82, "loc": 82, "complexity": 9, "fileCount": 2, "memberCount": 5, "partialDeclarationCount": 2, "importance": 0.8, "footprint": 0.9 } },
     { "id": "class-mapper", "label": "OrderMapper", "typeId": "class", "attributes": { "qualifiedName": "Orders.Adapter.OrderMapper" }, "metrics": { "linesOfCode": 36, "complexity": 4 } },
     { "id": "class-generated-client", "label": "OrderClient", "typeId": "class", "attributes": { "qualifiedName": "Orders.Adapter.OrderClient", "generated": true }, "metrics": { "linesOfCode": 44 } },
     { "id": "external-type-object", "label": "Object", "typeId": "external-type", "attributes": { "external": true, "assemblyName": "System.Runtime", "qualifiedName": "System.Object" } },
@@ -205,10 +208,11 @@
     { "id": "client-load-calls-mapper", "source": "method-client-load", "target": "method-mapper-map", "typeId": "calls", "directed": true, "metrics": { "callCount": 4 } },
     { "id": "test-load-calls-client", "source": "method-test-load", "target": "method-client-load", "typeId": "calls", "directed": true, "metrics": { "callCount": 1 } },
     { "id": "repository-save-calls-get", "source": "method-repository-save", "target": "method-repository-get", "typeId": "calls", "directed": true, "metrics": { "callCount": 2 } },
-    { "id": "summary-class-calls", "source": "class-generated-client", "target": "class-repository", "typeId": "summary-calls", "directed": true, "summary": true, "derivedFrom": ["client-load-calls-repository", "client-load-calls-mapper"] },
-    { "id": "summary-namespace-calls", "source": "namespace-adapter", "target": "namespace-core", "typeId": "summary-calls", "directed": true, "summary": true, "derivedFrom": ["summary-class-calls"] },
-    { "id": "summary-assembly-calls", "source": "assembly-adapter", "target": "assembly-core", "typeId": "summary-depends-on", "directed": true, "summary": true, "derivedFrom": ["summary-namespace-calls"] },
-    { "id": "summary-project-calls", "source": "project-adapter", "target": "project-core", "typeId": "summary-depends-on", "directed": true, "summary": true, "derivedFrom": ["summary-assembly-calls"] },
-    { "id": "summary-assembly-reference", "source": "assembly-adapter", "target": "assembly-core", "typeId": "summary-references", "directed": true, "summary": true, "derivedFrom": ["assembly-reference-adapter-core"] }
+    { "id": "summary-type-repository-order", "source": "class-repository", "target": "record-order", "typeId": "summary-depends-on", "directed": true, "summary": true, "derivedFrom": ["repository-get-uses-order", "repository-get-returns-order", "repository-save-parameter-order"], "metrics": { "occurrences": 3, "relationshipWeight": 3 }, "attributes": { "aggregation": { "origin": "detail-relations", "sourceLevel": "type", "targetLevel": "type" } } },
+    { "id": "summary-class-calls", "source": "class-generated-client", "target": "class-repository", "typeId": "summary-calls", "directed": true, "summary": true, "derivedFrom": ["client-load-calls-repository"], "metrics": { "occurrences": 4, "relationshipWeight": 12 }, "attributes": { "aggregation": { "origin": "detail-relations", "sourceLevel": "type", "targetLevel": "type" } } },
+    { "id": "summary-namespace-calls", "source": "namespace-adapter", "target": "namespace-core", "typeId": "summary-calls", "directed": true, "summary": true, "derivedFrom": ["client-load-calls-repository"], "metrics": { "occurrences": 4, "relationshipWeight": 12 }, "attributes": { "aggregation": { "origin": "detail-relations", "sourceLevel": "namespace", "targetLevel": "namespace" } } },
+    { "id": "summary-assembly-calls", "source": "assembly-adapter", "target": "assembly-core", "typeId": "summary-depends-on", "directed": true, "summary": true, "derivedFrom": ["client-load-calls-repository"], "metrics": { "occurrences": 4, "relationshipWeight": 12 }, "attributes": { "aggregation": { "origin": "detail-relations", "sourceLevel": "assembly", "targetLevel": "assembly" } } },
+    { "id": "summary-project-calls", "source": "project-adapter", "target": "project-core", "typeId": "summary-depends-on", "directed": true, "summary": true, "derivedFrom": ["client-load-calls-repository"], "metrics": { "occurrences": 4, "relationshipWeight": 12 }, "attributes": { "aggregation": { "origin": "detail-relations", "sourceLevel": "project", "targetLevel": "project" } } },
+    { "id": "summary-assembly-reference", "source": "assembly-adapter", "target": "assembly-core", "typeId": "summary-references", "directed": true, "summary": true, "derivedFrom": ["assembly-reference-adapter-core"], "metrics": { "occurrences": 1, "relationshipWeight": 1 }, "attributes": { "aggregation": { "origin": "detail-relations", "sourceLevel": "assembly", "targetLevel": "assembly" } } }
   ]
 }

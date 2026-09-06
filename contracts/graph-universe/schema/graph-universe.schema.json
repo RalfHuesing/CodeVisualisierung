@@ -53,7 +53,14 @@
         "label": { "type": "string" },
         "unit": { "type": "string" },
         "valueType": { "const": "number" },
-        "description": { "type": "string" }
+        "description": { "type": "string" },
+        "valueKind": { "enum": ["raw", "normalized-score"] },
+        "range": {
+          "type": "array",
+          "prefixItems": [{ "type": "number" }, { "type": "number" }],
+          "minItems": 2,
+          "maxItems": 2
+        }
       },
       "additionalProperties": true
     },
