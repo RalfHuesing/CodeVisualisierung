@@ -1,0 +1,166 @@
+{
+  "format": {
+    "name": "graph-universe",
+    "version": "0.2"
+  },
+  "nodeTypes": [
+    { "id": "portfolio", "label": "Portfolio", "visualToken": "portfolio" },
+    { "id": "company", "label": "Company", "visualToken": "company" }
+  ],
+  "linkTypes": [
+    { "id": "contains", "label": "Contains", "role": "containment", "visualToken": "containment" },
+    { "id": "owns", "label": "Owns", "role": "relation", "visualToken": "ownership" },
+    { "id": "invests-in", "label": "Invests in", "role": "relation", "visualToken": "investment" },
+    { "id": "supplies", "label": "Supplies", "role": "relation", "visualToken": "supply" },
+    { "id": "group-exposure", "label": "Group exposure", "role": "summary", "visualToken": "summary" }
+  ],
+  "facets": [
+    { "id": "node-type", "label": "Node type", "source": { "scope": "node", "field": "typeId" } },
+    { "id": "region", "label": "Region", "source": { "scope": "node", "field": "attributes.region" } },
+    { "id": "status", "label": "Status", "source": { "scope": "node", "field": "attributes.status" } }
+  ],
+  "filterSources": [
+    { "id": "node-type", "facetId": "node-type", "label": "Node type" },
+    { "id": "region", "facetId": "region", "label": "Region" },
+    { "id": "status", "facetId": "status", "label": "Status" }
+  ],
+  "viewProfiles": [
+    {
+      "id": "ownership-overview",
+      "label": "Ownership overview",
+      "detailLevel": 0,
+      "visibleNodeTypes": ["portfolio", "company"],
+      "visibleLinkTypes": ["contains", "owns", "invests-in", "supplies", "group-exposure"],
+      "nodeMetric": "marketReach",
+      "linkMetric": "relationshipStrength"
+    },
+    {
+      "id": "ownership-detail",
+      "label": "Ownership detail",
+      "detailLevel": 1,
+      "visibleNodeTypes": ["company"],
+      "visibleLinkTypes": ["owns", "invests-in", "supplies", "group-exposure"],
+      "nodeMetric": "employeeIndex",
+      "linkMetric": "ownershipShare"
+    }
+  ],
+  "hierarchy": { "containmentLinkTypes": ["contains"], "maxParents": 1, "acyclic": true },
+  "containmentRules": [
+    {
+      "id": "portfolio-contains-company",
+      "linkTypeId": "contains",
+      "parentTypeId": "portfolio",
+      "childTypeId": "company",
+      "maxParents": 1,
+      "acyclic": true
+    }
+  ],
+  "projections": [],
+  "visualTokens": {
+    "portfolio": { "kind": "node", "color": "#f59e0b", "shape": "cube" },
+    "company": { "kind": "node", "color": "#38bdf8", "shape": "sphere" },
+    "containment": { "kind": "link", "color": "#64748b", "lineStyle": "dashed" },
+    "ownership": { "kind": "link", "color": "#22c55e", "lineStyle": "solid" },
+    "investment": { "kind": "link", "color": "#eab308", "lineStyle": "solid" },
+    "supply": { "kind": "link", "color": "#06b6d4", "lineStyle": "solid" },
+    "summary": { "kind": "link", "color": "#a78bfa", "lineStyle": "dotted" }
+  },
+  "theme": { "id": "company-light", "fallbackToken": "company", "background": "#0f172a" },
+  "meta": {
+    "title": "Deterministic company network",
+    "description": "A synthetic portfolio with ownership, investment and supply relationships.",
+    "createdAt": "2026-09-05T12:00:00Z",
+    "source": { "name": "fixture", "version": "1.0.0" }
+  },
+  "metricDefinitions": {
+    "marketReach": { "label": "Market reach", "unit": "score", "valueType": "number" },
+    "employeeIndex": { "label": "Employee index", "unit": "score", "valueType": "number" },
+    "ownershipShare": { "label": "Ownership share", "unit": "ratio", "valueType": "number" },
+    "relationshipStrength": { "label": "Relationship strength", "unit": "score", "valueType": "number" }
+  },
+  "nodes": [
+    {
+      "id": "portfolio-1",
+      "label": "Northstar portfolio",
+      "typeId": "portfolio",
+      "kind": "portfolio",
+      "groupId": "portfolio-1",
+      "tags": ["root"],
+      "metrics": { "marketReach": 1 },
+      "attributes": { "region": "global", "status": "active" }
+    },
+    {
+      "id": "company-aurora",
+      "label": "Aurora Group",
+      "typeId": "company",
+      "kind": "company",
+      "groupId": "region-north",
+      "tags": ["holding"],
+      "metrics": { "marketReach": 0.9, "employeeIndex": 0.8 },
+      "attributes": { "region": "north", "status": "active" }
+    },
+    {
+      "id": "company-birch",
+      "label": "Birch Works",
+      "typeId": "company",
+      "kind": "company",
+      "groupId": "region-north",
+      "tags": ["subsidiary"],
+      "metrics": { "marketReach": 0.65, "employeeIndex": 0.55 },
+      "attributes": { "region": "north", "status": "active" }
+    },
+    {
+      "id": "company-cirrus",
+      "label": "Cirrus Labs",
+      "typeId": "company",
+      "kind": "company",
+      "groupId": "region-east",
+      "tags": ["subsidiary"],
+      "metrics": { "marketReach": 0.6, "employeeIndex": 0.5 },
+      "attributes": { "region": "east", "status": "active" }
+    },
+    {
+      "id": "company-delta",
+      "label": "Delta Partners",
+      "typeId": "company",
+      "kind": "company",
+      "groupId": "region-central",
+      "tags": ["investment"],
+      "metrics": { "marketReach": 0.45, "employeeIndex": 0.35 },
+      "attributes": { "region": "central", "status": "active" }
+    },
+    {
+      "id": "company-ember",
+      "label": "Ember Supply",
+      "typeId": "company",
+      "kind": "company",
+      "groupId": "region-west",
+      "tags": ["supplier"],
+      "metrics": { "marketReach": 0.3, "employeeIndex": 0.25 },
+      "attributes": { "region": "west", "status": "active" }
+    }
+  ],
+  "links": [
+    { "id": "contains-aurora", "source": "portfolio-1", "target": "company-aurora", "typeId": "contains", "kind": "contains", "directed": true },
+    { "id": "contains-birch", "source": "portfolio-1", "target": "company-birch", "typeId": "contains", "kind": "contains", "directed": true },
+    { "id": "contains-cirrus", "source": "portfolio-1", "target": "company-cirrus", "typeId": "contains", "kind": "contains", "directed": true },
+    { "id": "contains-delta", "source": "portfolio-1", "target": "company-delta", "typeId": "contains", "kind": "contains", "directed": true },
+    { "id": "contains-ember", "source": "portfolio-1", "target": "company-ember", "typeId": "contains", "kind": "contains", "directed": true },
+    { "id": "owns-aurora-birch", "source": "company-aurora", "target": "company-birch", "typeId": "owns", "kind": "owns", "directed": true, "weight": 0.75, "metrics": { "ownershipShare": 0.75, "relationshipStrength": 0.75 } },
+    { "id": "owns-aurora-cirrus", "source": "company-aurora", "target": "company-cirrus", "typeId": "owns", "kind": "owns", "directed": true, "weight": 0.55, "metrics": { "ownershipShare": 0.55, "relationshipStrength": 0.55 } },
+    { "id": "invests-birch-delta", "source": "company-birch", "target": "company-delta", "typeId": "invests-in", "kind": "invests-in", "directed": true, "weight": 0.25, "metrics": { "ownershipShare": 0.25, "relationshipStrength": 0.25 } },
+    { "id": "supplies-ember-birch", "source": "company-ember", "target": "company-birch", "typeId": "supplies", "kind": "supplies", "directed": true, "metrics": { "relationshipStrength": 0.6 } },
+    { "id": "supplies-delta-cirrus", "source": "company-delta", "target": "company-cirrus", "typeId": "supplies", "kind": "supplies", "directed": true, "metrics": { "relationshipStrength": 0.4 } },
+    {
+      "id": "exposure-portfolio-delta",
+      "source": "portfolio-1",
+      "target": "company-delta",
+      "typeId": "group-exposure",
+      "kind": "group-exposure",
+      "directed": true,
+      "summary": true,
+      "derivedFrom": ["owns-aurora-birch", "invests-birch-delta"],
+      "metrics": { "relationshipStrength": 0.19 }
+    }
+  ]
+}

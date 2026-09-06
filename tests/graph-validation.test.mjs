@@ -6,6 +6,8 @@ import { normalizeGraph, parseGraphText, resolveVisualToken, validateGraph } fro
 import { EXAMPLE_CATALOG, getExampleGraph } from "../apps/viewer/src/domain/catalog.js";
 import invalidFixture from "../contracts/graph-universe/fixtures/invalid.json" with { type: "json" };
 import edgeCasesFixture from "../contracts/graph-universe/fixtures/edge-cases.json" with { type: "json" };
+import familyFixture from "../contracts/graph-universe/fixtures/family.json" with { type: "json" };
+import companyFixture from "../contracts/graph-universe/fixtures/company.json" with { type: "json" };
 
 const fixturePath = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -20,10 +22,33 @@ describe("fixture catalog", () => {
       "small",
       "medium",
       "large",
-      "performance"
+      "performance",
+      "family",
+      "company"
     ]);
     expect(EXAMPLE_CATALOG.every((example) => validateGraph(example.graph).valid)).toBe(true);
     expect(getExampleGraph("medium").nodes.length).toBe(64);
+  });
+
+  it("provides domain-neutral family and company fixtures with stable graph references", () => {
+    for (const fixture of [familyFixture, companyFixture]) {
+      const nodeIds = new Set(fixture.nodes.map((node) => node.id));
+      const linkIds = new Set(fixture.links.map((link) => link.id));
+
+      expect(nodeIds.size).toBe(fixture.nodes.length);
+      expect(linkIds.size).toBe(fixture.links.length);
+      expect(fixture.links.every((link) => nodeIds.has(link.source) && nodeIds.has(link.target))).toBe(true);
+      expect(validateGraph(fixture)).toEqual({ valid: true, errors: [] });
+    }
+
+    expect(familyFixture.links.find((link) => link.id === "ancestor-anna-fiona")).toMatchObject({
+      summary: true,
+      derivedFrom: ["parent-anna-clara", "parent-clara-fiona"]
+    });
+    expect(companyFixture.links.find((link) => link.id === "exposure-portfolio-delta")).toMatchObject({
+      summary: true,
+      derivedFrom: ["owns-aurora-birch", "invests-birch-delta"]
+    });
   });
 });
 

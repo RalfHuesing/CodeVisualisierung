@@ -1,0 +1,203 @@
+{
+  "format": {
+    "name": "graph-universe",
+    "version": "0.2"
+  },
+  "nodeTypes": [
+    { "id": "family-unit", "label": "Family unit", "visualToken": "family" },
+    { "id": "person", "label": "Person", "visualToken": "person" }
+  ],
+  "linkTypes": [
+    { "id": "contains", "label": "Contains", "role": "containment", "visualToken": "containment" },
+    { "id": "partner-of", "label": "Partner of", "role": "relation", "visualToken": "partner" },
+    { "id": "parent-of", "label": "Parent of", "role": "relation", "visualToken": "parent" },
+    { "id": "ancestor-of", "label": "Ancestor of", "role": "summary", "visualToken": "summary" }
+  ],
+  "facets": [
+    { "id": "node-type", "label": "Node type", "source": { "scope": "node", "field": "typeId" } },
+    { "id": "generation", "label": "Generation", "source": { "scope": "node", "field": "attributes.generation" } },
+    { "id": "role", "label": "Role", "source": { "scope": "node", "field": "attributes.role" } }
+  ],
+  "filterSources": [
+    { "id": "node-type", "facetId": "node-type", "label": "Node type" },
+    { "id": "generation", "facetId": "generation", "label": "Generation" },
+    { "id": "role", "facetId": "role", "label": "Role" }
+  ],
+  "viewProfiles": [
+    {
+      "id": "family-overview",
+      "label": "Family overview",
+      "detailLevel": 0,
+      "visibleNodeTypes": ["family-unit", "person"],
+      "visibleLinkTypes": ["contains", "partner-of", "parent-of", "ancestor-of"],
+      "nodeMetric": "descendantCount",
+      "linkMetric": "relationshipStrength"
+    }
+  ],
+  "hierarchy": { "containmentLinkTypes": ["contains"], "maxParents": 1, "acyclic": true },
+  "containmentRules": [
+    {
+      "id": "family-unit-contains-person",
+      "linkTypeId": "contains",
+      "parentTypeId": "family-unit",
+      "childTypeId": "person",
+      "maxParents": 1,
+      "acyclic": true
+    }
+  ],
+  "projections": [],
+  "visualTokens": {
+    "family": { "kind": "node", "color": "#f59e0b", "shape": "cube" },
+    "person": { "kind": "node", "color": "#38bdf8", "shape": "sphere" },
+    "containment": { "kind": "link", "color": "#64748b", "lineStyle": "dashed" },
+    "partner": { "kind": "link", "color": "#ec4899", "lineStyle": "solid" },
+    "parent": { "kind": "link", "color": "#22c55e", "lineStyle": "solid" },
+    "summary": { "kind": "link", "color": "#a78bfa", "lineStyle": "dotted" }
+  },
+  "theme": { "id": "family-light", "fallbackToken": "person", "background": "#0f172a" },
+  "meta": {
+    "title": "Deterministic family tree",
+    "description": "A small synthetic family tree with explicit ancestry summaries.",
+    "createdAt": "2026-09-05T12:00:00Z",
+    "source": { "name": "fixture", "version": "1.0.0" }
+  },
+  "metricDefinitions": {
+    "descendantCount": { "label": "Descendant count", "unit": "persons", "valueType": "number" },
+    "generationIndex": { "label": "Generation index", "unit": "level", "valueType": "number" },
+    "relationshipStrength": { "label": "Relationship strength", "unit": "score", "valueType": "number" }
+  },
+  "nodes": [
+    {
+      "id": "family-1",
+      "label": "Northstar family",
+      "typeId": "family-unit",
+      "kind": "family-unit",
+      "groupId": "family-1",
+      "tags": ["container"],
+      "metrics": { "descendantCount": 6 },
+      "attributes": { "role": "root" }
+    },
+    {
+      "id": "person-anna",
+      "label": "Anna",
+      "typeId": "person",
+      "kind": "person",
+      "groupId": "generation-1",
+      "tags": ["founder"],
+      "metrics": { "descendantCount": 4, "generationIndex": 1 },
+      "attributes": { "generation": "first", "role": "ancestor" }
+    },
+    {
+      "id": "person-bernd",
+      "label": "Bernd",
+      "typeId": "person",
+      "kind": "person",
+      "groupId": "generation-1",
+      "tags": ["founder"],
+      "metrics": { "descendantCount": 4, "generationIndex": 1 },
+      "attributes": { "generation": "first", "role": "ancestor" }
+    },
+    {
+      "id": "person-clara",
+      "label": "Clara",
+      "typeId": "person",
+      "kind": "person",
+      "groupId": "generation-2",
+      "tags": ["parent"],
+      "metrics": { "descendantCount": 2, "generationIndex": 2 },
+      "attributes": { "generation": "second", "role": "parent" }
+    },
+    {
+      "id": "person-daniel",
+      "label": "Daniel",
+      "typeId": "person",
+      "kind": "person",
+      "groupId": "generation-2",
+      "tags": ["parent"],
+      "metrics": { "descendantCount": 2, "generationIndex": 2 },
+      "attributes": { "generation": "second", "role": "parent" }
+    },
+    {
+      "id": "person-fiona",
+      "label": "Fiona",
+      "typeId": "person",
+      "kind": "person",
+      "groupId": "generation-3",
+      "tags": ["youngest"],
+      "metrics": { "descendantCount": 0, "generationIndex": 3 },
+      "attributes": { "generation": "third", "role": "child" }
+    },
+    {
+      "id": "person-greta",
+      "label": "Greta",
+      "typeId": "person",
+      "kind": "person",
+      "groupId": "generation-3",
+      "tags": ["youngest"],
+      "metrics": { "descendantCount": 0, "generationIndex": 3 },
+      "attributes": { "generation": "third", "role": "child" }
+    }
+  ],
+  "links": [
+    { "id": "contains-anna", "source": "family-1", "target": "person-anna", "typeId": "contains", "kind": "contains", "directed": true },
+    { "id": "contains-bernd", "source": "family-1", "target": "person-bernd", "typeId": "contains", "kind": "contains", "directed": true },
+    { "id": "contains-clara", "source": "family-1", "target": "person-clara", "typeId": "contains", "kind": "contains", "directed": true },
+    { "id": "contains-daniel", "source": "family-1", "target": "person-daniel", "typeId": "contains", "kind": "contains", "directed": true },
+    { "id": "contains-fiona", "source": "family-1", "target": "person-fiona", "typeId": "contains", "kind": "contains", "directed": true },
+    { "id": "contains-greta", "source": "family-1", "target": "person-greta", "typeId": "contains", "kind": "contains", "directed": true },
+    { "id": "partner-anna-bernd", "source": "person-anna", "target": "person-bernd", "typeId": "partner-of", "kind": "partner-of", "directed": false, "metrics": { "relationshipStrength": 1 } },
+    { "id": "partner-clara-daniel", "source": "person-clara", "target": "person-daniel", "typeId": "partner-of", "kind": "partner-of", "directed": false, "metrics": { "relationshipStrength": 1 } },
+    { "id": "parent-anna-clara", "source": "person-anna", "target": "person-clara", "typeId": "parent-of", "kind": "parent-of", "directed": true, "metrics": { "relationshipStrength": 1 } },
+    { "id": "parent-bernd-clara", "source": "person-bernd", "target": "person-clara", "typeId": "parent-of", "kind": "parent-of", "directed": true, "metrics": { "relationshipStrength": 1 } },
+    { "id": "parent-anna-daniel", "source": "person-anna", "target": "person-daniel", "typeId": "parent-of", "kind": "parent-of", "directed": true, "metrics": { "relationshipStrength": 1 } },
+    { "id": "parent-bernd-daniel", "source": "person-bernd", "target": "person-daniel", "typeId": "parent-of", "kind": "parent-of", "directed": true, "metrics": { "relationshipStrength": 1 } },
+    { "id": "parent-clara-fiona", "source": "person-clara", "target": "person-fiona", "typeId": "parent-of", "kind": "parent-of", "directed": true, "metrics": { "relationshipStrength": 1 } },
+    { "id": "parent-daniel-fiona", "source": "person-daniel", "target": "person-fiona", "typeId": "parent-of", "kind": "parent-of", "directed": true, "metrics": { "relationshipStrength": 1 } },
+    { "id": "parent-clara-greta", "source": "person-clara", "target": "person-greta", "typeId": "parent-of", "kind": "parent-of", "directed": true, "metrics": { "relationshipStrength": 1 } },
+    { "id": "parent-daniel-greta", "source": "person-daniel", "target": "person-greta", "typeId": "parent-of", "kind": "parent-of", "directed": true, "metrics": { "relationshipStrength": 1 } },
+    {
+      "id": "ancestor-anna-fiona",
+      "source": "person-anna",
+      "target": "person-fiona",
+      "typeId": "ancestor-of",
+      "kind": "ancestor-of",
+      "directed": true,
+      "summary": true,
+      "derivedFrom": ["parent-anna-clara", "parent-clara-fiona"],
+      "metrics": { "relationshipStrength": 0.5 }
+    },
+    {
+      "id": "ancestor-bernd-fiona",
+      "source": "person-bernd",
+      "target": "person-fiona",
+      "typeId": "ancestor-of",
+      "kind": "ancestor-of",
+      "directed": true,
+      "summary": true,
+      "derivedFrom": ["parent-bernd-clara", "parent-clara-fiona"],
+      "metrics": { "relationshipStrength": 0.5 }
+    },
+    {
+      "id": "ancestor-anna-greta",
+      "source": "person-anna",
+      "target": "person-greta",
+      "typeId": "ancestor-of",
+      "kind": "ancestor-of",
+      "directed": true,
+      "summary": true,
+      "derivedFrom": ["parent-anna-clara", "parent-clara-greta"],
+      "metrics": { "relationshipStrength": 0.5 }
+    },
+    {
+      "id": "ancestor-bernd-greta",
+      "source": "person-bernd",
+      "target": "person-greta",
+      "typeId": "ancestor-of",
+      "kind": "ancestor-of",
+      "directed": true,
+      "summary": true,
+      "derivedFrom": ["parent-bernd-clara", "parent-clara-greta"],
+      "metrics": { "relationshipStrength": 0.5 }
+    }
+  ]
+}
