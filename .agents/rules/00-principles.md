@@ -44,3 +44,23 @@
 - Regeln bleiben kurz, konkret und prüfbar.
 - Keine Wiederholung derselben Vorgabe in mehreren Dateien ohne zusätzlichen Geltungsbereich.
 - Beispiele nur aufnehmen, wenn sie eine häufige Fehlinterpretation verhindern.
+
+## Agentenlesbare Dokumentation
+
+- Dokumentation ist kompakter Arbeitskontext, kein Gesprächsprotokoll und kein
+  vollständiges Lehrbuch.
+- Jede Datei hat genau eine erkennbare Aufgabe und beginnt mit dem aktuellen
+  Ziel, Scope oder Ergebnis.
+- Eine fachliche Aussage hat eine Quelle der Wahrheit. Andere Dokumente
+  verlinken darauf, statt sie zu kopieren.
+- Entscheidungen, Akzeptanzkriterien, Risiken und Prüfungen werden konkret
+  festgehalten; offensichtliche Erklärungen, historische Zwischenstände und
+  wiederholte Begründungen entfallen.
+- Details werden progressiv ergänzt: Index/README zuerst, fachliche
+  Entscheidung danach, Implementierungsdetails nur bei konkretem Nutzen für
+  Umsetzung oder Prüfung.
+- Wird ein Dokument lang, redundant oder thematisch gemischt, wird es gekürzt
+  oder nach Verantwortung geteilt. Länge allein ist kein Grund, Inhalt zu
+  duplizieren.
+- Vor Abschluss einer Änderung werden veraltete Aussagen entfernt, damit
+  Agenten nicht zwischen konkurrierenden Versionen wählen müssen.
