@@ -33,6 +33,62 @@ test("opens graph details and node details", async ({ page }) => {
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-selected-node-id", "orders");
 });
 
+test("selects a node from the canvas without a pointer-up position error", async ({ page }) => {
+  const consoleErrors = [];
+  const pageErrors = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") {
+      consoleErrors.push(message.text());
+    }
+  });
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+
+  await page.goto("/");
+  await page.waitForTimeout(3000);
+  const canvas = page.locator("#graph-canvas canvas");
+  const bounds = await canvas.boundingBox();
+  expect(bounds).not.toBeNull();
+
+  const screenshot = await page.screenshot();
+  const nodePoint = await page.evaluate(async ({ imageData, canvasBounds }) => {
+    const image = new globalThis.Image();
+    image.src = `data:image/png;base64,${imageData}`;
+    await image.decode();
+    const probe = globalThis.document.createElement("canvas");
+    probe.width = image.width;
+    probe.height = image.height;
+    const context = probe.getContext("2d");
+    context.drawImage(image, 0, 0);
+    const pixels = context.getImageData(0, 0, image.width, image.height).data;
+    let bestNode = null;
+    for (let y = Math.ceil(canvasBounds.y); y < canvasBounds.y + canvasBounds.height; y += 2) {
+      for (let x = Math.ceil(canvasBounds.x); x < canvasBounds.x + canvasBounds.width * 0.75; x += 2) {
+        let nodePixels = 0;
+        for (let offsetY = -6; offsetY <= 6; offsetY += 1) {
+          for (let offsetX = -6; offsetX <= 6; offsetX += 1) {
+            const index = ((y + offsetY) * image.width + x + offsetX) * 4;
+            if (pixels[index] >= 30 && pixels[index] <= 90 && pixels[index + 1] >= 140 && pixels[index + 2] >= 200) {
+              nodePixels += 1;
+            }
+          }
+        }
+        if (nodePixels > (bestNode?.pixels ?? 0)) {
+          bestNode = { x, y, pixels: nodePixels };
+        }
+      }
+    }
+    return bestNode;
+  }, { imageData: screenshot.toString("base64"), canvasBounds: bounds });
+  expect(nodePoint).not.toBeNull();
+  await page.mouse.move(nodePoint.x, nodePoint.y);
+  await page.waitForTimeout(100);
+  await page.mouse.click(nodePoint.x, nodePoint.y);
+
+  await expect(page.locator("#selected-node-details")).toBeVisible();
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-selected-node-id", /.+/);
+  expect([...consoleErrors, ...pageErrors].filter((message) => message.includes("reading 'x'")).length).toBe(0);
+});
+
 test("focuses the neighborhood and supports search and reset", async ({ page }) => {
   await page.goto("/");
 

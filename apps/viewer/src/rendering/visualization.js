@@ -133,6 +133,7 @@ function getNodeColor(node, graph, selectedNodeId, searchQuery) {
 function createForceGraph(container, onNodeClick, visualData, graph, nodeColor, linkColor, nodeObject) {
   const graphInstance = new ForceGraph3D(container, { controlType: "orbit" })
     .backgroundColor(graph.theme?.background ?? "#0b1120")
+    .enableNodeDrag(false)
     .showNavInfo(false)
     .nodeRelSize(VIEWER_CONFIG.node.relativeSize)
     .nodeLabel((node) => `${node.label} (${node.kind})`)
