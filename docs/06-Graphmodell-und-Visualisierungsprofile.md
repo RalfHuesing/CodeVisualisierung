@@ -109,10 +109,14 @@ Methodenaufrufe als auch daraus aggregierte Klassen- und Namespacebeziehungen
 liefern. Ein Summary-Link kann seine Herkunft über `derivedFrom` oder Metriken
 dokumentieren.
 
-Spätere `projections` dürfen solche Beziehungen deklarativ erzeugen. Die
-Regeln müssen fachlich explizit sein und dürfen nicht aus unbekannten Feldnamen
+`projections` können solche Beziehungen deklarativ erzeugen. Die Regeln müssen
+fachlich explizit sein und dürfen nicht aus unbekannten Feldnamen
 oder beliebigen Pfaden erraten werden. Der Viewer darf eine Detailstufe daher
 nie stillschweigend als Datenlöschung darstellen.
+
+Der C#-Adapter liefert diese vollständigen Detaildaten sowie deklarative
+Projektionen und Summary-Links; der Viewer muss dafür keine C#-Sonderlogik
+kennen.
 
 ## View-Profile
 

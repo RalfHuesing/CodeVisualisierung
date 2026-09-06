@@ -90,8 +90,39 @@ public sealed class MetricsAndProjectionTests
 
         Assert.Contains(summaries, summary => summary.TypeId == "summary-calls");
         Assert.Contains(graph.Projections, projection => projection.LinkTypeId == "summary-calls");
+        Assert.Contains(graph.Projections, projection => projection is
+        {
+            FromProfile: "architecture",
+            ToProfile: "overview",
+            LinkTypeId: "summary-references"
+        });
         Assert.Contains(summaries, summary => summary.TypeId == "summary-depends-on"
             && summary.DerivedFrom!.Any(detailId => detailLinks[detailId].TypeId is "uses-type" or "returns-type" or "parameter-type" or "constructs"));
+        var assemblyReferences = detailLinks.Values.Where(link => link.TypeId == "references-assembly").ToArray();
+        var summaryReferences = summaries.Where(link => link.TypeId == "summary-references").ToArray();
+        Assert.NotEmpty(assemblyReferences);
+        Assert.NotEmpty(summaryReferences);
+        Assert.All(assemblyReferences, link =>
+        {
+            Assert.Equal(1, link.Metrics["occurrences"]);
+            Assert.Equal(1, link.Metrics["relationshipWeight"]);
+            Assert.Equal("assembly", graph.Nodes.Single(node => node.Id == link.Source).TypeId);
+            Assert.Equal("assembly", graph.Nodes.Single(node => node.Id == link.Target).TypeId);
+        });
+        Assert.All(summaryReferences, summary =>
+        {
+            Assert.True(summary.Directed);
+            Assert.Equal("assembly", graph.Nodes.Single(node => node.Id == summary.Source).TypeId);
+            Assert.Equal("assembly", graph.Nodes.Single(node => node.Id == summary.Target).TypeId);
+            Assert.Equal(summary.Source, graph.Links.Single(link => link.Id == summary.DerivedFrom!.Single()).Source);
+            Assert.Equal(summary.Target, graph.Links.Single(link => link.Id == summary.DerivedFrom!.Single()).Target);
+            Assert.All(summary.DerivedFrom!, detailId => Assert.Equal("references-assembly", detailLinks[detailId].TypeId));
+            Assert.Equal(summary.DerivedFrom!.Count, summary.Metrics["occurrences"]);
+            Assert.Equal(summary.DerivedFrom!.Count, summary.Metrics["relationshipWeight"]);
+            var aggregation = Assert.IsType<Dictionary<string, object?>>(summary.Attributes["aggregation"]);
+            Assert.Equal("assembly", aggregation["sourceLevel"]);
+            Assert.Equal("assembly", aggregation["targetLevel"]);
+        });
         Assert.True(graph.Links.Zip(graph.Links.Skip(1)).All(pair => string.CompareOrdinal(pair.First.Id, pair.Second.Id) <= 0));
     }
 

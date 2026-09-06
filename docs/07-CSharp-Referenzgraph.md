@@ -1,9 +1,9 @@
-# C#-Referenzgraph für die spätere Datenquelle
+# C#-Referenzgraph für die C#-Datenquelle
 
 ## Zweck und Abgrenzung
 
-Dieses Dokument ist ein fachlicher Zielentwurf für den späteren C#-/Roslyn-
-Exporter. Es erweitert nicht den allgemeinen Viewer um C#-Wissen. Der Exporter
+Dieses Dokument beschreibt den fachlichen Vertrag des C#-/Roslyn-Exporters. Es
+erweitert nicht den allgemeinen Viewer um C#-Wissen. Der Exporter
 liefert ein Graph-JSON nach dem allgemeinen Modell aus
 [Graphmodell und Visualisierungsprofile](06-Graphmodell-und-Visualisierungsprofile.md).
 
@@ -45,7 +45,7 @@ eine Detailansicht Methoden und Member.
 
 ## Beziehungen
 
-Der Exporter soll unter anderem folgende `linkTypes` liefern können:
+Der implementierte Exporter liefert unter anderem folgende `linkTypes`:
 
 - `contains` für Solution, Project, Namespace, File, Type und Member
 - `declares` für deklarierende Beziehungen
@@ -57,7 +57,8 @@ Der Exporter soll unter anderem folgende `linkTypes` liefern können:
 - `reads` und `writes` für Feld- und Propertyzugriffe
 - `uses-type`, `returns-type` und `parameter-type`
 - `references-assembly` und `project-reference`
-- `generated-from` für generierte Artefakte
+- `generated-from` ist im allgemeinen Vertrag reserviert, wird im C#-Adapter-v1
+  wegen der ausgeschlossenen generierten Artefakte jedoch nicht emittiert.
 - `tests` für Test- und Produktbeziehungen
 
 Richtung, Herkunft, Metriken und Belege gehören in die Daten. Ein unbekannter
@@ -80,13 +81,13 @@ Der allgemeine Graphvertrag kann externe Assemblies und externe Typen als Nodes
 mit Attributen wie `external`, `assemblyName`, `packageName` oder `framework`
 führen. Der C#-Adapter-v1-Task nutzt diese Möglichkeit bewusst nicht: Externe,
 Framework- und generierte Artefakte bleiben außerhalb des exportierten Graphen.
-Ihre verworfenen Beziehungen werden in der CLI-Summary gezählt. Eine spätere
-Erweiterung kann externe Nodes als separaten Scope ergänzen, ohne die v1-
-Identitäten oder die Viewerlogik zu verändern.
+Ihre verworfenen Beziehungen werden in der CLI-Summary gezählt. Externe Nodes
+gehören nicht zum v1-Export; die v1-Identitäten und die Viewerlogik bleiben
+dadurch quellenneutral.
 
 ## Metriken
 
-Mögliche benannte Metriken sind:
+Der implementierte Adapter liefert folgende benannte Metriken:
 
 - Methoden- und Typkomplexität
 - Quellcodezeilen
@@ -94,11 +95,11 @@ Mögliche benannte Metriken sind:
 - Aufrufanzahl
 - Abhängigkeitsstärke
 - Sichtbarkeit oder API-Status
-- Testabdeckung, sofern die Datenquelle sie liefert
+- globale Scores und Summary-Projektionen
 
-Keine dieser Metriken ist Pflichtbestandteil des allgemeinen Graphschemas. Der
-Exporter definiert sie mit Einheit und Beschreibung und bietet sie für
-View-Profile und Legenden an.
+Diese Metriken sind keine Pflichtbestandteile des allgemeinen Graphschemas. Der
+Exporter definiert die gelieferten Metriken mit Einheit und Beschreibung und
+bietet sie für View-Profile und Legenden an.
 
 Der v1-Adapter liefert `loc`, `cyclomaticComplexity`, `fanIn`, `fanOut`,
 `weightedFanIn`, `weightedFanOut`, `pageRank`, `fileCount`, `typeCount`,
@@ -134,8 +135,9 @@ berücksichtigen.
 
 ## Referenz-Fixture
 
-Vor einem echten Roslyn-Adapter wird eine handgeschriebene oder deterministisch
-erzeugte C#-Referenz-Fixture benötigt. Sie soll mindestens enthalten:
+Die handgeschriebene, deterministische JSON-Fixture dient als gemeinsamer
+Graph-Universe-Vertragstest. Die tatsächlichen C#-CLI-E2E-Tests verwenden die
+physische `CSharpReferenceMini`-Solution. Die JSON-Fixture enthält mindestens:
 
 - mehrere Projekte und Assemblies
 - interne und externe Assemblyreferenzen
@@ -146,9 +148,9 @@ erzeugte C#-Referenz-Fixture benötigt. Sie soll mindestens enthalten:
 - Dateien, Partial Types und generierte Artefakte
 - benannte Metriken und Summary-Links
 
-Diese Fixture ist ein späterer Vertragstest. Sie ist kein Bestandteil der
-aktuellen allgemeinen Viewer-Fixtures und setzt keine C#-Infrastruktur im
-Browser voraus.
+Diese Fixture ist ein aktiver allgemeiner Vertragstest. Sie ist kein Bestandteil
+der CLI-Ausgabe und kein Bestandteil der allgemeinen Viewer-Fixtures; sie setzt
+keine C#-Infrastruktur im Browser voraus.
 
 Die konkrete deterministische Fixture liegt unter
 [`contracts/graph-universe/fixtures/csharp-reference.json`](../contracts/graph-universe/fixtures/csharp-reference.json).

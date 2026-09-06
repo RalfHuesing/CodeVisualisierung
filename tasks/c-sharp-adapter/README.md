@@ -1,8 +1,8 @@
 # Task: C#-Adapter
 
 Dieser Ordner enthält den fortschreibbaren Konzept- und Umsetzungsauftrag für
-den C#-/Roslyn-Adapter. Der Auftrag wird später als vollständiger Task mit der
-Orchestrator-Rolle umgesetzt.
+den C#-/Roslyn-Adapter. Der Adapter ist implementiert und erzeugt mit der
+veröffentlichten CLI tatsächlich Graph-Universe-JSON.
 
 - [CONCEPT.md](CONCEPT.md) beschreibt Ziel, Grenzen, Architektur und den
   fachlichen Vertrag.
@@ -23,17 +23,15 @@ Die fachliche Wahrheit für das Ausgabeformat bleibt in
 `docs/`. Diese Task-Dateien ergänzen die vorhandenen Dokumente um den
 konkreten C#-Auftrag; sie ersetzen den allgemeinen Graphvertrag nicht.
 
-Der v1-Fachvertrag ist entschieden. Die Slices 1 bis 4 sind committed und
-liefern Workspace-Inventar, Deklarationen sowie aufgelöste Beziehungen mit
-Zählern und Determinismusregeln. Slice 5 ist im gemeinsamen Arbeitsbaum
-implementiert und befindet sich im zweiten und letzten Review-
-Korrekturzyklus; der Abschlussstatus wird erst mit dem Orchestrator-Commit
-gesetzt. Metriken, Scores und Projektionen sind Teil dieses Arbeitsstands.
+Der v1-Fachvertrag ist entschieden. Die Slices 1 bis 5 sind umgesetzt und
+liefern Workspace-Inventar, Deklarationen, aufgelöste Beziehungen, Metriken,
+Scores und Projektionen mit Zählern und Determinismusregeln. Slice 6 härtet
+im gemeinsamen Arbeitsbaum den veröffentlichten CLI-Prozessvertrag; sein
+Abschlussstatus wird erst mit dem Orchestrator-Commit gesetzt.
 
-## Späterer Aufruf
+## CLI-Aufruf
 
-Der vorgesehene End-to-End-Aufruf soll nach der Implementierung ungefähr so
-aussehen:
+Der implementierte End-to-End-Aufruf lautet:
 
 ```text
 codegraph-csharp path\to\application.slnx --output path\to\graph.json
@@ -43,3 +41,8 @@ Der Produktname, die Grundsyntax, die Eingabetypen, Fehlercodes und das
 Summary-Format sind im v1-Vertrag entschieden. Die fachlichen Details stehen
 im [Konzept](CONCEPT.md), das Entscheidungslog in
 [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md).
+
+Das veröffentlichbare Artefakt entsteht mit `dotnet publish` aus dem
+Adapterprojekt und kann anschließend aus jedem Arbeitsverzeichnis gestartet
+werden. Es validiert die Ausgabe vor dem atomaren Ersetzen der Zieldatei
+gegen das kanonische Shared-Schema.

@@ -106,3 +106,8 @@ errät keine fachliche Bedeutung aus unbekannten Feldnamen.
 
 Die fachlichen Regeln für Profile, Projektionen und Visualisierungstokens
 stehen in [06 – Graphmodell und Visualisierungsprofile](06-Graphmodell-und-Visualisierungsprofile.md).
+
+Der veröffentlichte C#-Adapter ist eine Datenquelle dieses Vertrags. Er
+validiert seine deterministisch sortierte Ausgabe vor dem atomaren Schreiben
+gegen die kanonische Schema-Datei und verwendet keine absoluten Pfade oder
+flüchtigen Zeit-/Hostdaten in der Graphausgabe.

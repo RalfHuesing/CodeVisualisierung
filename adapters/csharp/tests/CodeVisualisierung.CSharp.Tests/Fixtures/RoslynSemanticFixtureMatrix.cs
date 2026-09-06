@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis;
 namespace CodeVisualisierung.CSharp.Fixtures;
 
 /// <summary>
-/// Fachliche Gruppen der semantischen Referenzfälle für spätere Roslyn-Analyse.
+/// Fachliche Gruppen der semantischen Referenzfälle für die Roslyn-Analyse.
 /// </summary>
 public enum RoslynSemanticFixtureArea
 {

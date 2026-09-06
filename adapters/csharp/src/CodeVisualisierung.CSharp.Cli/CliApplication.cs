@@ -8,6 +8,8 @@ internal static class CliApplication
 {
     private const string Version = "0.1.0";
     private const string Usage = "codegraph-csharp <input> --output <graph.json>";
+    private const string InputErrorMessage = "Eingabe kann nicht gelesen oder ausgewertet werden. Unterstützt werden .slnx, .sln und .csproj.";
+    private const string OutputDirectoryErrorMessage = "Ausgabeverzeichnis ist nicht vorhanden oder nicht beschreibbar.";
 
     public static async Task<int> RunAsync(string[] args, TextWriter standardOutput, TextWriter standardError)
     {
@@ -23,44 +25,128 @@ internal static class CliApplication
 
     private static async Task<int> RunAnalysisAsync(CliInvocation invocation, TextWriter standardOutput, TextWriter standardError)
     {
-        if (!File.Exists(invocation.InputPath) || !IsSupportedInput(invocation.InputPath))
-            return WriteError(standardError, "Eingabe kann nicht gelesen oder ausgewertet werden. Unterstützt werden .slnx, .sln und .csproj.", CliExitCodes.InputError);
-        if (!HasExistingOutputDirectory(invocation.OutputPath))
-            return WriteError(standardError, "Ausgabeverzeichnis ist nicht vorhanden oder nicht beschreibbar.", CliExitCodes.OutputError);
+        if (!TryPreparePaths(invocation, out var inputPath, out var outputPath, out var preparationError, out var preparationExitCode))
+            return WriteError(standardError, preparationError, preparationExitCode);
+
+        var analysis = await TryAnalyzeAsync(inputPath);
+        if (!analysis.Succeeded)
+            return WriteError(standardError, analysis.Error!, analysis.ErrorCode);
+
+        var serialization = await TrySerializeAsync(analysis.Result!);
+        if (!serialization.Succeeded)
+            return WriteError(standardError, serialization.Error!, serialization.ErrorCode);
+
         try
         {
-            var result = await new WorkspaceAnalysis().AnalyzeAsync(invocation.InputPath);
+            WriteAtomically(outputPath, serialization.Json!);
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or ArgumentException or NotSupportedException)
+        {
+            return WriteError(standardError, "Ausgabe konnte nicht geschrieben werden: Die Zieldatei konnte nicht atomar geschrieben werden.", CliExitCodes.OutputError);
+        }
+
+        WriteDiagnostics(standardError, analysis.Result!.Diagnostics);
+        WriteSummary(standardOutput, analysis.Result.Summary, Encoding.UTF8.GetByteCount(serialization.Json!));
+        return analysis.Result.Summary.Status == "complete" ? CliExitCodes.Success : CliExitCodes.Partial;
+    }
+
+    private static bool TryPreparePaths(
+        CliInvocation invocation,
+        out string inputPath,
+        out string outputPath,
+        out string error,
+        out int errorCode)
+    {
+        if (!TryGetFullPath(invocation.InputPath, out inputPath)
+            || !File.Exists(inputPath)
+            || !IsSupportedInput(inputPath))
+        {
+            outputPath = string.Empty;
+            error = InputErrorMessage;
+            errorCode = CliExitCodes.InputError;
+            return false;
+        }
+
+        if (!TryGetFullPath(invocation.OutputPath, out outputPath)
+            || !HasWritableOutputDirectory(outputPath))
+        {
+            error = OutputDirectoryErrorMessage;
+            errorCode = CliExitCodes.OutputError;
+            return false;
+        }
+
+        error = string.Empty;
+        errorCode = CliExitCodes.Success;
+        return true;
+    }
+
+    private static async Task<AnalysisAttempt> TryAnalyzeAsync(string inputPath)
+    {
+        try
+        {
+            return new AnalysisAttempt(await new WorkspaceAnalysis().AnalyzeAsync(inputPath), CliExitCodes.Success, null);
+        }
+        catch (Exception exception) when (exception is InputLoadException or InvalidDataException)
+        {
+            return new AnalysisAttempt(null, CliExitCodes.InputError, "Eingabe kann nicht ausgewertet werden: Die Solution- oder Projektdatei ist ungültig.");
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
+        {
+            return new AnalysisAttempt(null, CliExitCodes.InputError, "Eingabe kann nicht ausgewertet werden: Die Datei konnte nicht gelesen werden.");
+        }
+        catch (Exception)
+        {
+            return new AnalysisAttempt(null, CliExitCodes.AnalysisError, "Fataler Analyse- oder Vertragsfehler: Die Analyse konnte nicht abgeschlossen werden.");
+        }
+    }
+
+    private static async Task<SerializationAttempt> TrySerializeAsync(AnalysisResult result)
+    {
+        try
+        {
             var json = GraphJson.Serialize(result.Graph);
             await GraphSchemaValidator.ValidateAsync(json, Path.Combine(AppContext.BaseDirectory, "graph-universe.schema.json"));
-            WriteAtomically(invocation.OutputPath, json);
-            WriteSummary(standardOutput, result.Summary, Encoding.UTF8.GetByteCount(json));
-            return result.Summary.Status == "complete" ? CliExitCodes.Success : CliExitCodes.Partial;
+            return new SerializationAttempt(json, CliExitCodes.Success, null);
         }
-        catch (InputLoadException exception)
+        catch (Exception)
         {
-            return WriteError(standardError, $"Eingabe kann nicht ausgewertet werden: {exception.Message}", CliExitCodes.InputError);
-        }
-        catch (InvalidDataException exception)
-        {
-            return WriteError(standardError, $"Eingabe kann nicht ausgewertet werden: {exception.Message}", CliExitCodes.InputError);
-        }
-        catch (IOException exception)
-        {
-            return WriteError(standardError, $"Ausgabe konnte nicht geschrieben werden: {exception.Message}", CliExitCodes.OutputError);
-        }
-        catch (Exception exception) when (exception is InvalidOperationException or UnauthorizedAccessException)
-        {
-            return WriteError(standardError, $"Fataler Analyse- oder Vertragsfehler: {exception.Message}", CliExitCodes.AnalysisError);
+            return new SerializationAttempt(null, CliExitCodes.AnalysisError, "Fataler Analyse- oder Vertragsfehler: Die Graphausgabe konnte nicht validiert werden.");
         }
     }
 
     private static void WriteAtomically(string outputPath, string json)
     {
-        var fullOutputPath = Path.GetFullPath(outputPath);
-        var outputDirectory = Path.GetDirectoryName(fullOutputPath)!;
+        var fullOutputPath = outputPath;
+        var outputDirectory = Path.GetDirectoryName(fullOutputPath)
+            ?? throw new IOException("Das Ausgabeverzeichnis konnte nicht bestimmt werden.");
         var temporaryPath = Path.Combine(outputDirectory, $".{Path.GetFileName(fullOutputPath)}.{Guid.NewGuid():N}.tmp");
-        File.WriteAllText(temporaryPath, json, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
-        File.Move(temporaryPath, fullOutputPath, overwrite: true);
+        try
+        {
+            var bytes = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false).GetBytes(json);
+            using (var stream = new FileStream(temporaryPath, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+            {
+                stream.Write(bytes);
+                stream.Flush(flushToDisk: true);
+            }
+
+            File.Move(temporaryPath, fullOutputPath, overwrite: true);
+        }
+        finally
+        {
+            try
+            {
+                if (File.Exists(temporaryPath))
+                    File.Delete(temporaryPath);
+            }
+            catch (IOException ignored)
+            {
+                _ = ignored;
+            }
+            catch (UnauthorizedAccessException ignored)
+            {
+                _ = ignored;
+            }
+        }
     }
 
     private static int WriteError(TextWriter output, string message, int exitCode)
@@ -81,19 +167,46 @@ internal static class CliApplication
         return CliExitCodes.Success;
     }
 
-    private static bool HasExistingOutputDirectory(string outputPath)
+    private static bool TryGetFullPath(string path, out string fullPath)
     {
         try
         {
-            var fullOutputPath = Path.GetFullPath(outputPath);
-            var outputDirectory = Path.GetDirectoryName(fullOutputPath);
-            return !string.IsNullOrEmpty(outputDirectory) && Directory.Exists(outputDirectory);
+            fullPath = Path.GetFullPath(path);
+            return true;
         }
         catch (ArgumentException)
         {
+            fullPath = string.Empty;
             return false;
         }
         catch (NotSupportedException)
+        {
+            fullPath = string.Empty;
+            return false;
+        }
+    }
+
+    private static bool HasWritableOutputDirectory(string outputPath)
+    {
+        var outputDirectory = Path.GetDirectoryName(outputPath);
+        if (string.IsNullOrEmpty(outputDirectory) || !Directory.Exists(outputDirectory))
+            return false;
+
+        var probePath = Path.Combine(outputDirectory, $".codegraph-write-test-{Guid.NewGuid():N}.tmp");
+        try
+        {
+            using (File.Create(probePath))
+            {
+            }
+
+            File.Delete(probePath);
+            return true;
+        }
+        catch (IOException)
+        {
+            return false;
+        }
+        catch (UnauthorizedAccessException)
         {
             return false;
         }
@@ -137,5 +250,21 @@ internal static class CliApplication
         output.WriteLine($"relations.externalDropped={summary.ExternalDropped} relations.unresolved={summary.Unresolved}");
         output.WriteLine($"diagnostics.warnings={summary.Warnings} diagnostics.errors={summary.Errors}");
         output.WriteLine($"output.bytes={outputBytes}");
+    }
+
+    private static void WriteDiagnostics(TextWriter output, IReadOnlyList<string> diagnostics)
+    {
+        foreach (var diagnostic in diagnostics)
+            output.WriteLine($"Diagnose: {diagnostic}");
+    }
+
+    private sealed record AnalysisAttempt(AnalysisResult? Result, int ErrorCode, string? Error)
+    {
+        public bool Succeeded => Result is not null;
+    }
+
+    private sealed record SerializationAttempt(string? Json, int ErrorCode, string? Error)
+    {
+        public bool Succeeded => Json is not null;
     }
 }

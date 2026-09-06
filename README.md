@@ -27,7 +27,8 @@ npm run build
 Der statische Build liegt danach unter `dist/viewer/`. Die deterministische
 Aufbereitungs-Messung läuft mit `npm run benchmark`.
 
-Später folgt ein separater C#-/Roslyn-Exporter, der Code analysiert und dasselbe Graphformat erzeugt.
+Der separate C#-/Roslyn-Adapter analysiert Code und erzeugt dasselbe
+Graphformat als veröffentlichbares .NET-10-CLI-Artefakt.
 
 ## Struktur
 
@@ -38,7 +39,7 @@ Später folgt ein separater C#-/Roslyn-Exporter, der Code analysiert und dasselb
 ├── contracts/
 │   └── graph-universe/         # Graph-Universe 1.0, Schema und Fixtures
 ├── adapters/
-│   └── csharp/                 # Späterer C#-/Roslyn-Exporter
+│   └── csharp/                 # .NET-10-C#-/Roslyn-Adapter
 ├── docs/                       # Vision, UX, Format, Quellen und Roadmap
 └── .gitignore
 ```

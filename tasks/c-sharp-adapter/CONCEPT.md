@@ -34,10 +34,10 @@ Der aktuelle Implementierungsstand unter `adapters/csharp/` umfasst:
 - eine dokumentweise SemanticModel-Pipeline für die v1-Beziehungen mit
   deterministischer Auflösung, Filterung und Aggregation.
 
-Die Slices 1 bis 4 sind umgesetzt. Slice 5 ist im gemeinsamen Arbeitsbaum
-implementiert; sein Abschlussstatus bleibt bis zum Orchestrator-Commit offen.
-Die Metrik- und Projektionsschicht arbeitet nach vollständiger Analyse global
-auf dem vollständigen Graphen.
+Die Slices 1 bis 5 sind umgesetzt. Slice 6 härtet den veröffentlichten
+CLI-Prozessvertrag im gemeinsamen Arbeitsbaum; sein Abschlussstatus bleibt bis zum
+Orchestrator-Commit offen. Die Metrik- und Projektionsschicht arbeitet nach
+vollständiger Analyse global auf dem vollständigen Graphen.
 
 Der Zielvertrag ist auf Solutions bis mindestens 180.000 Quellcodezeilen
 ausgelegt. Vollständige Analyse bedeutet dabei vollständige fachlich relevante
@@ -53,7 +53,7 @@ Ein Nutzer kann eine Solution lokal analysieren:
 codegraph-csharp path\to\application.slnx --output path\to\graph.json
 ```
 
-Das Ergebnis des späteren vollständigen Laufs enthält unter anderem:
+Das Ergebnis eines vollständigen Laufs enthält unter anderem:
 
 - Solution-, Projekt-, Assembly-, Modul-, Namespace-, Datei-, Typ- und
   Member-Nodes,
@@ -196,11 +196,13 @@ Für den v1-Zielzustand gelten folgende Grundregeln:
 - Die strukturierte Summary geht nach `stdout`, Diagnosen und Fehler gehen
   nach `stderr`; strukturierte Graphdaten gehen ausschließlich in die
   Ausgabedatei.
-- Roslyn-, Workspace- und Compilerdiagnosen werden auf der Konsole gemeldet,
-  nicht in den Graph verschoben. Die Analyse versucht mit dem verwertbaren
-  Teil weiterzuarbeiten und schreibt am Ende ein valides, gegebenenfalls
-  partielles Dokument. Die Zusammenfassung nennt erledigte, übersprungene und
-  fehlgeschlagene Analyseschritte jeweils mit Anzahl.
+- Roslyn-, Workspace- und Compilerdiagnosen werden mit stabiler deutscher
+  Klassifikation und Detailmeldung auf `stderr` gemeldet, nicht in den Graph
+  verschoben. Die Ausgabe bleibt auch unter `en-US` deutsch; IDs und Pfade
+  dürfen als technische Details erscheinen. Die Analyse versucht mit dem
+  verwertbaren Teil weiterzuarbeiten und schreibt am Ende ein valides,
+  gegebenenfalls partielles Dokument. Die Zusammenfassung nennt erledigte,
+  übersprungene und fehlgeschlagene Analyseschritte jeweils mit Anzahl.
 - Ein vollständiger, valider Lauf endet mit Exit-Code `0`.
 - Ein valider, aber partieller Lauf endet mit Exit-Code `1`. Die Ausgabe ist
   verwendbar, die Summary nennt alle ausgelassenen oder fehlgeschlagenen
@@ -237,10 +239,10 @@ und erzeugt Contract-konforme Solution-, Projekt-, Assembly-, Modul-,
 Namespace- und Datei-Nodes mit Containment und eigenen Referenzen. Slice 3
 ergänzt die semantischen Deklarations-Nodes mit stabilen IDs, Details,
 Partial-Type-Zusammenführung und Generated-Code-Policy. Slice 4 ergänzt die
-semantischen Beziehungen. Slices 1 bis 4 sind committed; Slice 5 ist im
-Arbeitsbaum implementiert und befindet sich im zweiten und letzten
-Review-Korrekturzyklus vor dem Orchestrator-Commit. Metriken und Projektionen
-sind in diesem Arbeitsstand enthalten.
+semantischen Beziehungen. Slices 1 bis 5 sind umgesetzt; Slice 6 härtet den
+veröffentlichten Prozessvertrag im Arbeitsbaum und bleibt bis zum
+Orchestrator-Commit offen.
+Metriken und Projektionen sind in diesem Arbeitsstand enthalten.
 
 ## Fachliches Datenmodell
 
@@ -275,9 +277,9 @@ constructs, reads, writes, uses-type, returns-type, parameter-type,
 references-assembly, project-reference, tests
 ```
 
-`generated-from` bleibt als mögliche spätere Beziehung dokumentiert, wird in
-v1 aber nicht emittiert, weil generierte Artefakte außerhalb des Graphen
-liegen. `tests` wird nur emittiert, wenn Test- und Produktprojekt gemeinsam
+`generated-from` bleibt als allgemeiner Vertragsfall dokumentiert, wird in v1
+aber nicht emittiert, weil generierte Artefakte außerhalb des Graphen liegen.
+`tests` wird nur emittiert, wenn Test- und Produktprojekt gemeinsam
 als eigene Projekte geladen wurden.
 
 Jeder Link referenziert vorhandene Node-IDs. Richtungen, Herkunft und
@@ -325,15 +327,14 @@ generierte Symbole werden verworfen und in `relations.unresolved` bzw.
 Relation-Candidate, wenn dessen zuerst geprüfter Endpunkt nicht auf einen
 eigenen Node aufgelöst werden kann; `relations.externalDropped` zählt analog
 den ersten als extern, generiert oder nicht unterstützten erkannten Endpunkt.
-Die Zähler sind Candidate-Diagnostik und werden nicht nach der späteren
+Die Zähler sind Candidate-Diagnostik und werden nicht nach der abschließenden
 Link-Deduplizierung reduziert. `projects.skipped` bleibt in der aktuellen
 Workspace-Policy null, weil alle von Roslyn gelieferten Projekte entweder
-analysiert oder als fehlgeschlagen behandelt werden. `diagnostics.errors`
-bleibt ebenfalls null, weil `WorkspaceFailed` derzeit nur Meldungstexte ohne
-verlässliche Severity-Klassifikation sammelt; unbekannte Diagnosen werden
-nicht künstlich als Fehler gezählt. Die saubere Fixture erwartet daher drei
-geladene und analysierte Projekte, null übersprungene/fehlgeschlagene Projekte
-und null klassifizierte Warnungen/Fehler.
+analysiert oder als fehlgeschlagen behandelt werden. `diagnostics.errors` zählt
+nur klassifizierte Compilerfehler; unbekannte Workspace-Meldungen werden nicht
+künstlich als Fehler gezählt. Die saubere Fixture erwartet daher drei geladene
+und analysierte Projekte, null übersprungene/fehlgeschlagene Projekte und null
+klassifizierte Warnungen/Fehler.
 
 ### Identität und Determinismus
 
@@ -418,7 +419,7 @@ Containment- und Beziehungsdaten sowie `layoutProfiles`; der Viewer berechnet
 daraus die konkrete 3D-Position. Ein Profil kann mit `groupField`,
 `groupDistance`, `defaultDistance` und `containmentDistances` Gruppen-,
 Standard- und Eltern-Kind-Abstände deklarieren. Der Adapter liefert diese
-neutralen Vertragsdaten später als Quelle; er implementiert keine
+  neutralen Vertragsdaten als Quelle; er implementiert keine
 Viewer-Layoutlogik und berechnet keine Positionen selbst.
 
 Der Adapter liefert mindestens diese deklarativen v1-Detailstufen:
@@ -439,8 +440,8 @@ ungefilterte Standardansicht verwendet.
 Die aktuelle Visualisierung kann eine Node-Größe aus benannten Metriken,
 `visualRole` und `baseSize` ableiten. `metricDefinitions` beschreibt die
 fachliche Bedeutung von Namen wie `importance`; der Viewer skaliert die Werte
-und wendet die Grundgröße an. Der Adapter liefert später solche neutralen
-Metriken, ohne ein C#-spezifisches Größenfeld zu erfinden.
+und wendet die Grundgröße an. Der Adapter liefert solche neutralen Metriken,
+ohne ein C#-spezifisches Größenfeld zu erfinden.
 
 Der Graphvertrag enthält bereits `layoutProfiles`. Der Viewer wählt das
 angeforderte Profil, fällt bei unbekannter Auswahl auf das erste Profil und bei
@@ -448,9 +449,8 @@ fehlenden Profilen auf interne Defaults zurück. Aus `groupField`-Werten,
 Containment-/Summary-Links und den deklarierten Abständen bereitet er
 deterministische Initialpositionen vor. Fehlende Gruppenwerte, Abstände,
 Metriken und Tokens werden durch stabile neutrale Defaults ergänzt. Die
-spätere Adapterausgabe muss diese Vertragsdaten nur liefern und validieren;
-ihre Nutzung im C#-Exporter ist ein nachgelagerter Umsetzungsschritt, keine
-zusätzliche Layoutimplementierung.
+Die Adapterausgabe liefert und validiert diese Vertragsdaten; ihre Nutzung im
+C#-Exporter ist keine zusätzliche Layoutimplementierung.
 
 ## Metriken und visuelle Größe
 
@@ -609,8 +609,9 @@ sequenziellen Referenzpfad und einer Messung der Deterministik zulässig.
 
 ## Tests und Qualität
 
-Die Slices 1 bis 4 weisen Prozessgrenze, Workspace-Inventar, semantische
-Deklarations-Nodes und Beziehungen nach. Der vollständige Adapter ist erst fertig, wenn
+Die Slices 1 bis 5 weisen Prozessgrenze, Workspace-Inventar, semantische
+Deklarations-Nodes, Beziehungen, Metriken und Projektionen nach. Slice 6 weist
+den veröffentlichten End-to-End-Prozessvertrag nach. Der vollständige Adapter ist erst fertig, wenn
 mindestens folgende Verhalten nachgewiesen sind:
 
 - CLI-Hilfe, erfolgreiche Ausgabe und alle wesentlichen Fehlerfälle,
@@ -661,7 +662,7 @@ Eine Änderung ist nicht abgeschlossen, wenn Code, Schema, Fixture und
 Dokumentation unterschiedliche Verträge beschreiben. Der Orchestrator prüft
 das vor jedem Slice-Commit.
 
-## Abschlussbedingung des späteren Orchestrator-Tasks
+## Abschlussbedingung des Orchestrator-Tasks
 
 Der Task ist erst abgeschlossen, wenn:
 

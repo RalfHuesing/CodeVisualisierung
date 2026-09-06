@@ -1,13 +1,13 @@
 # C# / Roslyn Adapter
 
-Die kompilierbare .NET-10-CLI liegt in
+Die veröffentlichbare .NET-10-CLI liegt in
 [CodeVisualisierung.CSharp.slnx](CodeVisualisierung.CSharp.slnx). Sie enthält
 ein CLI-Projekt und ein xUnit-Testprojekt. Slice 1 definiert die echte
 Prozessgrenze; Slice 2 lädt reale Workspaces; Slice 3 ergänzt die semantische
 Deklarationsauswertung; Slice 4 ergänzt semantisch aufgelöste Beziehungen.
-Slice 5 ergänzt im gemeinsamen Arbeitsbaum die globale Metrikberechnung,
-normalisierte Scores, Partial-Footprints und deklarative Projektionen; der
-Slice bleibt bis zum Orchestrator-Commit offen.
+Slice 5 ergänzt die globale Metrikberechnung, normalisierte Scores,
+Partial-Footprints und deklarative Projektionen. Slice 6 härtet den
+veröffentlichten Prozessvertrag und bleibt bis zum Orchestrator-Commit offen.
 
 ## CLI-Prozessvertrag
 
@@ -22,11 +22,18 @@ Unterstützte Eingaben sind `.slnx`, `.sln` und `.csproj`. `--help` und
 Argumentfehler, etwa ein fehlender Eingabepfad, beendet mit `2`; eine nicht
 lesbare oder nicht unterstützte Eingabe mit `3`; ein fataler Analyse- oder Vertragsfehler mit `4`;
 ein fehlendes Ausgabeverzeichnis oder anderer Ausgabe-/Dateisystemfehler mit
-`5`. `1` ist für einen späteren validen partiellen Lauf mit geschriebener
-Ausgabe reserviert. Diagnosen stehen auf Deutsch in `stderr`, Graphdaten werden
+`5`. Ein valider partieller Lauf mit geschriebener Ausgabe verwendet `1`.
+Diagnosen stehen auf Deutsch in `stderr`, Graphdaten werden
 niemals auf `stdout` geschrieben.
 
-Die Slice-4-CLI lädt die Eingabe über `MSBuildWorkspace`, verarbeitet eigene
+Ein Release-Artefakt kann beispielsweise mit
+`dotnet publish src/CodeVisualisierung.CSharp.Cli/CodeVisualisierung.CSharp.Cli.csproj`
+erzeugt und anschließend von beliebiger `cwd` aus auf `.slnx`, `.sln` oder
+`.csproj` angewendet werden. Die JSON-Datei wird nach Schema-Validierung über
+eine temporäre Datei im Zielordner atomar ersetzt; ein vorhandenes Ziel bleibt
+bei Fehlern unverändert.
+
+Die CLI lädt die Eingabe über `MSBuildWorkspace`, verarbeitet eigene
 `.cs`-Dokumente mit einem Roslyn-`SemanticModel` pro Dokument und schreibt
 einen deterministisch sortierten Deklarationsgraphen. Neben dem Slice-2-
 Inventar werden Klassen, Interfaces, Records, Structs, Enums, Delegates,
@@ -68,11 +75,12 @@ Methoden und Typen erzeugen keine solchen Links. `out` erzeugt nur `writes`,
 `ref` `reads` und `writes`, `in` nur `reads`. Externe,
 generierte und unauflösbare Ziele erzeugen keine Links; sie werden in der
 CLI-Summary gezählt.
-Die aktuelle Workspace-Policy analysiert alle geladenen Projekte; deshalb ist
-`projects.skipped` nur bei einer später explizit eingeführten Skip-Policy
-belegt. Workspace-Diagnosen werden derzeit als Meldungstexte ohne sichere
-Severity-Klassifikation gesammelt; `diagnostics.errors` wird nicht aus
-unbekannten Meldungen fingiert und bleibt im sauberen Fixture null.
+Die aktuelle Workspace-Policy analysiert alle geladenen Projekte; deshalb bleibt
+`projects.skipped` leer. Workspace- und Compilerdiagnosen werden unabhängig von
+der Prozesskultur mit deutscher Klassifikation und Detailmeldung auf `stderr`
+ausgegeben und in ihrer klassifizierten Severity in der Summary gezählt; IDs
+und Pfade dürfen als technische Details erscheinen. Der verwertbare Graph wird
+als valides `partial`-Dokument geschrieben.
 
 Gemeinsame MSBuild-Einstellungen für beide Projekte liegen in
 [Directory.Build.props](Directory.Build.props). Zentrale NuGet-Versionen liegen
@@ -92,7 +100,7 @@ Die Testinfrastruktur trennt zwei Anwendungsfälle:
   erstellt kleine mehrprojektige `AdhocWorkspace`-Solutions direkt im Speicher.
   `PreparedSolutionFixture` verwaltet deren Lebensdauer über die Testklasse.
 - [CSharpReferenceMini](tests/Fixtures/CSharpReferenceMini) ist eine physische
-  Contract-/Application-/Test-Solution für spätere `MSBuildWorkspace`- und
+  Contract-/Application-/Test-Solution für echte `MSBuildWorkspace`- und
   Projektdatei-Tests. Sie wird absichtlich nicht in die produktive Adapter-
   Solution aufgenommen.
 
@@ -109,14 +117,14 @@ Partial Types, Überladungen/Generics, Vererbung/Interfaces/Overrides,
 Records/Structs/Enums/Delegates sowie Aufrufe, Konstruktionen, Lese-/Schreib-
 zugriffe und Typverwendungen.
 
-Ein generisches `Result<T>` wird in dieser Testinfrastruktur bewusst noch
-nicht eingeführt: Sein sinnvoller Vertrag hängt an der späteren Produktions-
-grenze für Analysefehler, Warnungen und partielle Ergebnisse. Bis dahin bleiben
-Solution und Workspace-Diagnosen am konkreten Testhost explizit.
+Ein generisches `Result<T>` ist in dieser Testinfrastruktur nicht erforderlich:
+Die Produktionsgrenze verwendet `AnalysisResult` für Analysefehler, Warnungen
+und partielle Ergebnisse. Solution- und Workspace-Diagnosen bleiben am
+konkreten Testhost explizit.
 
 Vorgesehene Namespace-Verantwortungen innerhalb des CLI-Projekts:
 
-- CodeVisualisierung.CSharp.Cli — Prozessgrenze und spätere CLI-Komposition
+- CodeVisualisierung.CSharp.Cli — Prozessgrenze und CLI-Komposition
 - CodeVisualisierung.CSharp.Analysis — Roslyn-/Workspace-Analyse
 - CodeVisualisierung.CSharp.Graph — Zwischenmodell, IDs und Beziehungen
 - CodeVisualisierung.CSharp.Contract — Graphvertrag, Serialisierung und Validierung
@@ -135,7 +143,7 @@ Die [rules.json](rules.json) ist kein unverändertes AiNetLinter-Template:
 - XML-Dokumentation für öffentliche APIs, keine blockierenden Task-Zugriffe und
   eine maximale LINQ-Kettenlänge von vier bleiben Teil des Adapterprofils.
 
-Voraussichtliche Aufgaben:
+Umfang des implementierten Adapters:
 
 - Projekte und Solutions mit Roslyn einlesen
 - Namespaces, Typen und Methoden als Nodes exportieren
@@ -143,4 +151,5 @@ Voraussichtliche Aufgaben:
 - Code-Metriken als benannte Metriken ergänzen
 - Ausgabe gegen das gemeinsame Schema und Fixtures testen
 
-Der Adapter gehört nicht in den Browser-Viewer und wird erst nach dem ersten funktionierenden Viewer umgesetzt.
+Der Adapter gehört nicht in den Browser-Viewer. Er ist als veröffentlichbare
+.NET-10-CLI unabhängig vom Viewer nutzbar.

@@ -34,13 +34,13 @@ Delegated roles:
   orchestrator, implementer, reviewer gemäß .agents/roles/.
 ```
 
-## Aktueller Stand vor dem Orchestrator-Start
+## Aktueller Stand
 
 Die vorbereitende C#-Grundlage ist vorhanden: Solution, CLI-Projekt,
 Testprojekt, gemeinsame .NET-/Paketvorgaben, AiNetLinter-Profil und die
 repo-lokale Temp-Testinfrastruktur. Die fachliche Vertragsklärung in Slice 0
-ist abgeschlossen. Slices 1 bis 5 sind committed. Slice 6 bleibt für
-End-to-End-Härtung und Abschluss offen.
+ist abgeschlossen. Slices 1 bis 6 sind umgesetzt und durch die finalen
+Prüfungen bestätigt.
 
 Workspace-Inventargraph, Graph-/Contract-Schichten und vertragskonforme
 JSON-Ausgabe sind in Slice 2 umgesetzt. Slice 3 ergänzt die Roslyn-
@@ -56,7 +56,7 @@ Summary-Projektionen.
 Der generische Vertrag ist in `graph-universe` 1.0 mit `visualRole`, `baseSize`,
 `layoutProfiles`, `groupField`, Gruppen-/Containment-Abständen und
 deterministischen Viewer-Fallbacks umgesetzt. Dieser C#-Task nutzt die
-verabschiedete Vertragsform später; er enthält weiterhin keine Viewer- oder
+verabschiedete Vertragsform als Datenquelle; er enthält weiterhin keine Viewer- oder
 Layoutimplementierung.
 
 ## [X] Slice 0 – Vertrag und Entscheidungen einfrieren
@@ -200,21 +200,21 @@ Viewer mit C#-Sonderlogik zu belasten.
 
 Akzeptanzkriterien:
 
-- [ ] LOC-/Komplexitäts-/Fan-in-/Fan-out-Metriken sind benannt,
+- [X] LOC-/Komplexitäts-/Fan-in-/Fan-out-Metriken sind benannt,
   reproduzierbar und mit fehlenden Werten sauber unterschieden.
-- [ ] Rohmetriken und bereits normierte Scores (`importance`, `footprint`) sind
+- [X] Rohmetriken und bereits normierte Scores (`importance`, `footprint`) sind
   im Graphvertrag unterschieden; Scores werden im Viewer nicht nochmals über
   die sichtbare Teilmenge normalisiert.
-- [ ] Generierte Dateien und externe Assemblies sind nach der beschlossenen
+- [X] Generierte Dateien und externe Assemblies sind nach der beschlossenen
   Policy ausgeschlossen; Partial Types bleiben als zusammengehörige eigene
   Typdeklarationen nachvollziehbar.
-- [ ] Summary-Links und ihre Herkunft sind explizit und gegen die
+- [X] Summary-Links und ihre Herkunft sind explizit und gegen die
   Detailbeziehungen prüfbar.
-- [ ] `metricDefinitions`, `nodeTypes`, `linkTypes`, Facetten, Profile und
+- [X] `metricDefinitions`, `nodeTypes`, `linkTypes`, Facetten, Profile und
   `layoutProfiles` bleiben mit dem gemeinsamen Vertrag kompatibel.
-- [ ] Schema, Fixtures und die betroffenen allgemeinen und C#-Fachdokumente
+- [X] Schema, Fixtures und die betroffenen allgemeinen und C#-Fachdokumente
   werden gemeinsam aktualisiert.
-- [ ] Eine absichtliche Schemaänderung lässt C#-Contract- und semantische
+- [X] Eine absichtliche Schemaänderung lässt C#-Contract- und semantische
   Adaptertests sichtbar fehlschlagen, bis der Adaptervertrag aktualisiert ist.
 
 Erlaubte Pfade: `adapters/csharp/**`, `contracts/graph-universe/**` für
@@ -226,24 +226,24 @@ Vertragstests, `dotnet test`, `npm run check`.
 
 Abhängigkeit: Slice 4.
 
-## [ ] Slice 6 – End-to-End-Härtung und Abschluss
+## [X] Slice 6 – End-to-End-Härtung und Abschluss
 
 Ziel: Die Anwendung ist als CLI nutzbar, vollständig dokumentiert und gegen
 Regressionen abgesichert.
 
 Akzeptanzkriterien:
 
-- [ ] Ein veröffentlichbares CLI-Artefakt kann eine Test-Solution aus einem
+- [X] Ein veröffentlichbares CLI-Artefakt kann eine Test-Solution aus einem
   beliebigen Arbeitsverzeichnis analysieren.
-- [ ] Erfolg, Fehler, deterministische Wiederholung und vorhandene Zieldateien
+- [X] Erfolg, Fehler, deterministische Wiederholung und vorhandene Zieldateien
   sind als Prozessverhalten getestet.
-- [ ] README, C#-Adapterdokumentation, Schema-Referenz-Fixture und Taskstatus
+- [X] README, C#-Adapterdokumentation, Schema-Referenz-Fixture und Taskstatus
   stimmen überein.
-- [ ] `docs/05-Roadmap.md`, `docs/03-Graphformat.md`,
+- [X] `docs/05-Roadmap.md`, `docs/03-Graphformat.md`,
   `docs/06-Graphmodell-und-Visualisierungsprofile.md`,
   `docs/07-CSharp-Referenzgraph.md` und die betroffenen READMEs sind auf dem
   finalen Implementierungsstand.
-- [ ] Keine Architektur-/Dateigrößenregel des Repositorys ist verletzt.
+- [X] Keine Architektur-/Dateigrößenregel des Repositorys ist verletzt.
 
 Erlaubte Pfade: `adapters/csharp/**`, zugehörige Tests/Fixtures,
 `contracts/graph-universe/**`, `docs/**`, `README.md`,

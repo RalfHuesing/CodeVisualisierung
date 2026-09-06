@@ -105,6 +105,7 @@ describe("C# reference fixture contract declarations", () => {
       "type-detail",
       "method-detail"
     ]);
+    expect(csharpReferenceFixture.viewProfiles[0].visibleLinkTypes).toContain("summary-references");
     expect(csharpReferenceFixture.projections).toEqual(expect.arrayContaining([
       expect.objectContaining({ fromProfile: "assembly-overview", toProfile: "type-detail", linkTypeId: "summary-depends-on" }),
       expect.objectContaining({ fromProfile: "type-detail", toProfile: "method-detail", linkTypeId: "summary-calls" })
@@ -142,6 +143,17 @@ describe("C# reference fixture contract declarations", () => {
       && link.metrics.relationshipWeight > 0
       && link.attributes.aggregation.origin === "detail-relations"
     ))).toBe(true);
+    const assemblyReference = csharpReferenceFixture.links.find((link) => link.id === "assembly-reference-adapter-core");
+    const summaryReference = csharpReferenceFixture.links.find((link) => link.id === "summary-assembly-reference");
+    expect(summaryReference).toMatchObject({
+      source: assemblyReference.source,
+      target: assemblyReference.target,
+      typeId: "summary-references",
+      summary: true,
+      derivedFrom: [assemblyReference.id],
+      metrics: { occurrences: 1, relationshipWeight: 1 },
+      attributes: { aggregation: { sourceLevel: "assembly", targetLevel: "assembly" } }
+    });
   });
 });
 

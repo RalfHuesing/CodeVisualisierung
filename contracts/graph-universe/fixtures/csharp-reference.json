@@ -5,7 +5,7 @@
   },
   "meta": {
     "title": "C# reference graph",
-    "description": "Small deterministic contract fixture for a future C# exporter.",
+    "description": "Small deterministic Graph-Universe contract fixture for generic viewer and schema tests; the C# CLI E2E tests use CSharpReferenceMini.",
     "createdAt": "2026-09-06T10:00:00Z",
     "source": {
       "name": "handwritten-reference-fixture",

@@ -1,10 +1,8 @@
 using CodeVisualisierung.CSharp.Contract;
-
 namespace CodeVisualisierung.CSharp.Graph;
 
 /// <summary>Reports bounded work counters from the complete metric pass.</summary>
 public sealed record GraphAnalysisStats(long NormalizationValueScans);
-
 /// <summary>Calculates complete-graph metrics and explicit summary projections.</summary>
 public static class GraphMetricsAndProjections
 {
@@ -16,14 +14,13 @@ public static class GraphMetricsAndProjections
     private static readonly HashSet<string> RelationTypes =
     [
         "calls", "constructs", "inherits", "implements", "overrides", "reads", "writes",
-        "uses-type", "returns-type", "parameter-type"
+        "uses-type", "returns-type", "parameter-type", "references-assembly"
     ];
     private static readonly HashSet<string> TypeNodeTypes = ["class", "interface", "record", "struct", "enum", "delegate"];
     private static readonly HashSet<string> MemberNodeTypes =
     ["method", "constructor", "property", "field", "event", "operator", "local-function", "type-parameter"];
     private static readonly HashSet<string> ContainerNodeTypes =
     ["solution", "project", "assembly", "module", "namespace", "file", "class", "interface", "record", "struct", "enum", "delegate"];
-
     public static GraphAnalysisStats Apply(GraphDocument graph)
     {
         var nodes = graph.Nodes.ToDictionary(node => node.Id, StringComparer.Ordinal);
@@ -39,7 +36,6 @@ public static class GraphMetricsAndProjections
         graph.Links.AddRange(sortedLinks);
         return new GraphAnalysisStats(normalizationValueScans);
     }
-
     private static long ApplyLevelMetrics(
         IReadOnlyDictionary<string, GraphNode> nodes,
         IReadOnlyDictionary<string, List<string>> parents,
@@ -84,7 +80,6 @@ public static class GraphMetricsAndProjections
 
         return normalizationValueScans;
     }
-
     private static Dictionary<ProjectionKey, ProjectedEdge> CreateProjectedEdges(
         string level,
         IReadOnlyDictionary<string, GraphNode> nodes,
@@ -115,7 +110,6 @@ public static class GraphMetricsAndProjections
 
         return edges;
     }
-
     private static Dictionary<string, double> CalculatePageRank(
         IReadOnlyCollection<string> nodeIds,
         IEnumerable<ProjectedEdge> edges)
@@ -150,7 +144,6 @@ public static class GraphMetricsAndProjections
 
         return ranks;
     }
-
     private static void ApplyContainerMetrics(
         GraphDocument graph,
         IReadOnlyDictionary<string, GraphNode> nodes,
@@ -220,7 +213,6 @@ public static class GraphMetricsAndProjections
             }
         }
     }
-
     private static void AddSummaryLinks(
         GraphDocument graph,
         IReadOnlyDictionary<string, GraphNode> nodes,
@@ -242,6 +234,12 @@ public static class GraphMetricsAndProjections
         IReadOnlyDictionary<string, GraphNode> nodes,
         IReadOnlyDictionary<string, List<string>> parents)
     {
+        if (link.TypeId == "references-assembly")
+        {
+            AddSummaryAtLevel(summaries, link, "assembly", nodes, parents);
+            return;
+        }
+
         var sourceLevel = GetLevel(nodes[link.Source]);
         var targetLevel = GetLevel(nodes[link.Target]);
         if (sourceLevel is null || targetLevel is null)
@@ -262,7 +260,12 @@ public static class GraphMetricsAndProjections
         var target = GetAncestorAtLevel(link.Target, level, nodes, parents);
         if (source is null || target is null || source == target)
             return;
-        var summaryType = link.TypeId == "calls" ? "summary-calls" : "summary-depends-on";
+        var summaryType = link.TypeId switch
+        {
+            "calls" => "summary-calls",
+            "references-assembly" => "summary-references",
+            _ => "summary-depends-on"
+        };
         var key = new SummaryKey(summaryType, source, target, level);
         var summary = summaries.TryGetValue(key, out var existing)
             ? existing

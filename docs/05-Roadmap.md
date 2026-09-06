@@ -20,19 +20,7 @@ jeweiligen `tasks/<name>/`-Ordnern.
 
 ## Reihenfolge der offenen Vorhaben
 
-### 1. C#-/Roslyn-Adapter — `active`
-
-Eine quellennahe Datenquelle soll aus C#-Solutions vertragskonformes
-Graph-JSON erzeugen.
-
-- [Taskvertrag](../tasks/c-sharp-adapter/README.md)
-- [Umsetzungs-Roadmap](../tasks/c-sharp-adapter/ROADMAP.md)
-- [C#-Referenzgraph](07-CSharp-Referenzgraph.md)
-
-Abhängigkeit: Der gemeinsame Graphvertrag 1.0 bleibt maßgeblich. Ein
-separater Viewer-Layoutvertrag darf nicht in den Adapter gezogen werden.
-
-### 2. Mehrere Visualisierungsmodi — `planned`
+### 1. Mehrere Visualisierungsmodi — `planned`
 
 Eine Graph-JSON soll später zwischen Stadtkarte, Universum und biologischer
 Netzwerkansicht wechseln können.

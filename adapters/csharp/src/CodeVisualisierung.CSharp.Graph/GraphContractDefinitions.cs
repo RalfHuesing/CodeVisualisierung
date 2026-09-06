@@ -74,7 +74,8 @@ internal static class GraphContractDefinitions
         new() { Id = "member-to-architecture", Label = "Member to architecture", FromProfile = "member-detail", ToProfile = "architecture", LinkTypeId = "summary-depends-on" },
         new() { Id = "member-to-overview", Label = "Member to overview", FromProfile = "member-detail", ToProfile = "overview", LinkTypeId = "summary-depends-on" },
         new() { Id = "calls-to-architecture", Label = "Calls to architecture", FromProfile = "member-detail", ToProfile = "architecture", LinkTypeId = "summary-calls" },
-        new() { Id = "calls-to-overview", Label = "Calls to overview", FromProfile = "member-detail", ToProfile = "overview", LinkTypeId = "summary-calls" }
+        new() { Id = "calls-to-overview", Label = "Calls to overview", FromProfile = "member-detail", ToProfile = "overview", LinkTypeId = "summary-calls" },
+        new() { Id = "assembly-references-to-overview", Label = "Assembly references to overview", FromProfile = "architecture", ToProfile = "overview", LinkTypeId = "summary-references" }
     ];
 
     public static IReadOnlyList<GraphContainmentRule> ContainmentRules()

@@ -26,7 +26,10 @@ public sealed record AnalysisSummary(
     string Status);
 
 /// <summary>Graph und Summary eines abgeschlossenen Workspace-Laufs.</summary>
-public sealed record AnalysisResult(GraphDocument Graph, AnalysisSummary Summary);
+public sealed record AnalysisResult(
+    GraphDocument Graph,
+    AnalysisSummary Summary,
+    IReadOnlyList<string> Diagnostics);
 
 /// <summary>Signals that the requested project or solution cannot be loaded.</summary>
 public sealed class InputLoadException : Exception
@@ -47,26 +50,27 @@ public sealed class WorkspaceAnalysis
         var fullInputPath = Path.GetFullPath(inputPath);
         var inputKind = DetermineInputKind(fullInputPath);
         var diagnostics = new List<string>();
-        using var workspace = CreateWorkspace(diagnostics);
+        var workspaceDetails = new List<string>();
+        var counters = new AnalysisCounters();
+        using var workspace = CreateWorkspace(diagnostics, workspaceDetails, counters);
         Solution solution;
         try
         {
             solution = await OpenInputAsync(workspace, inputKind, fullInputPath, cancellationToken);
         }
-        catch (Exception exception) when (exception is IOException or InvalidOperationException)
+        catch (Exception exception) when (exception is IOException or InvalidOperationException or System.Xml.XmlException)
         {
             throw new InputLoadException("Die Solution oder das Projekt konnte nicht ausgewertet werden.", exception);
         }
-        if (diagnostics.Any(IsMissingInputDiagnostic))
+        if (workspaceDetails.Any(IsMissingInputDiagnostic))
         {
-            throw new InputLoadException("Eine referenzierte Projektdatei wurde nicht gefunden.", new InvalidOperationException(diagnostics.First(IsMissingInputDiagnostic)));
+            throw new InputLoadException("Eine referenzierte Projektdatei wurde nicht gefunden.", new InvalidOperationException(workspaceDetails.First(IsMissingInputDiagnostic)));
         }
         var rootPath = Path.GetDirectoryName(fullInputPath)!;
         var builder = new GraphBuilder();
         builder.AddNode(new GraphNode { Id = "solution:root", TypeId = "solution", Label = Path.GetFileName(fullInputPath) });
         var projects = GetProjects(solution);
         var projectIndex = CreateProjectIndex(projects, rootPath);
-        var counters = new AnalysisCounters();
         var analyzedProjects = new List<AnalyzedProject>();
         foreach (var project in projects)
         {
@@ -90,7 +94,10 @@ public sealed class WorkspaceAnalysis
         var graph = builder.Build();
         GraphMetricsAndProjections.Apply(graph);
         GraphContractValidator.Validate(graph);
-        return new AnalysisResult(graph, counters.CreateSummary(inputKind, projects.Length, graph, diagnostics));
+        return new AnalysisResult(
+            graph,
+            counters.CreateSummary(inputKind, projects.Length, graph, diagnostics),
+            diagnostics.ToArray());
     }
 
     private static string DetermineInputKind(string inputPath) => Path.GetExtension(inputPath).ToLowerInvariant() switch
@@ -101,7 +108,7 @@ public sealed class WorkspaceAnalysis
         _ => throw new InvalidOperationException("Nicht unterstütztes Eingabeformat.")
     };
 
-    private static MSBuildWorkspace CreateWorkspace(List<string> diagnostics)
+    private static MSBuildWorkspace CreateWorkspace(List<string> diagnostics, List<string> workspaceDetails, AnalysisCounters counters)
     {
         var workspace = MSBuildWorkspace.Create(new Dictionary<string, string>
         {
@@ -110,7 +117,12 @@ public sealed class WorkspaceAnalysis
             ["ProvideCommandLineArgs"] = "true",
             ["RunAnalyzers"] = "false"
         });
-        workspace.RegisterWorkspaceFailedHandler(eventArgs => diagnostics.Add(eventArgs.Diagnostic.Message));
+        workspace.RegisterWorkspaceFailedHandler(eventArgs =>
+        {
+            workspaceDetails.Add(eventArgs.Diagnostic.Message);
+            counters.WorkspaceDiagnostic(eventArgs.Diagnostic.Kind.ToString());
+            diagnostics.Add(CSharpDiagnosticMessages.Workspace(eventArgs.Diagnostic.Kind.ToString(), eventArgs.Diagnostic.Message));
+        });
         return workspace;
     }
 
@@ -143,8 +155,33 @@ public sealed class WorkspaceAnalysis
             await AnalyzeDocumentAsync(document, documentContext, cancellationToken);
         }
 
+        await CollectCompilationDiagnosticsAsync(project, context, cancellationToken);
+
         context.Counters.ProjectAnalyzed();
         return new AnalyzedProject(project, projectId, declarations, relations);
+    }
+
+    private static async Task CollectCompilationDiagnosticsAsync(
+        Project project,
+        ProjectAnalysisContext context,
+        CancellationToken cancellationToken)
+    {
+        var compilation = await project.GetCompilationAsync(cancellationToken);
+        if (compilation is null)
+        {
+            context.Counters.ProjectFailed();
+            context.Diagnostics.Add($"Projekt '{project.Name}' besitzt keine Compilation.");
+            return;
+        }
+
+        foreach (var diagnostic in compilation.GetDiagnostics(cancellationToken)
+                     .Where(diagnostic => diagnostic.Severity is DiagnosticSeverity.Warning or DiagnosticSeverity.Error)
+                     .OrderBy(diagnostic => diagnostic.Id, StringComparer.Ordinal)
+                     .ThenBy(diagnostic => diagnostic.GetMessage(), StringComparer.Ordinal))
+        {
+            context.Counters.CompilationDiagnostic(diagnostic.Severity);
+            context.Diagnostics.Add(CSharpDiagnosticMessages.Compiler(diagnostic.Severity, diagnostic.Id, diagnostic.GetMessage()));
+        }
     }
 
     private static void AddProjectNodes(Project project, string projectId, string assemblyId, string moduleId, string rootPath, GraphBuilder builder)
@@ -182,7 +219,7 @@ public sealed class WorkspaceAnalysis
             }
 
             builder.AddLink("project-reference", projectId, targetProject.ProjectId);
-            builder.AddLink("references-assembly", assemblyId, targetProject.AssemblyId);
+            builder.AddRelationLink("references-assembly", assemblyId, targetProject.AssemblyId, 1);
         }
     }
 
@@ -220,45 +257,46 @@ public sealed class WorkspaceAnalysis
                 ?? throw new InvalidOperationException($"Dokument '{document.Name}' besitzt keinen Syntaxbaum.");
             var semanticModel = await document.GetSemanticModelAsync(cancellationToken)
                 ?? throw new InvalidOperationException($"Dokument '{document.Name}' besitzt kein SemanticModel.");
-            context.Analysis.Builder.SetNodeMetric(fileId, "loc", SourceMetrics.GetNonEmptyLines(root).Count); var namespaces = GetNamespaces(root, semanticModel, cancellationToken);
-            foreach (var namespaceName in namespaces)
-            {
-                var namespaceId = $"namespace:{context.ProjectId}:{namespaceName}";
-                context.Analysis.Builder.AddNode(new GraphNode { Id = namespaceId, TypeId = "namespace", Label = namespaceName, GroupId = context.ProjectId });
-                context.Analysis.Builder.AddLink("contains", namespaceId, fileId);
-                context.Analysis.Builder.AddLink("contains", GetAssemblyId(context.Project, context.ProjectId), namespaceId);
-                context.Analysis.Builder.AddDeclarationLink(fileId, namespaceId);
-                context.Analysis.Builder.AddDeclarationLink(GetAssemblyId(context.Project, context.ProjectId), namespaceId);
-            }
-
-            var declarations = DeclarationCollector.Collect(
-                root,
-                semanticModel,
-                context.Analysis.RootPath,
-                context.ProjectId,
-                cancellationToken);
-            foreach (var declaration in declarations)
-                context.Declarations.Add(declaration);
-            foreach (var relation in SemanticRelationCollector.Collect(
-                         root,
-                         semanticModel,
-                         context.ProjectId,
-                         cancellationToken))
-                context.Relations.Add(relation);
-            foreach (var relation in SemanticRelationCollector.CollectDeclarationRelations(
-                         root,
-                         semanticModel,
-                         context.ProjectId,
-                         cancellationToken))
-                context.Relations.Add(relation);
+            AnalyzeDocumentContent(root, semanticModel, context, fileId, cancellationToken);
 
             context.Analysis.Counters.DocumentAnalyzed();
         }
         catch (Exception exception) when (exception is IOException or InvalidOperationException)
         {
             context.Analysis.Counters.DocumentFailed();
-            context.Analysis.Diagnostics.Add(exception.Message);
+            context.Analysis.Diagnostics.Add(CSharpDiagnosticMessages.DocumentFailure(document.FilePath ?? document.Name));
         }
+    }
+
+    private static void AnalyzeDocumentContent(
+        SyntaxNode root,
+        SemanticModel semanticModel,
+        DocumentAnalysisContext context,
+        string fileId,
+        CancellationToken cancellationToken)
+    {
+        context.Analysis.Builder.SetNodeMetric(fileId, "loc", SourceMetrics.GetNonEmptyLines(root).Count);
+        foreach (var namespaceName in GetNamespaces(root, semanticModel, cancellationToken))
+        {
+            var namespaceId = $"namespace:{context.ProjectId}:{namespaceName}";
+            context.Analysis.Builder.AddNode(new GraphNode { Id = namespaceId, TypeId = "namespace", Label = namespaceName, GroupId = context.ProjectId });
+            context.Analysis.Builder.AddLink("contains", namespaceId, fileId);
+            context.Analysis.Builder.AddLink("contains", GetAssemblyId(context.Project, context.ProjectId), namespaceId);
+            context.Analysis.Builder.AddDeclarationLink(fileId, namespaceId);
+            context.Analysis.Builder.AddDeclarationLink(GetAssemblyId(context.Project, context.ProjectId), namespaceId);
+        }
+
+        foreach (var declaration in DeclarationCollector.Collect(
+                     root,
+                     semanticModel,
+                     context.Analysis.RootPath,
+                     context.ProjectId,
+                     cancellationToken))
+            context.Declarations.Add(declaration);
+        foreach (var relation in SemanticRelationCollector.Collect(root, semanticModel, context.ProjectId, cancellationToken))
+            context.Relations.Add(relation);
+        foreach (var relation in SemanticRelationCollector.CollectDeclarationRelations(root, semanticModel, context.ProjectId, cancellationToken))
+            context.Relations.Add(relation);
     }
 
     private static string[] GetNamespaces(SyntaxNode root, SemanticModel semanticModel, CancellationToken cancellationToken)
@@ -399,26 +437,44 @@ public sealed class WorkspaceAnalysis
 
     private sealed class AnalysisCounters
     {
-        private readonly int[] values = new int[7];
+        private readonly int[] values = new int[9];
 
-        public int ProjectsAnalyzed => values[0];
-        public int ProjectsFailed => values[1];
-        public int DocumentsAnalyzed => values[2];
-        public int DocumentsSkipped => values[3];
-        public int DocumentsFailed => values[4];
+        internal int ProjectsAnalyzed => values[0];
+        internal int ProjectsFailed => values[1];
+        internal int DocumentsAnalyzed => values[2];
+        internal int DocumentsSkipped => values[3];
+        internal int DocumentsFailed => values[4];
+        internal int Warnings => values[7];
+        internal int Errors => values[8];
 
-        public void ProjectAnalyzed() => values[0]++;
-        public void ProjectFailed() => values[1]++;
-        public void DocumentAnalyzed() => values[2]++;
-        public void DocumentSkipped() => values[3]++;
-        public void DocumentFailed() => values[4]++;
+        internal void ProjectAnalyzed() => values[0]++;
+        internal void ProjectFailed() => values[1]++;
+        internal void DocumentAnalyzed() => values[2]++;
+        internal void DocumentSkipped() => values[3]++;
+        internal void DocumentFailed() => values[4]++;
 
-        public void ExternalRelationDropped() => values[5]++;
-        public void UnresolvedRelation() => values[6]++;
+        internal void ExternalRelationDropped() => values[5]++;
+        internal void UnresolvedRelation() => values[6]++;
 
-        public AnalysisSummary CreateSummary(string inputKind, int projectsLoaded, GraphDocument graph, List<string> diagnostics) => new(
+        internal void CompilationDiagnostic(DiagnosticSeverity severity)
+        {
+            if (severity == DiagnosticSeverity.Warning)
+                values[7]++;
+            else if (severity == DiagnosticSeverity.Error)
+                values[8]++;
+        }
+
+        internal void WorkspaceDiagnostic(string kind)
+        {
+            if (kind.Equals("Warning", StringComparison.OrdinalIgnoreCase))
+                values[7]++;
+            else if (kind.Equals("Failure", StringComparison.OrdinalIgnoreCase))
+                values[8]++;
+        }
+
+        internal AnalysisSummary CreateSummary(string inputKind, int projectsLoaded, GraphDocument graph, List<string> diagnostics) => new(
             inputKind, projectsLoaded, ProjectsAnalyzed, 0, ProjectsFailed, DocumentsAnalyzed, DocumentsSkipped,
-            DocumentsFailed, graph.Nodes.Count, graph.Links.Count, values[5], values[6], diagnostics.Count, 0,
+            DocumentsFailed, graph.Nodes.Count, graph.Links.Count, values[5], values[6], Warnings, Errors,
             diagnostics.Count == 0 && ProjectsFailed == 0 && DocumentsFailed == 0 ? "complete" : "partial");
     }
 }

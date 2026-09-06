@@ -10,3 +10,7 @@ Rohmetriken tragen `valueKind: "raw"`; bereits global normalisierte Scores trage
 `valueKind: "normalized-score"` und werden nicht aus einer sichtbaren Teilmenge
 neu skaliert. Summary-Links verweisen über `derivedFrom` und ihre
 `attributes.aggregation` auf die vollständigen Detailbeziehungen.
+
+Der C#-Adapter validiert jede Ausgabe vor dem atomaren Schreiben gegen dieses
+Schema. Die Referenz-Fixture und die Viewer-Vertragstests bleiben damit die
+gemeinsame Prüfung für alle Datenquellen.
