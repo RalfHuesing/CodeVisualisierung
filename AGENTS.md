@@ -28,6 +28,7 @@ Der Nutzer bevorzugt einfachen, expliziten und gut lesbaren Code. Weniger Code i
 - [Architektur und Verzeichnisstruktur](.agents/rules/10-architecture.md)
 - [Tests und Größenlimits](.agents/rules/20-testing-and-quality.md)
 - [HTML, CSS und Browser-Code](.agents/rules/30-ui-structure.md)
+- [C#-Codequalität und technische Schulden](.agents/rules/35-csharp-code-quality.md)
 - [Arbeitsablauf und Git](.agents/rules/40-workflow.md)
 - [Orchestrierung und Subagenten](.agents/rules/50-orchestration.md)
 - [AiNetLinter MCP-Workflow](.agents/rules/AiNetLinter-McpWorkflow.mdc)
