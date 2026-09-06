@@ -10,6 +10,7 @@ import familyFixture from "../contracts/graph-universe/fixtures/family.json" wit
 import companyFixture from "../contracts/graph-universe/fixtures/company.json" with { type: "json" };
 import csharpReferenceFixture from "../contracts/graph-universe/fixtures/csharp-reference.json" with { type: "json" };
 import spatialFixture from "../contracts/graph-universe/fixtures/spatial.json" with { type: "json" };
+import nestedUniverseFixture from "../contracts/graph-universe/fixtures/nested-universe.json" with { type: "json" };
 
 const fixturePath = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -237,6 +238,63 @@ describe("spatial layout definitions", () => {
     graph.layoutProfiles[0].containmentDistances[0].futureDistanceMode = "soft";
 
     expect(validateGraph(graph)).toEqual({ valid: true, errors: [] });
+  });
+});
+
+describe("nested universe reference fixture", () => {
+  it("validates all generic type, link, containment, metric, and profile references", () => {
+    const nodeIds = new Set(nestedUniverseFixture.nodes.map((node) => node.id));
+    const nodeTypeIds = new Set(nestedUniverseFixture.nodeTypes.map((type) => type.id));
+    const linkTypeIds = new Set(nestedUniverseFixture.linkTypes.map((type) => type.id));
+
+    expect(validateGraph(nestedUniverseFixture)).toEqual({ valid: true, errors: [] });
+    expect(nestedUniverseFixture.nodeTypes.map((type) => type.id)).toEqual([
+      "galaxy",
+      "system",
+      "star",
+      "planet",
+      "moon"
+    ]);
+    expect(nestedUniverseFixture.nodes).toHaveLength(18);
+    expect(nestedUniverseFixture.nodes.every((node) => nodeTypeIds.has(node.typeId))).toBe(true);
+    expect(nestedUniverseFixture.links.every((link) => (
+      linkTypeIds.has(link.typeId) && nodeIds.has(link.source) && nodeIds.has(link.target)
+    ))).toBe(true);
+    expect(nestedUniverseFixture.nodes.map((node) => node.groupId)).toEqual(expect.arrayContaining(["alpha", "beta"]));
+    expect(nestedUniverseFixture.nodeTypes.every((type) => type.visualRole && type.baseSize > 0)).toBe(true);
+    expect(Object.keys(nestedUniverseFixture.metricDefinitions)).toEqual([
+      "mass",
+      "complexity",
+      "dependencyCount",
+      "referenceStrength"
+    ]);
+    expect(nestedUniverseFixture.links.filter((link) => link.typeId === "references")).toEqual(
+      expect.arrayContaining([expect.objectContaining({ weight: 0.8 })])
+    );
+    expect(nestedUniverseFixture.links.find((link) => link.id === "summary-galaxy-alpha-beta")).toMatchObject({
+      summary: true,
+      derivedFrom: ["references-planet-alpha-beta", "references-moon-alpha-beta"]
+    });
+  });
+
+  it("declares all four containment levels in both layout profiles", () => {
+    const expectedLevels = [
+      ["galaxy", "system"],
+      ["system", "star"],
+      ["star", "planet"],
+      ["planet", "moon"]
+    ];
+
+    expect(nestedUniverseFixture.containmentRules.map((rule) => [rule.parentTypeId, rule.childTypeId])).toEqual(expectedLevels);
+    expect(nestedUniverseFixture.layoutProfiles).toHaveLength(2);
+    nestedUniverseFixture.layoutProfiles.forEach((profile) => {
+      expect(profile.containmentDistances).toHaveLength(4);
+      expect(profile.containmentDistances.map((distance) => [distance.parentTypeId, distance.childTypeId])).toEqual(expectedLevels);
+    });
+    expect(nestedUniverseFixture.viewProfiles.map((profile) => profile.layoutProfileId)).toEqual([
+      "nested-overview",
+      "nested-detail"
+    ]);
   });
 });
 

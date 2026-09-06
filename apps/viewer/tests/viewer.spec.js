@@ -1,4 +1,11 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
+
+const nestedUniverseFixturePath = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../../../contracts/graph-universe/fixtures/nested-universe.json"
+);
 
 test("loads the sample graph and shows its summary", async ({ page }) => {
   await page.goto("/");
@@ -128,32 +135,28 @@ test("communicates the full-mode limit and keeps larger graphs loadable", async 
   await expect(page.locator("#graph-status")).toContainText("weiterhin ladbar");
 });
 
-test("uploads spatial data and exposes the active layout", async ({ page }) => {
+test("uploads the nested universe fixture and exposes declarative profiles and metrics", async ({ page }) => {
   await page.goto("/");
-  await page.locator("#graph-file").setInputFiles({
-    buffer: Buffer.from(JSON.stringify({
-      format: { name: "graph-universe", version: "1.0" },
-      nodeTypes: [
-        { id: "group", visualRole: "container", baseSize: 2 },
-        { id: "item", visualRole: "entity", baseSize: 1 }
-      ],
-      linkTypes: [{ id: "contains" }],
-      viewProfiles: [{ id: "spatial", layoutProfileId: "layout" }],
-      layoutProfiles: [{ id: "layout", groupField: "groupId", groupDistance: 48, defaultDistance: 20 }],
-      hierarchy: { containmentLinkTypes: ["contains"] },
-      nodes: [
-        { id: "group-a", typeId: "group", groupId: "a", metrics: { value: 1 } },
-        { id: "item-a", typeId: "item", groupId: "a", metrics: { value: 1 } },
-        { id: "group-b", typeId: "group", groupId: "b", metrics: { value: 1 } }
-      ],
-      links: [{ id: "contains-a", source: "group-a", target: "item-a", typeId: "contains" }]
-    })),
-    mimeType: "application/json",
-    name: "spatial.json"
-  });
+  await page.locator("#graph-file").setInputFiles(nestedUniverseFixturePath);
 
-  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-layout-profile-id", "layout");
+  await expect(page.locator("#node-count")).toHaveText("18");
+  await expect(page.locator("#link-count")).toHaveText("19");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-layout-profile-id", "nested-detail");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "18");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-link-count", "19");
   await expect(page.locator("#graph-canvas")).toHaveAttribute("data-layout-group-count", "2");
+  await expect(page.locator("#zoom-select option[value='nested-overview']")).toHaveText("Universe overview");
+  await expect(page.locator("#node-metric-select option[value='mass']")).toHaveText("Mass");
+  await expect(page.locator("#link-metric-select option[value='referenceStrength']")).toHaveText("Reference strength");
+
+  await page.locator("#zoom-select").selectOption("nested-overview");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-layout-profile-id", "nested-overview");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-node-count", "6");
+  await expect(page.locator("#graph-canvas")).toHaveAttribute("data-link-count", "5");
+  await page.locator("#node-metric-select").selectOption("complexity");
+  await expect(page.locator("#legend-node-metric")).toContainText("Complexity");
+  await expect(page.locator("#link-metric-select")).toHaveValue("dependencyCount");
+  await expect(page.locator("#legend-link-metric")).toContainText("Connection count");
 });
 
 test("shows schema and semantic errors for an invalid graph", async ({ page }) => {

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import sampleGraph from "../contracts/graph-universe/fixtures/minimal.json" with { type: "json" };
 import edgeCasesGraph from "../contracts/graph-universe/fixtures/edge-cases.json" with { type: "json" };
 import spatialGraph from "../contracts/graph-universe/fixtures/spatial.json" with { type: "json" };
+import nestedUniverseGraph from "../contracts/graph-universe/fixtures/nested-universe.json" with { type: "json" };
 import { normalizeGraph } from "../apps/viewer/src/domain/graph.js";
 import {
   createVisualGraphData,
@@ -181,6 +182,61 @@ describe("spatial visualization calculations", () => {
     expect(distance(child, nestedChild)).toBe(12);
     expect(Math.abs(parent.x - otherGroup.x)).toBe(48);
     expect(getLayoutGroup(graph.nodes[0], "attributes.team")).toBe("north");
+  });
+});
+
+describe("nested universe visualization calculations", () => {
+  it("uses all four declarative containment distances and separates groups", () => {
+    const graph = normalizeGraph(nestedUniverseGraph);
+    const profile = graph.layoutProfiles.find((item) => item.id === "nested-detail");
+    const nodeMap = new Map(graph.nodes.map((node) => [node.id, node]));
+    const distances = [
+      ["contains-galaxy-alpha-system", 110],
+      ["contains-system-alpha-star", 78],
+      ["contains-star-alpha-inner", 48],
+      ["contains-inner-alpha-moon-a", 24]
+    ];
+
+    distances.forEach(([linkId, expectedDistance]) => {
+      const link = graph.links.find((item) => item.id === linkId);
+      expect(getLinkDistance(link, graph, profile, nodeMap)).toBe(expectedDistance);
+    });
+
+    const positions = createDeterministicPositions(graph, profile);
+    const distance = (left, right) => Math.hypot(left.x - right.x, left.y - right.y, left.z - right.z);
+    expect(Math.abs(positions.get("galaxy-alpha").x - positions.get("galaxy-beta").x)).toBe(180);
+    expect(distance(positions.get("galaxy-alpha"), positions.get("system-alpha"))).toBeCloseTo(110);
+    expect(distance(positions.get("system-alpha"), positions.get("star-alpha"))).toBeCloseTo(78);
+    expect(distance(positions.get("star-alpha"), positions.get("planet-alpha-inner"))).toBeCloseTo(48);
+    expect(distance(positions.get("planet-alpha-inner"), positions.get("moon-alpha-inner-a"))).toBeCloseTo(24);
+    expect(getLinkDistance(
+      graph.links.find((link) => link.id === "summary-galaxy-alpha-beta"),
+      graph,
+      profile,
+      nodeMap
+    )).toBe(180);
+  });
+
+  it("maps named metrics and weighted reference links from the detail profile", () => {
+    const graph = normalizeGraph(nestedUniverseGraph);
+    const profile = graph.viewProfiles.find((item) => item.id === "nested-detail");
+    const visualData = createVisualGraphData(graph, {
+      linkMetric: profile.linkMetric,
+      nodeMetric: profile.nodeMetric,
+      profile
+    });
+    const strongReference = visualData.links.find((link) => link.id === "references-planet-alpha-beta");
+    const weakReference = visualData.links.find((link) => link.id === "references-moon-alpha-beta");
+
+    expect(visualData.nodeMetric).toBe("complexity");
+    expect(visualData.linkMetric).toBe("referenceStrength");
+    expect(visualData.nodes.find((node) => node.id === "galaxy-alpha")).toMatchObject({
+      visualRole: "universe-container",
+      baseSize: 4
+    });
+    expect(strongReference.weight).toBe(0.8);
+    expect(strongReference.visualWidth).toBeGreaterThan(weakReference.visualWidth);
+    expect(findLinkMetric(graph)).toBe("weight");
   });
 });
 

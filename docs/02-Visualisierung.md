@@ -132,6 +132,14 @@ bleiben dabei unverändert.
 
 Der deterministische Aufbereitungs-Benchmark läuft mit `npm run benchmark` über feste Fixtures und 20 Wiederholungen. Der aktuelle Performance-Graph umfasst 684 Nodes und 1.260 Links; mehrere lokale Läufe lagen zwischen 7,4 und 7,9 ms pro Durchlauf. Das ist noch kein Versprechen für die WebGL-Bildrate, sondern ein reproduzierbarer Grenzwert für Filterung und visuelles Mapping.
 
+Die Fixture `nested-universe.json` prüft die räumliche Aufbereitung mit zwei
+Gruppen und der Kette `galaxy → system → star → planet → moon`. Vier
+Containment-Abstände, typabhängige Grundgrößen, benannte Node-/Linkmetriken,
+gewichtete Referenzlinks sowie Overview- und Detailprofil stammen vollständig
+aus dem Graph-JSON. Die Force-Physik verfeinert die daraus erzeugten
+deterministischen Initialpositionen nur als Layout-Hilfe; sie garantiert keine
+statischen Orbitbahnen oder Containergrenzen.
+
 Der Produktionsbuild bleibt statisch hostbar. Der aktuelle JavaScript-Bundle liegt bei rund 2,0 MB unkomprimiert bzw. 440 kB gzip; die Abhängigkeit wird wegen der vollständigen 3D-Geometrien vorerst nicht weiter aufgeteilt.
 
 Der geprüfte interaktive Vollmodus umfasst aktuell die große Fixture mit 248 Nodes und 448 Links. Die Belastungs-Fixture mit 684 Nodes und 1.260 Links ist für deterministische Aufbereitungs- und Filtermessungen vorgesehen; eine verbindliche WebGL-FPS-Grenze für darüber hinausgehende Graphen bleibt offen.

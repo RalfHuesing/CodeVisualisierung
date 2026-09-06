@@ -1,0 +1,161 @@
+{
+  "format": {
+    "name": "graph-universe",
+    "version": "1.0"
+  },
+  "meta": {
+    "title": "Nested universe reference",
+    "description": "A deterministic five-level graph for validating generic spatial visualization."
+  },
+  "nodeTypes": [
+    { "id": "galaxy", "label": "Galaxy", "visualRole": "universe-container", "baseSize": 4, "visualToken": "galaxy" },
+    { "id": "system", "label": "System", "visualRole": "system-container", "baseSize": 3, "visualToken": "system" },
+    { "id": "star", "label": "Star", "visualRole": "central-body", "baseSize": 2.4, "visualToken": "star" },
+    { "id": "planet", "label": "Planet", "visualRole": "orbiting-body", "baseSize": 1.5, "visualToken": "planet" },
+    { "id": "moon", "label": "Moon", "visualRole": "satellite", "baseSize": 0.8, "visualToken": "moon" }
+  ],
+  "linkTypes": [
+    { "id": "contains", "label": "Contains", "role": "containment", "visualToken": "containment" },
+    { "id": "references", "label": "References", "role": "relation", "visualToken": "reference" },
+    { "id": "summary-reference", "label": "Summary reference", "role": "summary", "visualToken": "summary" }
+  ],
+  "metricDefinitions": {
+    "mass": {
+      "label": "Mass",
+      "unit": "relative",
+      "valueType": "number",
+      "description": "Relative node importance for size mapping."
+    },
+    "complexity": {
+      "label": "Complexity",
+      "unit": "score",
+      "valueType": "number",
+      "description": "A second named node metric for profile and selector checks."
+    },
+    "dependencyCount": {
+      "label": "Connection count",
+      "unit": "links",
+      "valueType": "number",
+      "description": "Named link metric used by the overview profile."
+    },
+    "referenceStrength": {
+      "label": "Reference strength",
+      "unit": "score",
+      "valueType": "number",
+      "description": "Named link metric used by the detail profile."
+    }
+  },
+  "viewProfiles": [
+    {
+      "id": "nested-overview",
+      "label": "Universe overview",
+      "detailLevel": 0,
+      "visibleNodeTypes": ["galaxy", "system", "star"],
+      "visibleLinkTypes": ["contains", "summary-reference"],
+      "nodeMetric": "mass",
+      "linkMetric": "dependencyCount",
+      "layoutProfileId": "nested-overview"
+    },
+    {
+      "id": "nested-detail",
+      "label": "Universe detail",
+      "detailLevel": 1,
+      "visibleNodeTypes": ["galaxy", "system", "star", "planet", "moon"],
+      "visibleLinkTypes": ["contains", "references", "summary-reference"],
+      "nodeMetric": "complexity",
+      "linkMetric": "referenceStrength",
+      "layoutProfileId": "nested-detail"
+    }
+  ],
+  "layoutProfiles": [
+    {
+      "id": "nested-overview",
+      "label": "Overview spacing",
+      "groupField": "groupId",
+      "groupDistance": 140,
+      "defaultDistance": 42,
+      "containmentDistances": [
+        { "parentTypeId": "galaxy", "childTypeId": "system", "distance": 100 },
+        { "parentTypeId": "system", "childTypeId": "star", "distance": 70 },
+        { "parentTypeId": "star", "childTypeId": "planet", "distance": 44 },
+        { "parentTypeId": "planet", "childTypeId": "moon", "distance": 22 }
+      ]
+    },
+    {
+      "id": "nested-detail",
+      "label": "Detail spacing",
+      "groupField": "groupId",
+      "groupDistance": 180,
+      "defaultDistance": 32,
+      "containmentDistances": [
+        { "parentTypeId": "galaxy", "childTypeId": "system", "distance": 110 },
+        { "parentTypeId": "system", "childTypeId": "star", "distance": 78 },
+        { "parentTypeId": "star", "childTypeId": "planet", "distance": 48 },
+        { "parentTypeId": "planet", "childTypeId": "moon", "distance": 24 }
+      ]
+    }
+  ],
+  "containmentRules": [
+    { "id": "galaxy-contains-system", "linkTypeId": "contains", "parentTypeId": "galaxy", "childTypeId": "system", "maxParents": 1, "acyclic": true },
+    { "id": "system-contains-star", "linkTypeId": "contains", "parentTypeId": "system", "childTypeId": "star", "maxParents": 1, "acyclic": true },
+    { "id": "star-contains-planet", "linkTypeId": "contains", "parentTypeId": "star", "childTypeId": "planet", "maxParents": 1, "acyclic": true },
+    { "id": "planet-contains-moon", "linkTypeId": "contains", "parentTypeId": "planet", "childTypeId": "moon", "maxParents": 1, "acyclic": true }
+  ],
+  "hierarchy": {
+    "containmentLinkTypes": ["contains"],
+    "maxParents": 1,
+    "acyclic": true
+  },
+  "visualTokens": {
+    "galaxy": { "kind": "node", "color": "#a78bfa", "shape": "icosahedron" },
+    "system": { "kind": "node", "color": "#60a5fa", "shape": "dodecahedron" },
+    "star": { "kind": "node", "color": "#fbbf24", "shape": "sphere" },
+    "planet": { "kind": "node", "color": "#34d399", "shape": "sphere" },
+    "moon": { "kind": "node", "color": "#cbd5e1", "shape": "tetrahedron" },
+    "containment": { "kind": "link", "color": "#64748b", "lineStyle": "solid" },
+    "reference": { "kind": "link", "color": "#f472b6", "lineStyle": "solid" },
+    "summary": { "kind": "link", "color": "#fb923c", "lineStyle": "dashed" }
+  },
+  "theme": { "id": "nested-universe", "fallbackToken": "moon", "background": "#080b18" },
+  "nodes": [
+    { "id": "galaxy-alpha", "typeId": "galaxy", "label": "Galaxy Alpha", "groupId": "alpha", "metrics": { "mass": 100, "complexity": 10 } },
+    { "id": "system-alpha", "typeId": "system", "label": "System Alpha", "groupId": "alpha", "metrics": { "mass": 72, "complexity": 18 } },
+    { "id": "star-alpha", "typeId": "star", "label": "Star Alpha", "groupId": "alpha", "metrics": { "mass": 58, "complexity": 25 } },
+    { "id": "planet-alpha-inner", "typeId": "planet", "label": "Planet Alpha Inner", "groupId": "alpha", "metrics": { "mass": 30, "complexity": 34 } },
+    { "id": "planet-alpha-outer", "typeId": "planet", "label": "Planet Alpha Outer", "groupId": "alpha", "metrics": { "mass": 22, "complexity": 39 } },
+    { "id": "moon-alpha-inner-a", "typeId": "moon", "label": "Moon Alpha Inner A", "groupId": "alpha", "metrics": { "mass": 9, "complexity": 45 } },
+    { "id": "moon-alpha-inner-b", "typeId": "moon", "label": "Moon Alpha Inner B", "groupId": "alpha", "metrics": { "mass": 7, "complexity": 48 } },
+    { "id": "moon-alpha-outer-a", "typeId": "moon", "label": "Moon Alpha Outer A", "groupId": "alpha", "metrics": { "mass": 6, "complexity": 51 } },
+    { "id": "moon-alpha-outer-b", "typeId": "moon", "label": "Moon Alpha Outer B", "groupId": "alpha", "metrics": { "mass": 5, "complexity": 55 } },
+    { "id": "galaxy-beta", "typeId": "galaxy", "label": "Galaxy Beta", "groupId": "beta", "metrics": { "mass": 92, "complexity": 12 } },
+    { "id": "system-beta", "typeId": "system", "label": "System Beta", "groupId": "beta", "metrics": { "mass": 68, "complexity": 20 } },
+    { "id": "star-beta", "typeId": "star", "label": "Star Beta", "groupId": "beta", "metrics": { "mass": 52, "complexity": 27 } },
+    { "id": "planet-beta-inner", "typeId": "planet", "label": "Planet Beta Inner", "groupId": "beta", "metrics": { "mass": 28, "complexity": 36 } },
+    { "id": "planet-beta-outer", "typeId": "planet", "label": "Planet Beta Outer", "groupId": "beta", "metrics": { "mass": 20, "complexity": 41 } },
+    { "id": "moon-beta-inner-a", "typeId": "moon", "label": "Moon Beta Inner A", "groupId": "beta", "metrics": { "mass": 8, "complexity": 47 } },
+    { "id": "moon-beta-inner-b", "typeId": "moon", "label": "Moon Beta Inner B", "groupId": "beta", "metrics": { "mass": 6, "complexity": 50 } },
+    { "id": "moon-beta-outer-a", "typeId": "moon", "label": "Moon Beta Outer A", "groupId": "beta", "metrics": { "mass": 5, "complexity": 53 } },
+    { "id": "moon-beta-outer-b", "typeId": "moon", "label": "Moon Beta Outer B", "groupId": "beta", "metrics": { "mass": 4, "complexity": 57 } }
+  ],
+  "links": [
+    { "id": "contains-galaxy-alpha-system", "source": "galaxy-alpha", "target": "system-alpha", "typeId": "contains", "directed": true, "metrics": { "dependencyCount": 1 } },
+    { "id": "contains-system-alpha-star", "source": "system-alpha", "target": "star-alpha", "typeId": "contains", "directed": true, "metrics": { "dependencyCount": 1 } },
+    { "id": "contains-star-alpha-inner", "source": "star-alpha", "target": "planet-alpha-inner", "typeId": "contains", "directed": true, "metrics": { "dependencyCount": 2 } },
+    { "id": "contains-star-alpha-outer", "source": "star-alpha", "target": "planet-alpha-outer", "typeId": "contains", "directed": true, "metrics": { "dependencyCount": 2 } },
+    { "id": "contains-inner-alpha-moon-a", "source": "planet-alpha-inner", "target": "moon-alpha-inner-a", "typeId": "contains", "directed": true, "metrics": { "dependencyCount": 1 } },
+    { "id": "contains-inner-alpha-moon-b", "source": "planet-alpha-inner", "target": "moon-alpha-inner-b", "typeId": "contains", "directed": true, "metrics": { "dependencyCount": 1 } },
+    { "id": "contains-outer-alpha-moon-a", "source": "planet-alpha-outer", "target": "moon-alpha-outer-a", "typeId": "contains", "directed": true, "metrics": { "dependencyCount": 1 } },
+    { "id": "contains-outer-alpha-moon-b", "source": "planet-alpha-outer", "target": "moon-alpha-outer-b", "typeId": "contains", "directed": true, "metrics": { "dependencyCount": 1 } },
+    { "id": "contains-galaxy-beta-system", "source": "galaxy-beta", "target": "system-beta", "typeId": "contains", "directed": true, "metrics": { "dependencyCount": 1 } },
+    { "id": "contains-system-beta-star", "source": "system-beta", "target": "star-beta", "typeId": "contains", "directed": true, "metrics": { "dependencyCount": 1 } },
+    { "id": "contains-star-beta-inner", "source": "star-beta", "target": "planet-beta-inner", "typeId": "contains", "directed": true, "metrics": { "dependencyCount": 2 } },
+    { "id": "contains-star-beta-outer", "source": "star-beta", "target": "planet-beta-outer", "typeId": "contains", "directed": true, "metrics": { "dependencyCount": 2 } },
+    { "id": "contains-inner-beta-moon-a", "source": "planet-beta-inner", "target": "moon-beta-inner-a", "typeId": "contains", "directed": true, "metrics": { "dependencyCount": 1 } },
+    { "id": "contains-inner-beta-moon-b", "source": "planet-beta-inner", "target": "moon-beta-inner-b", "typeId": "contains", "directed": true, "metrics": { "dependencyCount": 1 } },
+    { "id": "contains-outer-beta-moon-a", "source": "planet-beta-outer", "target": "moon-beta-outer-a", "typeId": "contains", "directed": true, "metrics": { "dependencyCount": 1 } },
+    { "id": "contains-outer-beta-moon-b", "source": "planet-beta-outer", "target": "moon-beta-outer-b", "typeId": "contains", "directed": true, "metrics": { "dependencyCount": 1 } },
+    { "id": "references-planet-alpha-beta", "source": "planet-alpha-outer", "target": "planet-beta-inner", "typeId": "references", "directed": false, "weight": 0.8, "metrics": { "dependencyCount": 4, "referenceStrength": 0.8 } },
+    { "id": "references-moon-alpha-beta", "source": "moon-alpha-outer-a", "target": "moon-beta-outer-a", "typeId": "references", "directed": false, "weight": 0.45, "metrics": { "dependencyCount": 2, "referenceStrength": 0.45 } },
+    { "id": "summary-galaxy-alpha-beta", "source": "galaxy-alpha", "target": "galaxy-beta", "typeId": "summary-reference", "directed": false, "summary": true, "derivedFrom": ["references-planet-alpha-beta", "references-moon-alpha-beta"], "weight": 0.625, "metrics": { "dependencyCount": 6, "referenceStrength": 0.625 } }
+  ]
+}

@@ -157,6 +157,27 @@ mit `layoutProfileId` genau ein solches Profil referenzieren. Zusätzliche
 optionale Layoutfelder bleiben für spätere fachliche Regeln offen und werden
 vom generischen Vertrag toleriert.
 
+## Referenzfixture `nested-universe.json`
+
+`contracts/graph-universe/fixtures/nested-universe.json` prüft den Vertrag an
+einer fünfstufigen, quellenneutralen Hierarchie:
+
+```text
+galaxy → system → star → planet → moon
+```
+
+Die Fixture enthält zwei unabhängige Gruppen, vier explizite
+Containment-Regeln, zwei Layout- und View-Profile, benannte Node- und
+Linkmetriken, gewichtete Referenzlinks und einen daraus abgeleiteten
+Summary-Link. Sie ist damit ein kleiner Referenzfall für Größen, Abstände und
+Zusammenhänge, ohne eine Quelle oder einen Parser vorauszusetzen.
+
+Die vier Containment-Abstände sind deklarative Layout-Leitplanken. Der Viewer
+setzt daraus deterministische Initialpositionen; die anschließende Force-Physik
+kann diese Positionen zur Kollisions- und Linkoptimierung verfeinern. Ein
+Abstand ist daher keine Zusage für eine dauerhafte Orbitbahn oder eine feste
+geometrische Grenze.
+
 ## Visualisierungstokens
 
 Fachliche JSON-Daten sollen keine Hexfarben in Node- oder Linktypen benötigen.
