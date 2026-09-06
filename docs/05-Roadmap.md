@@ -61,8 +61,8 @@ Grundlagen: [Vision](01-Vision.md), [Visualisierung](02-Visualisierung.md),
 ## Phase 5 – Viewer-Abschluss
 
 - [X] Bedienung, Graphformat, Beispiele und bekannte Grenzen dokumentieren → [Dokumentationsindex](README.md)
-- [ ] Viewer-Version und fachlichen Meilenstein festlegen → [Visualisierung](02-Visualisierung.md)
-- [ ] Alle offenen Punkte aus Phase 1, 3 und 4 abschließen → dieses Dokument
+- [X] Viewer-Version und fachlichen Meilenstein festlegen → [Visualisierung](02-Visualisierung.md)
+- [X] Alle offenen Punkte aus Phase 1, 3 und 4 abschließen → dieses Dokument
 
 ## Phase 6 – Spätere Datenquellen
 

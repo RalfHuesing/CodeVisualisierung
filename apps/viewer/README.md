@@ -2,6 +2,17 @@
 
 Hier entsteht die statische Browser-Anwendung.
 
+## Abgeschlossener Meilenstein
+
+Der Viewer steht in Version **1.0.0** als schema-gesteuerter, statisch hostbarer
+3D-Viewer bereit. Der fachliche Umfang umfasst den Graph-Universe-Vertrag 0.2,
+deklarative View-Profile und Projektionen, domänenneutrale Referenz-Fixtures,
+Browser-Qualitätstests sowie dokumentierte Skalierungs- und Vollmodusgrenzen.
+
+Die Version 1.0.0 bezeichnet die abgeschlossene Viewer-Lieferung. Die Version
+`0.2` in den Graphdaten bezeichnet dagegen ausschließlich die Version des
+Graph-Universe-Datenvertrags.
+
 Der Viewer darf nur vom Graphvertrag in `contracts/graph-universe/` abhängen. Er soll weder C#-Parser noch Git-Analyse enthalten.
 
 Geplanter Einstieg:

@@ -120,3 +120,16 @@ Messlauf vom 06.09.2026, 09:19 Uhr Europe/Berlin (Chromium 153.0.8010.12, Playwr
 Die große Fixture mit 248 Nodes und 448 Links ist damit die unterstützte interaktive Vollmodusgrenze. Die Belastungs-Fixture mit 684 Nodes und 1.260 Links bleibt weiterhin ladbar und auswählbar, wird aber als außerhalb des geprüften interaktiven Vollmodus gekennzeichnet. Ihre geringere Bildrate und höhere Auswahl-/Bereitstellungslatenz sind eine Belastungsbeobachtung, keine automatische Datenreduktion.
 
 Aus den Messungen wird keine neue Aggregation und keine zusätzliche Detailstufe aus einer Einzelmessung abgeleitet. Für diesen Qualitätsabschluss bleibt die Entscheidung deshalb explizit: Vollmodus bis zur großen Fixture, darüber vollständiges Laden mit sichtbarer Kennzeichnung; Aggregation bleibt eine spätere, separat zu messende Darstellungsentscheidung.
+
+## Viewer-Version und fachlicher Meilenstein
+
+Der abgeschlossene Viewer-Meilenstein ist **Version 1.0.0**. Er umfasst den
+Graph-Universe-Datenvertrag 0.2, einen schema-gesteuerten und statisch
+hostbaren 3D-Viewer, domänenneutrale Referenzdaten sowie den geprüften
+Qualitätsumfang aus Browser-Tests, Produktions-Smoke-Test und dokumentierten
+Skalierungsgrenzen.
+
+Die Versionsnummern haben getrennte Bedeutungen: `1.0.0` kennzeichnet die
+Viewer-Lieferung; `0.2` kennzeichnet die Version des Graph-Universe-Vertrags.
+Spätere Datenquellen, insbesondere ein C#-/Roslyn-Exporter, sind kein Teil
+dieses Meilensteins.
