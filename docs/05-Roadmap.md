@@ -8,7 +8,7 @@ dupliziert.
 
 - Der aktuelle Lieferumfang ist ein allgemeiner, statisch hostbarer 3D-Viewer.
 - Der Viewer kennt keine C#-, Roslyn- oder andere Quelllogik.
-- 2D-Ansichten und 2D-Fallbacks gehören nicht zum Produkt.
+- 2D-Ansichten und 2D-Fallbacks gehören nicht zum aktuellen 1.0-Umfang.
 - Der allgemeine Graphvertrag ist `graph-universe` 1.0.
 
 Grundlagen: [Vision](01-Vision.md), [Visualisierung](02-Visualisierung.md),
@@ -68,6 +68,18 @@ Grundlagen: [Vision](01-Vision.md), [Visualisierung](02-Visualisierung.md),
 - [ ] C#-/Roslyn-Exporter implementieren → [07](07-CSharp-Referenzgraph.md)
 - [ ] C#-Graphen gegen Vertrag, Referenz-Fixture und Projektionen prüfen → [07](07-CSharp-Referenzgraph.md)
 - [ ] Weitere Datenquellenprofile ergänzen, ohne den Viewer zu ändern → [06](06-Graphmodell-und-Visualisierungsprofile.md)
+
+## Phase 7 – Mehrere Visualisierungsmodi
+
+Die fachliche Zielidee und die Abgrenzung stehen in [08 – Mehrere
+Visualisierungsmodi](08-Mehrere-Visualisierungsmodi.md). Die Graph-JSON bleibt
+dabei die gemeinsame Datenbasis.
+
+- [ ] Gemeinsame Renderer-Schnittstelle und Modusumschaltung entwerfen → [08](08-Mehrere-Visualisierungsmodi.md)
+- [ ] Stadtkarte als stabile 2D-Architekturansicht prototypisch umsetzen → [08](08-Mehrere-Visualisierungsmodi.md)
+- [ ] Auswahl, Filter und Detailzustand zwischen Modi erhalten → [08](08-Mehrere-Visualisierungsmodi.md)
+- [ ] Biologischen Myzel-/Signalmodus evaluieren → [08](08-Mehrere-Visualisierungsmodi.md)
+- [ ] Erst nach einem konkreten Renderer über `visualizationProfiles` im Graphvertrag entscheiden → [08](08-Mehrere-Visualisierungsmodi.md)
 
 ## Außerhalb des aktuellen Umfangs
 

@@ -22,6 +22,7 @@ flowchart LR
 - [05 – Roadmap](05-Roadmap.md): Umsetzungsreihenfolge, Tests und offene Entscheidungen.
 - [06 – Graphmodell und Visualisierungsprofile](06-Graphmodell-und-Visualisierungsprofile.md): Allgemeine Vertragserweiterung für Typen, Filter, Projektionen und Themes.
 - [07 – C#-Referenzgraph](07-CSharp-Referenzgraph.md): Fachlicher Zielentwurf für den späteren C#-/Roslyn-Exporter.
+- [08 – Mehrere Visualisierungsmodi](08-Mehrere-Visualisierungsmodi.md): Späteres Feature für Stadtkarte, Universum und biologische Ansichten auf derselben Graph-JSON.
 - [99 – Archiv](99-Grob-Konzept-Idee-Archiv.md): Der ursprüngliche, noch vermischte Entwurf.
 
 ## Leitbegriffe
