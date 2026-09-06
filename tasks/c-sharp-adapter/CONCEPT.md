@@ -10,6 +10,24 @@ die der quellenneutrale Viewer aus `apps/viewer/` laden kann.
 Der Adapter ist eine Datenquelle. Er kennt weder Three.js noch HTML, CSS,
 Browserzustände oder konkrete visuelle Effekte.
 
+## Aktueller Umsetzungsstand
+
+Die Grundlagen unter `adapters/csharp/` sind bereits angelegt:
+
+- eine .NET-10-Solution mit einem CLI-Projekt und einem xUnit-Testprojekt,
+- zentrale MSBuild-Vorgaben für Nullable, deterministische Builds und
+  Warnungen als Fehler,
+- zentral verwaltete NuGet-Versionen für Roslyn/MSBuild und xUnit,
+- ein angepasstes AiNetLinter-Profil für die reine C#-/CLI-Solution,
+- eine kleine CLI-Grenze mit `--help` und `--version`,
+- eine verwaltete, repo-lokale Temp-Infrastruktur für spätere Test-Solutions.
+
+Diese Grundlage ist noch kein Adapterverhalten: Es gibt noch keine
+Roslyn-Analyse, keine Graph-/Contract-Projekte, keine Graphausgabe und keine
+fachlichen CLI-Fehlerfälle. Die folgenden Abschnitte beschreiben deshalb den
+verbindlichen Zielvertrag und die späteren Umsetzungsslices, nicht bereits
+vorhandene Funktionalität.
+
 ## Zielbild
 
 Ein Nutzer kann eine Solution lokal analysieren:
@@ -18,8 +36,7 @@ Ein Nutzer kann eine Solution lokal analysieren:
 codegraph-csharp path\to\application.slnx --output path\to\graph.json
 ```
 
-Das Ergebnis enthält, abhängig von den gewählten Analyseoptionen, unter
-anderem:
+Das Ergebnis des späteren vollständigen Laufs enthält unter anderem:
 
 - Solution-, Projekt-, Assembly-, Modul-, Namespace-, Datei-, Typ- und
   Member-Nodes,
@@ -36,6 +53,10 @@ anderem:
 Nicht jede Ansicht muss alle Nodes gleichzeitig anzeigen. Der Adapter liefert
 die Rohdaten und deklarierten Projektionen; der Viewer entscheidet über die
 Darstellung.
+
+Die Grundsyntax hat zunächst keine festgelegten Analyseoptionen. Auswahl und
+Berechnung zusätzlicher Metriken oder Projektionen werden nur eingeführt, wenn
+eine konkrete fachliche Entscheidung sie erfordert.
 
 ## Quellen der Wahrheit
 
@@ -56,7 +77,7 @@ Ausgaben gegen genau die Schema-Datei, die auch der Viewer verwendet. Eine
 Schemaänderung wird deshalb immer als gemeinsamer Vertragsschritt mit Schema,
 Fixture, Viewer-Tests und Adapter-Tests behandelt.
 
-## Scope des ersten vollständigen Adapter-Tasks
+## Zielumfang des vollständigen Adapter-Tasks
 
 ### Enthalten
 
@@ -99,17 +120,17 @@ Die im Archivdokument `docs/99-Grob-Konzept-Idee-Archiv.md` beschriebenen
 Kestrel-, SignalR-, Git- und Live-Agenten-Ideen bleiben spätere, getrennte
 Aufträge.
 
-## CLI-Vertrag, vorläufig
+## CLI-Vertrag des Zielzustands
 
-Die Syntax ist bewusst als überprüfbarer Vorschlag formuliert:
+Die Grundsyntax und die unterstützten Eingabetypen sind entschieden:
 
 ```text
 codegraph-csharp <solution.slnx> --output <graph.json>
 ```
 
-Geplante Grundregeln:
+Für den späteren Zielzustand gelten folgende Grundregeln:
 
-- Der Positionsparameter ist die Eingabe-Solution.
+- Der Positionsparameter ist der Eingabepfad.
 - `.slnx`, `.sln` und `.csproj` werden unterstützt. Bei einer Solution werden
   alle enthaltenen Projekte gemeinsam geladen; bei einem `.csproj` bildet das
   einzelne Projekt den vollständigen Analyseumfang.
@@ -134,9 +155,13 @@ Geplante Grundregeln:
 - Flüchtige Werte wie die aktuelle Uhrzeit oder absolute lokale Pfade dürfen
   die standardmäßige Vergleichbarkeit der Ausgabe nicht unnötig zerstören.
 
-Optionen für Konfiguration, Metrikumfang und die genaue Darstellung der
-Konsolenzusammenfassung werden noch konkretisiert. Externe und generierte
-Artefakte sind dagegen grundsätzlich außerhalb des Graphen.
+Optionen für Konfiguration, Metrikumfang, Exit-Code-Bereiche und die genaue
+Darstellung der Konsolenzusammenfassung werden noch konkretisiert. Externe und
+generierte Artefakte sind dagegen grundsätzlich außerhalb des Graphen.
+
+Die aktuelle Grundlage implementiert aus diesem Zielvertrag nur `--help` und
+`--version`; der Analysepfad und die Ausgabe sind ausdrücklich noch nicht
+vorhanden.
 
 ## Fachliches Datenmodell
 
@@ -331,9 +356,10 @@ Cli → Analysis → Graph → Contract
 Tests → alle benötigten Produktionsprojekte
 ```
 
-Die genaue Projektzahl bleibt eine Strukturentscheidung des ersten Slices.
-Keine Schicht wird als Platzhalter für eine mögliche Zukunft angelegt. Pro
-Quellverzeichnis gelten die zentrale Dateigrenze aus
+Die aktuelle Grundlage besteht bewusst nur aus CLI und Testprojekt. Weitere
+Projekte werden erst angelegt, wenn die jeweilige Verantwortung tatsächlich
+benötigt wird; keine Schicht wird als Platzhalter für eine mögliche Zukunft
+angelegt. Pro Quellverzeichnis gelten die zentrale Dateigrenze aus
 `scripts/quality-config.mjs` und die allgemeinen Regeln aus `.agents/rules/`;
 große Klassen und Methoden werden nach Verantwortung geteilt.
 
@@ -361,8 +387,9 @@ Referenzpfad zulässig.
 
 ## Tests und Qualität
 
-Der Adapter ist erst fertig, wenn mindestens folgende Verhalten nachgewiesen
-sind:
+Die vorhandene Grundlage weist derzeit nur Solution-Struktur, Temp-Verzeichnis-
+Lebenszyklus und Linter-Kompatibilität nach. Der vollständige Adapter ist erst
+fertig, wenn mindestens folgende Verhalten nachgewiesen sind:
 
 - CLI-Hilfe, erfolgreiche Ausgabe und alle wesentlichen Fehlerfälle,
 - ungültige oder nicht vorhandene Solutionpfade,

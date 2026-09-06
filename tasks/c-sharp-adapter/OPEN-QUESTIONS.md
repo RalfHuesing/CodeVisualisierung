@@ -13,15 +13,18 @@ als Entscheidungslog erhalten.
   geladen; ein `.csproj` ist ein vollständiger Einzelprojekt-Graph.
 - [X] Speicher-/Lademodell: Die komplette Eingabe wird in den Speicher
   geladen. Kein dynamisches Nachladen und kein Streaming.
-- [X] Roslyn-/Compilerprobleme: auf der CLI-Konsole melden, nicht in den
-  Graph schreiben, Analyse best effort fortsetzen und am Ende ein valides,
-  gegebenenfalls partielles JSON mit Summary und Zählungen erzeugen.
-- [X] Fehlendes SDK/Restore wird best effort behandelt: Alles Verwertbare wird
-  analysiert, Probleme werden gemeldet und eine gültige, gegebenenfalls
-  partielle JSON-Ausgabe wird trotzdem versucht.
-- [X] Analysegrenze: Nur Symbole aus den eigenen, explizit geladenen
-  Quellprojekten. Externe Abhängigkeiten, `System.*`, Framework-Assemblies und
-  generierte Artefakte werden nicht exportiert.
+- [X] Die CLI baut die analysierte Solution nicht und führt ihre Tests nicht
+  aus.
+- [X] Roslyn-/Compilerprobleme werden auf der CLI-Konsole gemeldet, nicht in
+  den Graph geschrieben. Die Analyse arbeitet best effort weiter und erzeugt
+  nach Möglichkeit ein valides, gegebenenfalls partielles JSON mit Summary und
+  Zählungen.
+- [X] Fehlendes Restore/SDK wird best effort behandelt: Verwertbare Projekte
+  und Dokumente werden verarbeitet, Probleme werden gemeldet und eine gültige,
+  gegebenenfalls partielle JSON-Ausgabe wird trotzdem versucht.
+- [X] Analysegrenze: Nur Symbole aus den eigenen, ausdrücklich geladenen
+  Quellprojekten werden exportiert. Externe Abhängigkeiten, `System.*`,
+  Framework-Assemblies und generierte Artefakte bleiben außerhalb des Graphen.
 - [X] Vollständigkeit: Das erste fertige Release deckt die vollständige
   fachliche Zielmenge des eigenen Sourcecodes aus
   `docs/07-CSharp-Referenzgraph.md` ab; externe/generierte Artefakte bleiben
@@ -29,8 +32,8 @@ als Entscheidungslog erhalten.
   Zwischen-Slice.
 - [X] Darstellung: Kurze Labels für Nodes; qualifizierter Name, Signatur,
   Projekt und solution-relative Quellposition mit Zeile/Spalte als sinnvolle
-  Detaildaten zum Wiederfinden im Code. Keine absoluten Pfade in IDs oder
-  sichtbaren Labels.
+  Detaildaten zum Wiederfinden. Keine absoluten Pfade in IDs oder sichtbaren
+  Labels.
 - [X] Metrikrichtung: LOC und Komplexität sind Detailwerte, keine primäre
   Größenmetrik. `fanIn`, `fanOut`, `callCount`/gewichtete Grade und PageRank
   bilden zunächst die Grundlage für `importance`; Betweenness bleibt optional
@@ -40,39 +43,26 @@ als Entscheidungslog erhalten.
 - [X] Teststruktur: zunächst ein Testprojekt mit fachlich getrennten
   Testordnern; eine Aufteilung in mehrere Projekte bleibt nur bei konkretem
   Bedarf erlaubt.
+- [X] Der allgemeine Graphvertrag 1.0 ist der verabschiedete externe
+  Vorgänger. Ein separater Viewer-/Layout-Task ist keine Voraussetzung für den
+  C#-Adapter; der Adapter nutzt die quellenneutralen Vertragsfelder später.
 
 ## Noch zu entscheiden
 
-### 1. Workspace und Restore
+### 1. Relevanz- und Größenmetriken
 
-- [X] Die CLI baut die analysierte Solution nicht und führt ihre Tests nicht
-  aus.
-- [X] Fehlendes Restore/SDK führt zu best effort: verwertbare Projekte und
-  Dokumente werden verarbeitet, Fehler werden gezählt und ein partieller
-  gültiger Graph wird ausgegeben, sofern die CLI die Ausgabe noch schreiben
-  kann.
-
-### 2. Viewer-Abhängigkeit außerhalb dieses Tasks
-
-- [ ] Es gibt derzeit keinen separaten `tasks/viewer-layout`-Task. Er muss
-  außerhalb dieses C#-Tasks angelegt werden und Größen-/Abstandsdaten im
-  allgemeinen Graphvertrag definieren. Der C#-Task setzt diese Entscheidung
-  später nur um.
-
-### 3. Relevanz- und Größenmetriken
-
-- [ ] Zu entscheiden: genaue Formel und Normalisierung für `importance`.
+- [ ] Genaue Formel und Normalisierung für `importance` festlegen.
 - [X] PageRank wird zunächst gegenüber Betweenness bevorzugt und mit `fanIn`,
   `fanOut` und Beziehungshäufigkeit ergänzt.
-- [ ] Zu entscheiden: getrennte Berechnung für Methoden, Typen und Namespaces
-  sowie die Aggregation über Summary-Links.
-- [ ] Kandidaten, die der Adapter zusätzlich als benannte Detailwerte liefern
-  kann: `loc`, Komplexität, direkte/gewichtete Grade, `callCount`, Anzahl
-  referenzierender Projekte, Anzahl erreichbarer eigener Nodes,
-  Zykluszugehörigkeit und Komponentengröße. Keiner dieser Werte wird ohne
-  fachliche Definition zur visuellen Größe.
+- [ ] Getrennte Berechnung für Methoden, Typen und Namespaces sowie die
+  Aggregation über Summary-Links festlegen.
+- [ ] Entscheiden, welche zusätzlichen Detailwerte im ersten vollständigen
+  Release geliefert werden: etwa `loc`, Komplexität, direkte/gewichtete Grade,
+  `callCount`, Anzahl referenzierender Projekte, Anzahl erreichbarer eigener
+  Nodes, Zykluszugehörigkeit und Komponentengröße. Keiner dieser Werte wird
+  ohne fachliche Definition zur visuellen Größe.
 
-### 4. Contract-Validierung
+### 2. Contract-Validierung
 
 - [X] Die einzige Schemaquelle bleibt
   `contracts/graph-universe/schema/graph-universe.schema.json`.
@@ -80,7 +70,7 @@ als Entscheidungslog erhalten.
   verwenden und prüft jede Ausgabe vor dem Schreiben; Contract-Tests und
   Repository-Checks bleiben zusätzlich bestehen.
 
-### 5. CLI-Details
+### 3. CLI-Details
 
 - [ ] Konkrete Exit-Code-Bereiche für Argument-, Eingabe-, Analyse- und
   Ausgabefehler festlegen.

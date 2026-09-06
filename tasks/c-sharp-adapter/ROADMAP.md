@@ -33,6 +33,19 @@ Delegated roles:
   orchestrator, implementer, reviewer gemäß .agents/roles/.
 ```
 
+## Aktueller Stand vor dem Orchestrator-Start
+
+Die vorbereitende C#-Grundlage ist vorhanden: Solution, CLI-Projekt,
+Testprojekt, gemeinsame .NET-/Paketvorgaben, AiNetLinter-Profil und die
+repo-lokale Temp-Testinfrastruktur. Sie wurde bewusst noch nicht als
+abgeschlossener Roadmap-Slice markiert.
+
+Insbesondere fehlen weiterhin der belastbare Prozessvertrag für Analysefehler,
+das Workspace-Inventar, die Graph-/Contract-Schichten, die Roslyn-Auswertung
+und die vertragskonforme JSON-Ausgabe. Slice 0 und Slice 1 bleiben deshalb
+offen; die vorhandene Grundlage ist deren Ausgangspunkt, nicht deren
+Erfüllung.
+
 ## Externer Vorgänger: Viewer-Layoutvertrag
 
 - [X] Separater Viewer-/Graphvertrag-Task: generische Deklaration von
