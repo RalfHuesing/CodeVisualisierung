@@ -198,6 +198,9 @@ Akzeptanzkriterien:
 
 - [ ] LOC-/Komplexitäts-/Fan-in-/Fan-out-Metriken sind benannt,
   reproduzierbar und mit fehlenden Werten sauber unterschieden.
+- [ ] Rohmetriken und bereits normierte Scores (`importance`, `footprint`) sind
+  im Graphvertrag unterschieden; Scores werden im Viewer nicht nochmals über
+  die sichtbare Teilmenge normalisiert.
 - [ ] Generierte Dateien und externe Assemblies sind nach der beschlossenen
   Policy ausgeschlossen; Partial Types bleiben als zusammengehörige eigene
   Typdeklarationen nachvollziehbar.
@@ -207,6 +210,8 @@ Akzeptanzkriterien:
   `layoutProfiles` bleiben mit dem gemeinsamen Vertrag kompatibel.
 - [ ] Schema, Fixtures und die betroffenen allgemeinen und C#-Fachdokumente
   werden gemeinsam aktualisiert.
+- [ ] Eine absichtliche Schemaänderung lässt C#-Contract- und semantische
+  Adaptertests sichtbar fehlschlagen, bis der Adaptervertrag aktualisiert ist.
 
 Erlaubte Pfade: `adapters/csharp/**`, `contracts/graph-universe/**` für
 Vertrag/Fixtures, `docs/**` bei erforderlicher Vertragsdokumentation,

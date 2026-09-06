@@ -83,6 +83,27 @@ Ausgaben gegen genau die Schema-Datei, die auch der Viewer verwendet. Eine
 Schemaänderung wird deshalb immer als gemeinsamer Vertragsschritt mit Schema,
 Fixture, Viewer-Tests und Adapter-Tests behandelt.
 
+### Schutz vor Vertragsdrift
+
+Es gibt genau eine Schemaquelle: `contracts/graph-universe/schema/`.
+Der C#-Adapter besitzt keine zweite lokale Schema- oder Kompatibilitätsschicht.
+Jede Änderung am gemeinsamen Vertrag wird deshalb in demselben Änderungsschnitt
+mit diesen Artefakten geprüft:
+
+- Schema und gültige/ungültige Fixtures,
+- allgemeine Graph- und Viewer-Tests,
+- C#-Contract-Tests gegen exakt diese Schema-Datei,
+- C#-semantische Adaptertests für Node-/Linktypen, Metriken, Profile,
+  Projektionen, Identitäten und Determinismus.
+
+Die Schema-Validierung ist notwendig, aber nicht ausreichend: Optionales neues
+Schema kann altes JSON formal gültig lassen. Die semantischen C#-Contract-Tests
+müssen deshalb die erwartete v1-Ausgabe ausdrücklich einfordern. Ändert sich
+ein Feld, eine Bedeutung oder eine Pflichtprojektion, müssen diese Tests rot
+werden, bis Adapter, Fixture und Dokumentation gemeinsam aktualisiert sind.
+Es gibt keine stillschweigende Rückwärtskompatibilität und keine zweite
+Schema-Version innerhalb dieses v1-Tasks.
+
 ## Zielumfang des vollständigen Adapter-Tasks
 
 ### Enthalten
@@ -410,10 +431,13 @@ Für die v1 gilt folgende deterministische Berechnung:
 Der vollständige v1-Metriksatz ist festgelegt:
 
 - Nodes: `loc`, `fanIn`, `fanOut`, `weightedFanIn`, `weightedFanOut`,
-  `pageRank`, `importance`, soweit die Ebene fachlich dafür geeignet ist.
+  `pageRank`, `importance` und `footprint`, soweit die Ebene fachlich dafür
+  geeignet ist.
 - Methoden und lokale Funktionen zusätzlich: `cyclomaticComplexity`.
 - Container zusätzlich: `fileCount`, `typeCount`, `memberCount`, soweit die
   enthaltene Ebene definiert ist.
+- Partial Types zusätzlich: `partialDeclarationCount` und die Liste ihrer
+  Deklarationsstellen als Detaildaten.
 - Links zusätzlich: `occurrences` für wiederholte Aufrufe/Zugriffe und
   `relationshipWeight` für das gewichtete Aggregat.
 
@@ -424,6 +448,13 @@ zählt die syntaktisch erkennbaren Verzweigungspunkte. Betweenness, erreichbare 
 Komponentengröße, Zykluskennzeichnung und Testabdeckung sind nicht Bestandteil
 des v1-Exports.
 
+`footprint` wird aus den logarithmierten, fachlich vorhandenen Größen `loc`,
+`memberCount`, `fileCount` und `partialDeclarationCount` gebildet. Jede Größe
+wird je Node-Ebene normalisiert; der Footprint ist der Mittelwert der
+vorhandenen Teilwerte und wird anschließend auf `[0, 1]` geklemmt. Damit kann
+eine Klasse durch Quellumfang, Memberzahl oder Fragmentierung sichtbar groß
+werden, ohne dass dafür mehrere künstliche Nodes entstehen.
+
 PageRank behandelt Zyklen nach der üblichen iterativen Berechnung mit
 Dämpfungsfaktor `0.85`, maximal `50` Iterationen und Abbruchgrenze `1e-8`.
 Der Startvektor ist gleichverteilt; Dangling-Nodes verteilen ihre Masse
@@ -431,6 +462,14 @@ gleichverteilt. Konvergenz wird über die maximale absolute Wertänderung
 geprüft. Die Reihenfolge der Eingaben und Iterationen ist stabil. Der Adapter
 liefert die Roh- und abgeleiteten Metriken mit Definitionen, der Viewer
 entscheidet über die Darstellung.
+
+`importance` und `footprint` sind bereits normierte Score-Metriken im Bereich
+`[0, 1]`. Rohmetriken wie `loc`, `fanIn` oder `memberCount` bleiben separat
+erhalten. Der Adapter berechnet alle Scores erst nach vollständiger Analyse in
+einem eigenen Aggregationsschritt; kein Node erhält einen vorläufigen Score
+auf Basis des bisher gesehenen Maximums. Der Viewer wendet auf Scores nur noch
+seine allgemeine `baseSize`-Darstellung an und normalisiert sie nicht erneut
+über die gerade sichtbare Teilmenge.
 
 ## Technische Zielarchitektur
 

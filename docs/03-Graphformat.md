@@ -38,6 +38,9 @@ fachliche Darstellungsrolle und eine typabhängige Basisgröße deklarieren.
 - `meta.source` dokumentiert den Erzeuger, ohne ihn zur Voraussetzung des
   Viewers zu machen.
 - `metricDefinitions` erklärt optionale Metriknamen, Einheiten und Typen.
+  Metriken mit expliziter Score-Semantik im Bereich `[0, 1]` sind bereits
+  normalisiert und dürfen vom Viewer nicht erneut relativ zur sichtbaren
+  Teilmenge skaliert werden.
 - `layoutProfiles` beschreibt deklarative räumliche Regeln: `groupField` ist
   ein Punktpfad am Node und verwendet standardmäßig `groupId`, während
   `groupDistance`, `defaultDistance` und `containmentDistances` positive

@@ -60,12 +60,18 @@ still erweitern.
 
 ## Metriken
 
-- [X] `loc`, `fanIn`, `fanOut`, `weightedFanIn`, `weightedFanOut`, `pageRank`
-  und `importance` werden geliefert, soweit die Node-Ebene dafür geeignet ist.
+- [X] `loc`, `fanIn`, `fanOut`, `weightedFanIn`, `weightedFanOut`, `pageRank`,
+  `importance` und `footprint` werden geliefert, soweit die Node-Ebene dafür
+  geeignet ist. Normierte Scores liegen in `[0, 1]`; Rohmetriken bleiben
+  separat erhalten.
 - [X] Methoden und lokale Funktionen liefern zusätzlich
   `cyclomaticComplexity`.
 - [X] Container liefern zusätzlich `fileCount`, `typeCount` und `memberCount`,
   soweit die enthaltene Ebene definiert ist.
+- [X] Partial Types liefern `partialDeclarationCount`; die Deklarationsstellen
+  bleiben als Detaildaten erhalten. `footprint` ist der Mittelwert der je Ebene
+  normalisierten logarithmierten Werte für LOC, Member, Dateien und
+  Partial-Deklarationen.
 - [X] Links liefern `occurrences` und `relationshipWeight`, wenn Beziehungen
   aggregiert werden.
 - [X] `importance` wird getrennt für Member, Typen und Namespaces berechnet:
@@ -81,6 +87,9 @@ still erweitern.
   maximale absolute Wertänderung.
 - [X] PageRank nutzt Dämpfung `0.85`, maximal 50 Iterationen und
   Abbruchgrenze `1e-8`.
+- [X] Alle Score-Metriken werden erst nach vollständiger Analyse berechnet.
+  Der Viewer normalisiert `importance` und `footprint` nicht erneut über die
+  sichtbare Teilmenge.
 - [X] Betweenness, erreichbare Node-Anzahl, Komponentengröße,
   Zykluskennzeichnung und Testabdeckung sind nicht v1.
 
@@ -105,5 +114,8 @@ still erweitern.
   `contracts/graph-universe/schema/graph-universe.schema.json`.
 - [X] Die CLI validiert jede Ausgabe selbst; Contract-, Viewer-, xUnit- und
   Repository-Checks bleiben zusätzlich verpflichtend.
+- [X] Schemaänderungen müssen Schema, Fixtures, Viewer-Tests, C#-Contract-
+  Tests, semantische Adaptertests und Dokumentation gemeinsam aktualisieren.
+  Optionales Schema darf keinen stillen fachlichen Drift ermöglichen.
 - [X] Der Adapter darf keine Viewer-, Webserver-, Git-, Watch- oder Live-
   Infrastruktur einführen.
