@@ -15,8 +15,9 @@ Task scope:
   xUnit vollständig testen.
 
 Explicit exclusions:
-  Vieweränderungen, Backend/Live-Modus, Git-Churn, externe Coverage-Reports,
-  Agentenereignisse und nicht gemessene Performanceversprechen.
+  Vieweränderungen einschließlich Layout-/Orbitlogik, Backend/Live-Modus,
+  Git-Churn, externe Coverage-Reports, Agentenereignisse und nicht gemessene
+  Performanceversprechen.
 
 Task completion condition:
   CONCEPT.md ist umgesetzt, alle bereiten Slices sind abgeschlossen,
@@ -26,6 +27,16 @@ Task completion condition:
 Delegated roles:
   orchestrator, implementer, reviewer gemäß .agents/roles/.
 ```
+
+## Externer Vorgänger: Viewer-Layoutvertrag
+
+- [ ] Separater Viewer-/Graphvertrag-Task: generische Deklaration von
+  Größenmetriken sowie Containment-, Orbit- und Gruppendistanzen.
+
+Dieser Punkt ist ausdrücklich außerhalb des C#-Tasks und wird von dessen
+Orchestrator nicht umgesetzt oder abgehakt. Der C#-Adapter muss die
+verabschiedete Vertragsform später verwenden; bis dahin bleiben die
+Containment- und Relevanzdaten im Adapter fachlich definiert.
 
 ## [ ] Slice 0 – Vertrag und Entscheidungen einfrieren
 
@@ -41,7 +52,7 @@ Erwartete Inhalte:
 - deterministische Metadaten- und Fehlerpolicy,
 - Ausschluss-Policy für externe, Framework- und generierte Artefakte,
 - Metrikumfang und Compilerdiagnose-Policy,
-- generische deklarative Layoutregeln für Hierarchie und Abstände.
+- Abhängigkeit vom separaten Viewer-Layoutvertrag.
 
 Erlaubte Pfade: `tasks/c-sharp-adapter/**`, bei expliziter Vertragsänderung
 zusätzlich `docs/**` und `contracts/graph-universe/**`.
@@ -53,8 +64,8 @@ Akzeptanzkriterien:
 - [ ] `CONCEPT.md` und die allgemeine Graphdokumentation widersprechen sich
   nicht.
 - [ ] Alle folgenden Slices haben konkrete erlaubte Pfade und Prüfkriterien.
-- [ ] Der allgemeine Graphvertrag kann Namespace-/Typ-/Member-Nähe und
-  gruppenübergreifende Abstände deklarativ beschreiben.
+- [ ] Der C#-Task referenziert die vom separaten Viewer-Layouttask
+  verabschiedete, quellenneutrale Layoutbeschreibung korrekt.
 
 Checks: Dokumentenreview, `git diff --check`.
 
@@ -172,7 +183,8 @@ Akzeptanzkriterien:
 - [ ] Summary-Links und ihre Herkunft sind explizit und gegen die
   Detailbeziehungen prüfbar.
 - [ ] `metricDefinitions`, `nodeTypes`, `linkTypes`, Facetten, Profile und
-  Layoutregeln bleiben mit dem gemeinsamen Vertrag kompatibel.
+  Layoutregeln bleiben mit dem gemeinsamen Vertrag kompatibel, sobald der
+  externe Viewer-Layouttask den Vertrag erweitert hat.
 
 Erlaubte Pfade: `adapters/csharp/**`, `contracts/graph-universe/**` für
 Vertrag/Fixtures, `docs/**` bei erforderlicher Vertragsdokumentation,

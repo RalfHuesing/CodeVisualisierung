@@ -239,9 +239,27 @@ Klassen bilden Verbindungen zwischen Sonnensystemen, Referenzen zwischen
 Namespaces Verbindungen zwischen Galaxien. Der Adapter liefert dafür die
 Containment- und Beziehungsdaten sowie die generischen Layoutdeklarationen;
 der Viewer berechnet daraus die konkrete 3D-Position. Dafür muss der
-allgemeine Graphvertrag vor der Adapterimplementierung um eine
-quellenneutrale, deklarative Layoutbeschreibung ergänzt und gemeinsam mit dem
-Viewer geprüft werden.
+allgemeine Graphvertrag um eine quellenneutrale, deklarative
+Layoutbeschreibung ergänzt und gemeinsam mit dem Viewer geprüft werden. Diese
+Vertragserweiterung und ihre Viewer-Umsetzung sind ein eigener Vorgänger- bzw.
+Paralleltask außerhalb des C#-Adapters. Der Adapter implementiert keine
+Viewer-Layoutlogik.
+
+## Abgrenzung zur bestehenden Visualisierung
+
+Die aktuelle Visualisierung kann eine Node-Größe bereits aus einer benannten
+Node-Metrik beziehen: Ein `viewProfile.nodeMetric` wird auf `visualValue` und
+damit auf den Node-Radius abgebildet. Der C#-Adapter kann deshalb später
+`importance` als fachliche Größenmetrik liefern, ohne ein C#-spezifisches
+Größenfeld zu erfinden.
+
+Eine deklarative Übergabe von Abständen, Orbitradien und
+Containment-basierten Gruppenabständen fehlt im aktuellen Viewer dagegen noch.
+Der Renderer verwendet derzeit eine globale Linkdistanz und keine
+hierarchische Orbitberechnung. Dafür braucht es einen separaten
+Viewer-/Graphvertrag-Task. Dieser C#-Task darf ihn voraussetzen und mit
+Vertragsfixtures beliefern, übernimmt aber weder dessen Umsetzung noch dessen
+Abschluss.
 
 ## Metriken und visuelle Größe
 

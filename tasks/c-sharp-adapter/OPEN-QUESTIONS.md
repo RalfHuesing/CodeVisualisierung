@@ -16,6 +16,9 @@ als Entscheidungslog erhalten.
 - [X] Roslyn-/Compilerprobleme: auf der CLI-Konsole melden, nicht in den
   Graph schreiben, Analyse best effort fortsetzen und am Ende ein valides,
   gegebenenfalls partielles JSON mit Summary und Zählungen erzeugen.
+- [X] Fehlendes SDK/Restore wird best effort behandelt: Alles Verwertbare wird
+  analysiert, Probleme werden gemeldet und eine gültige, gegebenenfalls
+  partielle JSON-Ausgabe wird trotzdem versucht.
 - [X] Analysegrenze: Nur Symbole aus den eigenen, explizit geladenen
   Quellprojekten. Externe Abhängigkeiten, `System.*`, Framework-Assemblies und
   generierte Artefakte werden nicht exportiert.
@@ -29,8 +32,11 @@ als Entscheidungslog erhalten.
   Detaildaten zum Wiederfinden im Code. Keine absoluten Pfade in IDs oder
   sichtbaren Labels.
 - [X] Metrikrichtung: LOC und Komplexität sind Detailwerte, keine primäre
-  Größenmetrik. Relevanz soll aus eigenen Beziehungen, gewichteten Graden und
-  einem zu prüfenden Einflusswert wie PageRank entstehen.
+  Größenmetrik. `fanIn`, `fanOut`, `callCount`/gewichtete Grade und PageRank
+  bilden zunächst die Grundlage für `importance`; Betweenness bleibt optional
+  und nachgelagert.
+- [X] Schema-Kopplung: Die CLI validiert jede erzeugte Ausgabe selbst gegen
+  `contracts/graph-universe/schema/graph-universe.schema.json`.
 - [X] Teststruktur: zunächst ein Testprojekt mit fachlich getrennten
   Testordnern; eine Aufteilung in mehrere Projekte bleibt nur bei konkretem
   Bedarf erlaubt.
@@ -41,25 +47,23 @@ als Entscheidungslog erhalten.
 
 - [X] Die CLI baut die analysierte Solution nicht und führt ihre Tests nicht
   aus.
-- [ ] Zu klären: Ist ein fehlendes Restore/SDK ein harter Prozessfehler, oder
-  wird ein partieller Graph geschrieben, sofern noch verwertbare Projekte und
-  Dokumente geladen werden konnten?
+- [X] Fehlendes Restore/SDK führt zu best effort: verwertbare Projekte und
+  Dokumente werden verarbeitet, Fehler werden gezählt und ein partieller
+  gültiger Graph wird ausgegeben, sofern die CLI die Ausgabe noch schreiben
+  kann.
 
-### 2. Generische Layoutbeschreibung
+### 2. Viewer-Abhängigkeit außerhalb dieses Tasks
 
-- [ ] Der gemeinsame Graphvertrag braucht eine quellenneutrale deklarative
-  Beschreibung für Containment-basierte Nähe. Sie muss mindestens ausdrücken:
-  Namespace-Zentrum, Typ-Orbit, Member-Orbit, Abstand innerhalb eines
-  Containers und größeren Abstand zwischen Gruppen/Namespaces.
-- [ ] Zu entscheiden ist die konkrete Vertragsform, zum Beispiel ein
-  `layoutProfiles`-Abschnitt mit `orbitRules` und Gruppendistanzen. Der
-  Adapter darf dafür keine C#-spezifischen Viewer-Regeln erfinden.
+- [ ] Es gibt derzeit keinen separaten `tasks/viewer-layout`-Task. Er muss
+  außerhalb dieses C#-Tasks angelegt werden und Größen-/Abstandsdaten im
+  allgemeinen Graphvertrag definieren. Der C#-Task setzt diese Entscheidung
+  später nur um.
 
 ### 3. Relevanz- und Größenmetriken
 
 - [ ] Zu entscheiden: genaue Formel und Normalisierung für `importance`.
-- [ ] Zu entscheiden: PageRank, Betweenness oder eine bewusst einfachere
-  Kombination aus `fanIn`, `fanOut` und Beziehungshäufigkeit.
+- [X] PageRank wird zunächst gegenüber Betweenness bevorzugt und mit `fanIn`,
+  `fanOut` und Beziehungshäufigkeit ergänzt.
 - [ ] Zu entscheiden: getrennte Berechnung für Methoden, Typen und Namespaces
   sowie die Aggregation über Summary-Links.
 - [ ] Kandidaten, die der Adapter zusätzlich als benannte Detailwerte liefern
@@ -72,10 +76,9 @@ als Entscheidungslog erhalten.
 
 - [X] Die einzige Schemaquelle bleibt
   `contracts/graph-universe/schema/graph-universe.schema.json`.
-- [ ] Zu entscheiden: Darf die CLI eine kleine .NET-JSON-Schema-
-  Validierungsabhängigkeit verwenden, damit jede Ausgabe vor dem Schreiben
-  geprüft wird, oder bleibt die Laufzeitprüfung in Contract-Tests und einem
-  separaten Repository-Check?
+- [X] Die CLI darf eine kleine .NET-JSON-Schema-Validierungsabhängigkeit
+  verwenden und prüft jede Ausgabe vor dem Schreiben; Contract-Tests und
+  Repository-Checks bleiben zusätzlich bestehen.
 
 ### 5. CLI-Details
 
